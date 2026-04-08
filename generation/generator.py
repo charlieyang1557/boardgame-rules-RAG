@@ -23,6 +23,7 @@ def generate_tier1(query: str, chunks: list[dict], anthropic_client) -> Generati
     message = anthropic_client.messages.create(
         model="claude-sonnet-4-20250514",
         max_tokens=1024,
+        temperature=0,
         system=TIER1_SYSTEM_PROMPT,
         messages=[{
             "role": "user",

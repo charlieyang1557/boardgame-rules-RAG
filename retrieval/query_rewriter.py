@@ -32,6 +32,7 @@ def rewrite_query(
         response = anthropic_client.messages.create(
             model="claude-haiku-4-5-20251001",
             max_tokens=256,
+            temperature=0,
             system=REWRITE_SYSTEM_PROMPT,
             messages=[{"role": "user", "content": user_content}],
         )

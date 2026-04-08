@@ -77,7 +77,7 @@ def verify_citations(
             continue
 
         overlap = compute_token_overlap(claim, chunk["text"])
-        if overlap > 0.6:
+        if overlap > 0.3:
             details.append(
                 ClaimVerification(
                     claim=claim,
@@ -101,8 +101,14 @@ def verify_citations(
         message = anthropic_client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=1024,
+            temperature=0,
             system=(
                 "You verify whether each claim is supported by its cited rule chunk. "
+                "A claim is SUPPORTED if the chunk contains the same information, even if "
+                "the wording differs. Accept paraphrases, synonym substitutions (e.g., "
+                "'gold token' = 'joker', 'gems' = 'tokens'), and reasonable inferences "
+                "from the chunk text. Only mark UNSUPPORTED if the chunk clearly does not "
+                "contain or imply the claimed information. "
                 "Return one line per item in the form: Item N: SUPPORTED or UNSUPPORTED."
             ),
             messages=[{"role": "user", "content": prompt}],
