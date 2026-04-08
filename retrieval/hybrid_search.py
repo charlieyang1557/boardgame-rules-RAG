@@ -1,0 +1,140 @@
+from __future__ import annotations
+
+import os
+import pickle
+from dataclasses import dataclass
+
+from dotenv import load_dotenv
+from rank_bm25 import BM25Okapi
+
+load_dotenv()
+
+
+@dataclass(frozen=True)
+class SearchResult:
+    chunk_id: str
+    text: str
+    score: float
+    source: str  # "dense", "sparse", or "fused"
+
+
+def _load_bm25(pickle_path: str) -> tuple[BM25Okapi, list[str], list[str]]:
+    """Load BM25 index from pickle. Returns (bm25, chunk_ids, chunk_texts)."""
+    with open(pickle_path, "rb") as f:
+        data = pickle.load(f)
+    return data["bm25"], data["chunk_ids"], data["chunk_texts"]
+
+
+def rrf_fuse(
+    dense_results: list[SearchResult],
+    sparse_results: list[SearchResult],
+    k: int = 60,
+    top_k: int = 20,
+) -> list[SearchResult]:
+    """Reciprocal Rank Fusion of two ranked lists.
+
+    score(doc) = sum(1 / (k + rank)) across all lists where doc appears.
+    """
+    scores: dict[str, float] = {}
+    texts: dict[str, str] = {}
+
+    for rank, result in enumerate(dense_results):
+        scores[result.chunk_id] = scores.get(result.chunk_id, 0.0) + 1.0 / (k + rank + 1)
+        texts[result.chunk_id] = result.text
+
+    for rank, result in enumerate(sparse_results):
+        scores[result.chunk_id] = scores.get(result.chunk_id, 0.0) + 1.0 / (k + rank + 1)
+        texts[result.chunk_id] = result.text
+
+    sorted_ids = sorted(scores.keys(), key=lambda cid: scores[cid], reverse=True)[:top_k]
+    return [
+        SearchResult(chunk_id=cid, text=texts[cid], score=scores[cid], source="fused")
+        for cid in sorted_ids
+    ]
+
+
+class HybridSearcher:
+    def __init__(self, game_name: str, bm25_pickle_path: str) -> None:
+        self.game_name = game_name
+        self.bm25, self.chunk_ids, self.chunk_texts = _load_bm25(bm25_pickle_path)
+        self._pinecone_index = None
+
+    def _get_pinecone_index(self):
+        if self._pinecone_index is None:
+            from pinecone import Pinecone
+
+            pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
+            self._pinecone_index = pc.Index("boardgame-oracle")
+        return self._pinecone_index
+
+    def _dense_search(self, query_embedding: list[float], top_k: int = 20) -> list[SearchResult]:
+        """Search Pinecone dense index."""
+        index = self._get_pinecone_index()
+        response = index.query(
+            vector=query_embedding,
+            top_k=top_k,
+            namespace=self.game_name,
+            include_metadata=True,
+        )
+        results = []
+        for match in response.matches:
+            text = match.metadata.get("text", "") if match.metadata else ""
+            results.append(
+                SearchResult(chunk_id=match.id, text=text, score=match.score, source="dense")
+            )
+        return results
+
+    def _sparse_search(self, query: str, top_k: int = 20) -> list[SearchResult]:
+        """Search local BM25 index."""
+        tokenized_query = query.lower().split()
+        scores = self.bm25.get_scores(tokenized_query)
+
+        # Get top-k indices
+        top_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:top_k]
+
+        results = []
+        for idx in top_indices:
+            if scores[idx] > 0:
+                results.append(
+                    SearchResult(
+                        chunk_id=self.chunk_ids[idx],
+                        text=self.chunk_texts[idx],
+                        score=float(scores[idx]),
+                        source="sparse",
+                    )
+                )
+        return results
+
+    def search(
+        self,
+        query: str,
+        query_embedding: list[float],
+        top_k: int = 20,
+        rrf_k: int = 60,
+    ) -> list[SearchResult]:
+        """Hybrid search: dense + sparse + RRF fusion.
+
+        Args:
+            query: Raw query string for BM25.
+            query_embedding: Pre-computed embedding for dense search.
+            top_k: Number of results per source and final output.
+            rrf_k: RRF constant (higher = more weight to lower ranks).
+
+        Returns:
+            Top-k fused results sorted by RRF score.
+        """
+        dense_results = self._dense_search(query_embedding, top_k=top_k)
+        sparse_results = self._sparse_search(query, top_k=top_k)
+        return rrf_fuse(dense_results, sparse_results, k=rrf_k, top_k=top_k)
+
+    def validate_staleness(self) -> bool:
+        """Check that BM25 chunk count matches Pinecone namespace count."""
+        try:
+            index = self._get_pinecone_index()
+            stats = index.describe_index_stats()
+            ns_stats = stats.namespaces.get(self.game_name, None)
+            if ns_stats is None:
+                return False
+            return ns_stats.vector_count == len(self.chunk_ids)
+        except Exception:
+            return False
