@@ -41,5 +41,7 @@ async def submit_feedback(feedback: FeedbackRequest) -> FeedbackResponse:
             comment=feedback.comment,
         )
         return FeedbackResponse(status="ok", message="Feedback recorded")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception:
         raise HTTPException(status_code=500, detail="Failed to record feedback")

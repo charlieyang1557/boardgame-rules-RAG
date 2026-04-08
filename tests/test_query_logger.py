@@ -130,6 +130,16 @@ class TestLogFeedback:
         assert feedback[0]["comment"] == ""
 
 
+    def test_feedback_rejects_nonexistent_query(self, logger: QueryLogger) -> None:
+        with pytest.raises(ValueError, match="does not exist"):
+            logger.log_feedback("s", 999, True, "bad")
+
+    def test_feedback_rejects_wrong_session(self, logger: QueryLogger) -> None:
+        qid = logger.log_query("session_a", "q", "q", "splendor", 1, [], "a", 1.0, False)
+        with pytest.raises(ValueError, match="does not belong to session"):
+            logger.log_feedback("session_b", qid, True, "wrong session")
+
+
 class TestGetQuery:
     def test_nonexistent_returns_none(self, logger: QueryLogger) -> None:
         assert logger.get_query(999) is None

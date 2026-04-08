@@ -88,3 +88,23 @@ class TestSemanticCache:
         # cos(1.0, 0.0) and (0.95, 0.31) ≈ 0.95 < 0.99
         result = cache.lookup([0.95, 0.31])
         assert result is None
+
+    def test_cross_game_isolation(self) -> None:
+        cache = SemanticCache(threshold=0.92)
+        emb = [1.0, 0.0, 0.0]
+        cache.store(emb, {"answer": "splendor answer"}, tier=1, game_name="splendor")
+        # Same embedding, different game → miss
+        assert cache.lookup(emb, game_name="catan") is None
+        # Same embedding, same game → hit
+        result = cache.lookup(emb, game_name="splendor")
+        assert result is not None
+        assert result["answer"] == "splendor answer"
+
+    def test_game_partitioned_entries(self) -> None:
+        cache = SemanticCache(threshold=0.92)
+        emb = [1.0, 0.0, 0.0]
+        cache.store(emb, {"answer": "from splendor"}, tier=1, game_name="splendor")
+        cache.store(emb, {"answer": "from fcm"}, tier=1, game_name="fcm")
+        assert cache.size == 2
+        assert cache.lookup(emb, game_name="splendor")["answer"] == "from splendor"
+        assert cache.lookup(emb, game_name="fcm")["answer"] == "from fcm"

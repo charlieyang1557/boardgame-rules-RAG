@@ -13,7 +13,9 @@ class QueryLogger:
         self._init_tables()
 
     def _get_conn(self) -> sqlite3.Connection:
-        return sqlite3.connect(self.db_path)
+        conn = sqlite3.connect(self.db_path)
+        conn.execute("PRAGMA foreign_keys = ON")
+        return conn
 
     def _init_tables(self) -> None:
         with self._get_conn() as conn:
@@ -89,8 +91,17 @@ class QueryLogger:
         helpful: bool,
         comment: str = "",
     ) -> None:
-        timestamp = datetime.now(timezone.utc).isoformat()
         with self._get_conn() as conn:
+            # Verify query_id exists and belongs to this session
+            row = conn.execute(
+                "SELECT session_id FROM query_logs WHERE id = ?", (query_id,)
+            ).fetchone()
+            if row is None:
+                raise ValueError(f"Query {query_id} does not exist")
+            if row[0] != session_id:
+                raise ValueError(f"Query {query_id} does not belong to session {session_id}")
+
+            timestamp = datetime.now(timezone.utc).isoformat()
             conn.execute(
                 """
                 INSERT INTO feedback (timestamp, session_id, query_id, helpful, comment)

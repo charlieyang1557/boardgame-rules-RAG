@@ -120,18 +120,39 @@ def _run_pipeline(query: str, session_id: str, game_name: str | None) -> AskResp
     if _searcher is None:
         raise HTTPException(status_code=503, detail="BM25 index not loaded. Run ingestion first.")
 
-    # 1. Embed raw query (used for cache lookup and search)
-    raw_embedding = _embed_query(query)
+    # 1. Session management
+    history = _session_manager.get_history_text(session_id)
 
-    # 2. Check semantic cache BEFORE rewriting (saves Haiku + Sonnet cost)
-    cached = _cache.lookup(raw_embedding)
+    # 2. Query rewriting + game resolution (BEFORE cache lookup)
+    from retrieval.query_rewriter import rewrite_query
+
+    rewrite_result = rewrite_query(
+        raw_query=query,
+        history=history,
+        anthropic_client=_anthropic_client,
+        default_game=game_name or "splendor",
+    )
+    rewritten = rewrite_result.rewritten_query
+    resolved_game = rewrite_result.game_name
+
+    # 3. Phase 1: only Splendor is supported
+    from routing.game_config import get_config
+
+    if resolved_game != "splendor":
+        raise HTTPException(status_code=400, detail="Only 'splendor' is supported in Phase 1.")
+
+    # 4. Embed rewritten query (used for cache lookup AND search)
+    query_embedding = _embed_query(rewritten)
+
+    # 5. Check semantic cache (keyed on game + rewritten query embedding)
+    cached = _cache.lookup(query_embedding, game_name=resolved_game)
     if cached is not None:
         latency = (time.time() - start) * 1000
         query_id = _logger.log_query(
             session_id=session_id,
             raw_query=query,
-            rewritten_query=query,
-            game_name=cached.get("game_name", "splendor"),
+            rewritten_query=rewritten,
+            game_name=resolved_game,
             tier_decision=cached["tier"],
             top_chunks=[],
             final_answer=cached["answer"],
@@ -148,31 +169,6 @@ def _run_pipeline(query: str, session_id: str, game_name: str | None) -> AskResp
             cache_hit=True,
             latency_ms=latency,
         )
-
-    # 3. Session management
-    history = _session_manager.get_history_text(session_id)
-
-    # 4. Query rewriting
-    from retrieval.query_rewriter import rewrite_query
-
-    rewrite_result = rewrite_query(
-        raw_query=query,
-        history=history,
-        anthropic_client=_anthropic_client,
-        default_game=game_name or "splendor",
-    )
-    rewritten = rewrite_result.rewritten_query
-    resolved_game = rewrite_result.game_name
-
-    # 5. Embed rewritten query for search (different from raw for better retrieval)
-    query_embedding = _embed_query(rewritten)
-
-    # 5. Hybrid search
-    from routing.game_config import GAME_CONFIG, get_config
-
-    # Phase 1: default to splendor for unknown games
-    if resolved_game not in GAME_CONFIG:
-        resolved_game = "splendor"
     config = get_config(resolved_game)
     search_results = _searcher.search(
         query=rewritten,
@@ -214,11 +210,12 @@ def _run_pipeline(query: str, session_id: str, game_name: str | None) -> AskResp
     else:
         gen_result = generate_tier3(top_chunks)
 
-    # 10. Cache (Tier 1 only, keyed on raw query embedding)
+    # 10. Cache (Tier 1 only, keyed on game + rewritten query embedding)
     _cache.store(
-        raw_embedding,
-        {"answer": gen_result.answer, "tier": gen_result.tier, "game_name": resolved_game},
+        query_embedding,
+        {"answer": gen_result.answer, "tier": gen_result.tier},
         gen_result.tier,
+        game_name=resolved_game,
     )
 
     # 11. Log
