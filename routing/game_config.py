@@ -56,10 +56,12 @@ GAME_CONFIG: dict[str, GameConfig] = {
         rerank_top_k=8,
         hybrid_top_k=40,
         rrf_k=60,
-        multi_system_detection=True,
-        use_secondary_kb=True,
+        multi_system_detection=False,
+        use_secondary_kb=False,
         version_aware=False,
         parser_mode="agentic",
+        tier1_threshold=0.20,
+        tier2_threshold=0.08,
     ),
 }
 
@@ -118,6 +120,34 @@ TERMINOLOGY_MAPS: dict[str, dict[str, str]] = {
         "alcohol": "barrels",
         "liquor": "barrels",
     },
+    "fcm": {
+        "employees": "employee cards",
+        "workers": "employee cards",
+        "hire": "recruit",
+        "fire": "fire (Phase 5: Payday)",
+        "salary": "pay $5 for each card with salary icon",
+        "money": "cash",
+        "bank": "bank pool",
+        "income": "unit price + bonuses",
+        "demand": "demand counters on house",
+        "supply": "food and drinks stock",
+        "advertising": "marketing campaign",
+        "billboard": "billboard campaign",
+        "radio": "radio campaign",
+        "airplane": "airplane campaign",
+        "mailbox": "mailbox campaign",
+        "upgrade": "train (employee training)",
+        "promote": "train (employee training)",
+        "level up": "train (employee training)",
+        "garden bonus": "garden doubles unit price",
+        "double price": "garden doubles unit price",
+        "range": "range (number of tile crossings)",
+        "org chart": "company structure",
+        "pyramid": "company structure",
+        "bench": "on the beach",
+        "reserve": "on the beach",
+        "break the bank": "bank breaks",
+    },
 }
 
 # Multi-PDF source definitions per game
@@ -130,6 +160,7 @@ PDF_SOURCES: dict[str, list[tuple[str, str]]] = {
         ("data/rulebooks/speakeasy_solo_rules.pdf", "speakeasy_solo"),
         ("data/rulebooks/speakeasy_stretch_goals.pdf", "speakeasy_stretch"),
     ],
+    "fcm": [("data/rulebooks/fcm.pdf", "fcm_rules")],
 }
 
 

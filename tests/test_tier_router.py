@@ -1,5 +1,6 @@
 import math
 
+from routing.game_config import get_config, get_pdf_sources, get_terminology_map
 from routing.tier_router import TierDecision, route_tier, sigmoid
 
 
@@ -78,3 +79,25 @@ class TestRouteTier:
         # Without tier2_threshold, same as binary Tier 1/3
         result = route_tier(cross_encoder_logit=-0.5, threshold=0.5)
         assert result.tier == 3  # Not Tier 2
+
+
+class TestFcmConfig:
+    def test_fcm_config_exists(self) -> None:
+        config = get_config("fcm")
+        assert config.retrieval_hops == 3
+        assert config.rerank_top_k == 8
+        assert config.hybrid_top_k == 40
+        assert config.parser_mode == "agentic"
+        assert config.multi_system_detection is False
+        assert config.use_secondary_kb is False
+
+    def test_fcm_terminology_map(self) -> None:
+        term_map = get_terminology_map("fcm")
+        assert "employees" in term_map
+        assert term_map["hire"] == "recruit"
+        assert term_map["garden bonus"] == "garden doubles unit price"
+
+    def test_fcm_pdf_sources(self) -> None:
+        sources = get_pdf_sources("fcm")
+        assert len(sources) == 1
+        assert sources[0][1] == "fcm_rules"
