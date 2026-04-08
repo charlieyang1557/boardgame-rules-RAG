@@ -37,7 +37,7 @@ def _upsert_to_pinecone(
     chunks: list[dict],
     embeddings: list[list[float]],
     game_name: str,
-    batch_size: int = 100,
+    batch_size: int = 20,
 ) -> int:
     """Upsert chunk embeddings to Pinecone index."""
     from pinecone import Pinecone
