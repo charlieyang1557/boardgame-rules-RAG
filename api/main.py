@@ -203,18 +203,23 @@ def _run_pipeline(query: str, session_id: str, game_name: str) -> AskResponse:
     from routing.tier_router import route_tier
 
     best_score = reranked[0].raw_score if reranked else -10.0
-    tier_decision = route_tier(best_score, threshold=config.tier1_threshold)
+    tier_decision = route_tier(
+        best_score,
+        threshold=config.tier1_threshold,
+        tier2_threshold=config.tier2_threshold if config.retrieval_hops > 1 else None,
+    )
 
     # Override: if a location-promoted chunk is #1, force Tier 1
     if location_names and reranked:
         query_lower = query.lower()
         matched_loc = [loc for loc in location_names if loc.lower() in query_lower]
         if matched_loc and any(loc.lower() in reranked[0].text.lower() for loc in matched_loc):
-            if tier_decision.tier == 3:
+            if tier_decision.tier in (2, 3):
                 tier_decision = route_tier(10.0)  # Force Tier 1
 
     # 8. Generation
     from generation.generator import generate_tier1, generate_tier3
+    from verification.citation_verifier import verify_citations
 
     top_chunks = [
         {"chunk_id": r.chunk_id, "text": r.text, "sigmoid_score": r.sigmoid_score}
@@ -223,16 +228,57 @@ def _run_pipeline(query: str, session_id: str, game_name: str) -> AskResponse:
 
     if tier_decision.tier == 1:
         gen_result = generate_tier1(rewritten, top_chunks, _anthropic_client)
-
-        # 9. Citation verification
-        from verification.citation_verifier import verify_citations
-
         verification = verify_citations(gen_result.answer, top_chunks, _anthropic_client)
         if not verification.all_supported:
-            # Downgrade to Tier 3
-            gen_result = generate_tier3(top_chunks)
+            gen_result = generate_tier3(
+                top_chunks, anthropic_client=_anthropic_client, query=rewritten,
+            )
+
+    elif tier_decision.tier == 2:
+        # Tier 2: Chain-of-Retrieval multi-hop
+        from retrieval.multi_hop import ChainOfRetrieval
+
+        chain = ChainOfRetrieval(
+            searcher=searcher, reranker=_reranker,
+            anthropic_client=_anthropic_client, openai_client=_openai_client,
+            max_hops=min(config.retrieval_hops, 2),
+        )
+        chain_result = chain.retrieve_and_reason(
+            query=rewritten, game_name=resolved_game, config=config,
+            alt_query=query, location_names=location_names,
+            initial_chunks=top_chunks,
+        )
+
+        if chain_result.is_answerable:
+            # Parse citations from chain answer
+            import re as _re
+            citation_pattern = _re.compile(r'\[([^\]]+)\]')
+            found_ids = citation_pattern.findall(chain_result.answer)
+            valid_ids = {c["chunk_id"] for c in chain_result.merged_chunks}
+
+            from generation.generator import GenerationResult
+            gen_result = GenerationResult(
+                answer=chain_result.answer,
+                citations=[{"claim": "", "chunk_id": cid} for cid in found_ids if cid in valid_ids],
+                tier=2,
+            )
+            # Verify citations on merged chunks
+            verification = verify_citations(gen_result.answer, chain_result.merged_chunks, _anthropic_client)
+            if not verification.all_supported:
+                gen_result = generate_tier3(
+                    chain_result.merged_chunks, anthropic_client=_anthropic_client, query=rewritten,
+                )
+            else:
+                top_chunks = chain_result.merged_chunks  # Update for logging
+        else:
+            gen_result = generate_tier3(
+                top_chunks, anthropic_client=_anthropic_client, query=rewritten,
+            )
+
     else:
-        gen_result = generate_tier3(top_chunks)
+        gen_result = generate_tier3(
+            top_chunks, anthropic_client=_anthropic_client, query=rewritten,
+        )
 
     # 10. Cache (Tier 1 only, keyed on game + rewritten query embedding)
     _cache.store(

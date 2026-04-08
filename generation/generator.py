@@ -54,12 +54,36 @@ def generate_tier1(query: str, chunks: list[dict], anthropic_client) -> Generati
     return GenerationResult(answer=answer, citations=citations, tier=1)
 
 
-def generate_tier3(chunks: list[dict]) -> GenerationResult:
+def generate_tier3(
+    chunks: list[dict], anthropic_client=None, query: str = "",
+) -> GenerationResult:
+    """Tier 3: structured response with optional suggested interpretation.
+
+    Uses Haiku (cheapest model) for the interpretation if available.
+    Only generates interpretation if closest chunk has sigmoid > 0.05.
+    """
     top_3 = chunks[:3]
     parts = ["The rule book does not address this directly.\n"]
     parts.append("Closest relevant rules found:\n")
     for i, c in enumerate(top_3, 1):
         score = c.get("sigmoid_score", c.get("score", 0.0))
         parts.append(f"{i}. [{c['chunk_id']}] (relevance: {score:.2f}): {c['text'][:300]}")
+
+    # Suggested interpretation using Haiku (cheap)
+    best_score = top_3[0].get("sigmoid_score", 0) if top_3 else 0
+    if anthropic_client and query and best_score > 0.05:
+        try:
+            chunk_context = "\n".join(c["text"][:200] for c in top_3)
+            msg = anthropic_client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=256,
+                temperature=0,
+                system="Based on the closest rule chunks, offer a brief suggested interpretation. Clearly label it as interpretation, not official rule.",
+                messages=[{"role": "user", "content": f"Closest rules:\n{chunk_context}\n\nQuestion: {query}"}],
+            )
+            parts.append(f"\nSuggested interpretation (not an official rule):\n{msg.content[0].text}")
+        except Exception:
+            pass
+
     answer = "\n".join(parts)
     return GenerationResult(answer=answer, citations=[], tier=3)
