@@ -199,7 +199,7 @@ def _run_pipeline(query: str, session_id: str, game_name: str) -> AskResponse:
     from routing.tier_router import route_tier
 
     best_score = reranked[0].raw_score if reranked else -10.0
-    tier_decision = route_tier(best_score)
+    tier_decision = route_tier(best_score, threshold=config.tier1_threshold)
 
     # 8. Generation
     from generation.generator import generate_tier1, generate_tier3
