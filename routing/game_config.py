@@ -110,7 +110,7 @@ TERMINOLOGY_MAPS: dict[str, dict[str, str]] = {
         "scoring": "Cooking Books",
         "end game scoring": "Cooking Books",
         "bar": "Speakeasy",
-        "club": "Nightclub",
+        "nightclub": "Nightclub",
         "distillery": "Stills",
         "booze": "barrels",
         "alcohol": "barrels",
@@ -131,8 +131,21 @@ PDF_SOURCES: dict[str, list[tuple[str, str]]] = {
 }
 
 
+# Canonical location names per game (for location-aware chunk promotion)
+LOCATION_NAMES: dict[str, frozenset[str]] = {
+    "speakeasy": frozenset({
+        "Contractor", "City Planner", "Garage", "City Hall",
+        "Commission", "Docks", "Restaurant", "Park",
+    }),
+}
+
+
 def get_pdf_sources(game_name: str) -> list[tuple[str, str]]:
     return PDF_SOURCES.get(game_name.lower().strip(), [])
+
+
+def get_location_names(game_name: str) -> frozenset[str]:
+    return LOCATION_NAMES.get(game_name.lower().strip(), frozenset())
 
 
 def get_terminology_map(game_name: str) -> dict[str, str]:

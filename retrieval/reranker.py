@@ -24,6 +24,7 @@ class Reranker:
         chunks: list[dict],
         top_k: int = 5,
         alt_query: str | None = None,
+        location_names: frozenset[str] | None = None,
     ) -> list[RerankResult]:
         """Rerank chunks using cross-encoder, return top-k with sigmoid scores.
 
@@ -70,4 +71,33 @@ class Reranker:
             )
 
         results.sort(key=lambda r: r.sigmoid_score, reverse=True)
-        return results[:top_k]
+        top_results = results[:top_k]
+
+        # Location-aware chunk promotion: if query contains an exact location
+        # name and the matching chunk isn't in top-k, inject it at position 1.
+        if location_names:
+            query_lower = query.lower()
+            alt_lower = alt_query.lower() if alt_query else ""
+            matched_loc = [
+                loc for loc in location_names
+                if loc.lower() in query_lower or loc.lower() in alt_lower
+            ]
+            if matched_loc:
+                top_ids = {r.chunk_id for r in top_results}
+                for r in results:
+                    if r.chunk_id in top_ids:
+                        continue
+                    if any(loc.lower() in r.text.lower() for loc in matched_loc):
+                        top_results.insert(0, r)
+                        top_results = top_results[:top_k]
+                        break
+
+                # Also promote: if matching chunk is in top-k but not #1, move to #1
+                for i, r in enumerate(top_results):
+                    if i == 0:
+                        continue
+                    if any(loc.lower() in r.text.lower() for loc in matched_loc):
+                        top_results.insert(0, top_results.pop(i))
+                        break
+
+        return top_results

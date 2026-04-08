@@ -187,12 +187,16 @@ def _run_pipeline(query: str, session_id: str, game_name: str) -> AskResponse:
         rrf_k=config.rrf_k,
     )
 
-    # 6. Rerank
+    # 6. Rerank (with location-aware promotion for games with defined locations)
+    from routing.game_config import get_location_names
+
+    location_names = get_location_names(resolved_game)
     chunks_for_rerank = [
         {"chunk_id": r.chunk_id, "text": r.text} for r in search_results
     ]
     reranked = _reranker.rerank(
-        rewritten, chunks_for_rerank, top_k=config.rerank_top_k, alt_query=query
+        rewritten, chunks_for_rerank, top_k=config.rerank_top_k,
+        alt_query=query, location_names=location_names,
     )
 
     # 7. Tier routing
@@ -200,6 +204,14 @@ def _run_pipeline(query: str, session_id: str, game_name: str) -> AskResponse:
 
     best_score = reranked[0].raw_score if reranked else -10.0
     tier_decision = route_tier(best_score, threshold=config.tier1_threshold)
+
+    # Override: if a location-promoted chunk is #1, force Tier 1
+    if location_names and reranked:
+        query_lower = query.lower()
+        matched_loc = [loc for loc in location_names if loc.lower() in query_lower]
+        if matched_loc and any(loc.lower() in reranked[0].text.lower() for loc in matched_loc):
+            if tier_decision.tier == 3:
+                tier_decision = route_tier(10.0)  # Force Tier 1
 
     # 8. Generation
     from generation.generator import generate_tier1, generate_tier3
