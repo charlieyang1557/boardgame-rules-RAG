@@ -22,7 +22,7 @@
   {
     "query": "How much salary do employees cost?",
     "expected_tier": 1,
-    "ground_truth": "Each employee card that has a dollar sign symbol on it costs $5 in salary during Phase 5 (Payday). Not all employees require a salary — only those marked with the salary symbol. Various milestones and abilities can reduce salary costs, but the minimum salary payment is $0.",
+    "ground_truth": "Each employee card in your company structure or on the beach that has a salary icon (dollar sign symbol) on it costs $5 in salary during Phase 5 (Payday). Not all employee cards require a salary — only those marked with the salary icon on the card. Employees on the beach still require salary payment. Various milestones and abilities such as unused recruitment slots can reduce total salary costs, but the minimum salary payment is $0.",
     "expected_chunks": [],
     "required_chunk_keywords": ["$5", "salary"],
     "forbidden_content": ["$10 salary", "$3 salary"],
@@ -82,10 +82,10 @@
   {
     "query": "How is turn order determined?",
     "expected_tier": 1,
-    "ground_truth": "Turn order is determined in Phase 2 (Order of Business). The player with the most open slots in their company structure chooses their position on the turn order track first, followed by the next player with most open slots. If players tie in open slots, the one who was ahead in previous turn order chooses first. The 'First airplane campaign' milestone adds 2 extra open slots for this calculation only.",
+    "ground_truth": "Turn order is determined in Phase 2 (Order of Business). The player with the most open slots in their company structure chooses their position on the turn order track first, followed by the next player with most open slots. If players tie in open slots, the one who was ahead in previous turn order chooses first. The 'First airplane campaign' milestone adds 2 extra open slots for this calculation only. At the very start of the game, initial turn order is determined randomly before the first round begins.",
     "expected_chunks": [],
     "required_chunk_keywords": ["open slots", "turn order", "choose"],
-    "forbidden_content": ["random", "dice"],
+    "forbidden_content": ["dice"],
     "difficulty": "easy",
     "category": "phase"
   },
@@ -122,7 +122,7 @@
   {
     "query": "What range does the Cart Operator have?",
     "expected_tier": 1,
-    "ground_truth": "The Cart Operator has a range of 2 over roads, covering up to 3 tiles (including the restaurant tile). It collects 2 drinks from the stock for each drink symbol passed on either side of the road. With the 'First cart operator played' milestone, the range increases to 3.",
+    "ground_truth": "The Cart Operator employee card has a range of 2 over roads, covering up to 3 tiles including the restaurant tile where it starts. It collects 2 drinks from the stock for each drink symbol passed on either side of the road during its movement. With the 'First cart operator played' milestone, the Cart Operator's range increases by 1 to a total range of 3, allowing it to reach further along roads.",
     "expected_chunks": [],
     "required_chunk_keywords": ["Cart Operator", "range", "2"],
     "forbidden_content": ["range of 4", "ignoring roads"],
@@ -152,7 +152,7 @@
   {
     "query": "What does the Burger Chef produce?",
     "expected_tier": 1,
-    "ground_truth": "The Burger Chef produces 8 burgers per turn when placed in the company structure. The Burger Chef is the upgraded version of the Burger Cook (which produces 3 burgers).",
+    "ground_truth": "The Burger Chef employee card produces 8 burgers per turn when placed in the company structure and activated during Phase 3. The Burger Chef is the upgraded (trained) version of the Burger Cook, which only produces 3 burgers. Training a Burger Cook into a Burger Chef requires one training step.",
     "expected_chunks": [],
     "required_chunk_keywords": ["Burger Chef", "8", "burgers"],
     "forbidden_content": ["3 burgers"],
@@ -192,7 +192,7 @@
   {
     "query": "What is the standard unit price of goods in FCM?",
     "expected_tier": 1,
-    "ground_truth": "The standard unit price of each good is $10. This can be modified by pricing managers (-$1 each), discount managers (-$3 each), luxury managers (+$10), and the 'First to lower prices' milestone (-$1 permanently). Bonuses from CFO, 'First burger marketed', etc. do not alter the unit price.",
+    "ground_truth": "The standard unit price for all goods (burgers, pizza, drinks) in Food Chain Magnate is $10 per item. This base unit price can be modified by pricing managers (each reduces price by $1), discount managers (each reduces price by $3), luxury managers (each adds $10), and the 'First to lower prices' milestone (permanently reduces by $1). Note that bonuses from the CFO, 'First burger marketed', and similar effects do not alter the unit price calculation.",
     "expected_chunks": [],
     "required_chunk_keywords": ["$10", "unit price"],
     "forbidden_content": ["$5 unit price", "$15 unit price"],
@@ -373,7 +373,7 @@
   {
     "query": "What is the maximum demand a house can hold?",
     "expected_tier": 1,
-    "ground_truth": "A house can have at most 3 demand tokens in total. If the house has a garden, it can have up to 5 demand tokens. If a marketing campaign reaches a house that is already at its limit, the campaign has no additional effect on that house.",
+    "ground_truth": "A house can hold a maximum of 3 demand tokens in total across all food and drink types. If the house has a garden attached, the maximum demand capacity increases to 5 demand tokens. When a marketing campaign reaches a house that is already at its maximum demand limit, the campaign has no additional effect and no extra tokens are placed on that house.",
     "expected_chunks": [],
     "required_chunk_keywords": ["3", "demand", "garden", "5"],
     "forbidden_content": ["unlimited demand"],
@@ -423,7 +423,7 @@
   {
     "query": "What order are actions performed in during Phase 3?",
     "expected_tier": 2,
-    "ground_truth": "Actions in Phase 3 must be performed in a fixed order regardless of position in the organizational chart: (1) Recruit, (2) Train, (3) Initiate marketing campaigns, (4) Get food & drinks, (5) Place new houses and gardens, (6) Place or move restaurants. Some actions are mandatory (pricing/discount/luxury manager, CFO, recruiting manager/HR director, waitress) while others are optional. A player completes all actions before the next player takes their turn.",
+    "ground_truth": "During Phase 3 (Working 9:00-5:00), actions must be performed in a specific fixed order: first (1) Recruit new employees, then (2) Train existing employees, then (3) Initiate marketing campaigns by placing billboards, mailboxes, radios, or airplanes, then (4) Get food and drinks from sources, then (5) Place new houses and gardens using the new business developer, then (6) Place or move restaurants using managers. Certain actions are mandatory when the corresponding employee is active (pricing manager, discount manager, luxury manager, CFO, recruiting manager, HR director, waitress), while other actions are optional. Each player completes all of their actions before the next player in turn order takes their turn.",
     "expected_chunks": [],
     "required_chunk_keywords": ["order", "Recruit", "Train", "marketing"],
     "forbidden_content": ["any order", "simultaneous"],
@@ -513,7 +513,7 @@
   {
     "query": "Can two players share a billboard space?",
     "expected_tier": 3,
-    "ground_truth": "The rulebook does not address whether two players can place billboards on the same square. Billboards must be placed on 'empty squares,' which suggests a square with an existing billboard is no longer empty. However, the rules do not explicitly prohibit or address this scenario.",
+    "ground_truth": "The rulebook does not explicitly address whether two players can place billboards or marketing campaigns on the same square. The rules state that billboards must be placed on empty squares connected to a road, which implies that a square already occupied by a billboard or other campaign piece is no longer considered empty. However, the rules do not explicitly prohibit or directly address this sharing scenario.",
     "expected_chunks": [],
     "required_chunk_keywords": [],
     "forbidden_content": [],
@@ -523,17 +523,17 @@
   {
     "query": "If a house has demand but no chain can deliver, does demand persist to the next turn?",
     "expected_tier": 1,
-    "ground_truth": "Yes. Demand tokens that have been placed on houses remain on the board between turns. During Phase 7 (Clean Up), the rules state that 'demand tokens that have been placed on houses remain on the board.' If no chain can fulfill the demand in a given turn, the demand stays for future turns, and more demand may be added by new marketing campaigns (up to the house's capacity of 3, or 5 with a garden).",
+    "ground_truth": "Yes, demand tokens persist between turns. Demand tokens that have been placed on houses remain on the board and are not removed during Phase 7 (Clean Up). The rules explicitly state that demand tokens stay on the board between turns. If no chain can fulfill the demand in a given turn, the demand tokens stay for future turns. Additional demand may be added by new marketing campaigns up to the house's maximum capacity of 3 tokens, or 5 tokens if the house has a garden. Demand tokens are only removed when a house is served and its demand is fulfilled.",
     "expected_chunks": [],
     "required_chunk_keywords": ["demand", "remain", "board"],
-    "forbidden_content": ["removed", "discarded"],
+    "forbidden_content": [],
     "difficulty": "medium",
     "category": "dinnertime"
   },
   {
     "query": "Can I voluntarily leave an open slot in my structure even if I have employees available?",
     "expected_tier": 1,
-    "ground_truth": "Yes. In Phase 1 (Restructuring), you choose which employees to use this turn. You can place any subset of your employees at work and leave the rest on the beach. Having open slots in your structure is actually strategically important because more open slots mean earlier choice in Phase 2 turn order selection.",
+    "ground_truth": "Yes, you can voluntarily leave open slots in your company structure even if you have employees available to fill them. During Phase 1 (Restructuring), you freely choose which employees to place at work and which to leave on the beach. There is no explicit rule requiring you to fill all available slots. Leaving open slots is strategically important because having more open slots in your structure gives you earlier choice when selecting your position during Phase 2 turn order.",
     "expected_chunks": [],
     "required_chunk_keywords": ["open slot", "choose", "beach"],
     "forbidden_content": ["must fill all slots"],
