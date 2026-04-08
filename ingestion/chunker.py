@@ -73,25 +73,58 @@ def _split_text(text: str, chunk_size: int, overlap: int) -> list[str]:
     return chunks
 
 
+def _split_by_headings(text: str, max_section_tokens: int) -> list[tuple[str, str]]:
+    """Split text on markdown headings. Returns list of (heading, body) tuples.
+
+    If a section exceeds max_section_tokens, it will be split further by
+    the regular _split_text function downstream. Sections under the limit
+    are kept as coherent units.
+    """
+    sections: list[tuple[str, str]] = []
+    current_heading = ""
+    current_lines: list[str] = []
+
+    for line in text.split("\n"):
+        stripped = line.strip()
+        if stripped.startswith("#"):
+            # Flush previous section
+            if current_lines:
+                sections.append((current_heading, "\n".join(current_lines).strip()))
+            current_heading = re.sub(r"^#+\s*", "", stripped).strip()
+            current_lines = []
+        else:
+            current_lines.append(line)
+
+    if current_lines:
+        sections.append((current_heading, "\n".join(current_lines).strip()))
+
+    return [(h, b) for h, b in sections if b]
+
+
 def chunk_parsed_pages(
     pages: list[dict],
     game_name: str,
     chunk_size: int = 400,
     overlap: int = 50,
+    source_pdf: str = "",
 ) -> list[dict]:
     """Split parsed PDF pages into context-enriched chunks.
 
     Every chunk gets a prefix like "[Splendor - Noble Tiles] " embedded
     directly in the text body for better retrieval.
 
+    Section-aware: respects markdown heading boundaries from LlamaParse output.
+    Sections under chunk_size * 2 tokens are kept as single coherent chunks.
+
     Args:
         pages: Output from pdf_parser.parse_pdf (list of {page, text, section}).
         game_name: Lowercase game identifier.
         chunk_size: Target chunk size in tokens.
         overlap: Overlap between consecutive chunks in tokens.
+        source_pdf: Source PDF identifier for multi-PDF games.
 
     Returns:
-        List of chunk dicts with keys: chunk_id, text, game_name, section, page.
+        List of chunk dicts with keys: chunk_id, text, game_name, section, page, source_pdf.
     """
     game_display = game_name.title()
     all_chunks: list[dict] = []
@@ -100,24 +133,39 @@ def chunk_parsed_pages(
     for page_data in pages:
         page_num = page_data["page"]
         text = page_data["text"].strip()
-        section = page_data.get("section", "General")
+        page_section = page_data.get("section", "General")
 
         if not text:
             continue
 
-        raw_chunks = _split_text(text, chunk_size, overlap)
-        prefix = f"[{game_display} - {section}] "
+        # Split by headings to respect section boundaries
+        heading_sections = _split_by_headings(text, chunk_size * 2)
+        if not heading_sections:
+            heading_sections = [("", text)]
 
-        for chunk_text in raw_chunks:
-            enriched_text = prefix + chunk_text
-            chunk_id = _make_chunk_id(game_name, page_num, global_idx)
-            all_chunks.append({
-                "chunk_id": chunk_id,
-                "text": enriched_text,
-                "game_name": game_name,
-                "section": section,
-                "page": page_num,
-            })
-            global_idx += 1
+        for heading, body in heading_sections:
+            section = heading or page_section
+            body_tokens = _count_tokens(body)
+
+            # If section fits in chunk_size * 2, keep it as one chunk
+            if body_tokens <= chunk_size * 2:
+                raw_chunks = [body]
+            else:
+                raw_chunks = _split_text(body, chunk_size, overlap)
+
+            prefix = f"[{game_display} - {section}] "
+
+            for chunk_text in raw_chunks:
+                enriched_text = prefix + chunk_text
+                chunk_id = _make_chunk_id(game_name, page_num, global_idx)
+                all_chunks.append({
+                    "chunk_id": chunk_id,
+                    "text": enriched_text,
+                    "game_name": game_name,
+                    "section": section,
+                    "page": page_num,
+                    "source_pdf": source_pdf,
+                })
+                global_idx += 1
 
     return all_chunks

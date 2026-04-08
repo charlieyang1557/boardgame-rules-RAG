@@ -36,17 +36,17 @@ GAME_CONFIG: dict[str, GameConfig] = {
         version_aware=False,
         parser_mode="cost_effective",
     ),
-    # Phase 2+
     "speakeasy": GameConfig(
-        retrieval_hops=2,
+        retrieval_hops=1,  # Phase 2a: single hop only
         rerank_top_k=5,
-        hybrid_top_k=30,
+        hybrid_top_k=20,
         rrf_k=60,
         multi_system_detection=False,
-        use_secondary_kb=True,
-        version_aware=True,
+        use_secondary_kb=False,  # Phase 2b
+        version_aware=False,
         parser_mode="agentic",
     ),
+    # Phase 2+
     "fcm": GameConfig(
         retrieval_hops=3,
         rerank_top_k=8,
@@ -91,7 +91,46 @@ TERMINOLOGY_MAPS: dict[str, dict[str, str]] = {
         "sheep": "wool",
         "wood": "lumber",
     },
+    "speakeasy": {
+        "worker": "Capo",
+        "workers": "Capos",
+        "meeple": "Family Member",
+        "thug": "Goon",
+        "thugs": "Goons",
+        "protection money": "Leverage",
+        "fame": "Infamy",
+        "reputation": "Infamy",
+        "running": "Operating",
+        "open": "Operating",
+        "gang war": "Mob War",
+        "territory": "Zone Control",
+        "district control": "Zone Control",
+        "scoring": "Cooking Books",
+        "end game scoring": "Cooking Books",
+        "bar": "Speakeasy",
+        "club": "Nightclub",
+        "distillery": "Stills",
+        "booze": "barrels",
+        "alcohol": "barrels",
+        "liquor": "barrels",
+    },
 }
+
+# Multi-PDF source definitions per game
+PDF_SOURCES: dict[str, list[tuple[str, str]]] = {
+    "splendor": [("data/rulebooks/splendor.pdf", "splendor_rules")],
+    "catan": [("data/rulebooks/catan.pdf", "catan_rules")],
+    "speakeasy": [
+        ("data/rulebooks/speakeasy_rules_v18.pdf", "speakeasy_rules"),
+        ("data/rulebooks/speakeasy_player_aid.pdf", "speakeasy_player_aid"),
+        ("data/rulebooks/speakeasy_solo_rules.pdf", "speakeasy_solo"),
+        ("data/rulebooks/speakeasy_stretch_goals.pdf", "speakeasy_stretch"),
+    ],
+}
+
+
+def get_pdf_sources(game_name: str) -> list[tuple[str, str]]:
+    return PDF_SOURCES.get(game_name.lower().strip(), [])
 
 
 def get_terminology_map(game_name: str) -> dict[str, str]:

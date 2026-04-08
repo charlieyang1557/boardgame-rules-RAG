@@ -101,6 +101,46 @@ def _build_bm25_index(chunks: list[dict], game_name: str) -> int:
     return len(chunks)
 
 
+def build_multi_pdf_kb(game_name: str, pdf_sources: list[tuple[str, str]]) -> KBBuildResult:
+    """Ingest multiple PDFs for one game. Merges all chunks before embedding.
+
+    Args:
+        game_name: Lowercase game identifier.
+        pdf_sources: List of (pdf_path, source_label) tuples.
+
+    Returns:
+        KBBuildResult with combined counts.
+    """
+    from ingestion.chunker import chunk_parsed_pages
+    from ingestion.pdf_parser import parse_pdf
+    from routing.game_config import get_config
+
+    config = get_config(game_name)
+    all_chunks: list[dict] = []
+
+    for pdf_path, source_label in pdf_sources:
+        cache_name = source_label or game_name
+        pages = parse_pdf(pdf_path, cache_name, mode=config.parser_mode)
+        chunks = chunk_parsed_pages(
+            pages, game_name, chunk_size=300, overlap=50, source_pdf=source_label
+        )
+        all_chunks.extend(chunks)
+
+    if not all_chunks:
+        raise ValueError(f"No chunks produced from {len(pdf_sources)} PDFs for {game_name}")
+
+    texts = [c["text"] for c in all_chunks]
+    embeddings = _embed_texts(texts)
+    pinecone_count = _upsert_to_pinecone(all_chunks, embeddings, game_name)
+    bm25_count = _build_bm25_index(all_chunks, game_name)
+
+    return KBBuildResult(
+        chunk_count=len(all_chunks),
+        pinecone_count=pinecone_count,
+        bm25_count=bm25_count,
+    )
+
+
 def build_primary_kb(game_name: str, pdf_path: str) -> KBBuildResult:
     """Full ingestion pipeline: parse → chunk → embed → upsert + BM25.
 
