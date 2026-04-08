@@ -29,13 +29,22 @@ def compute_token_overlap(claim: str, chunk_text: str) -> float:
     return len(overlap) / len(claim_tokens)
 
 
+_MIN_CLAIM_WORDS = 4
+
+
 def _extract_cited_claims(answer: str) -> list[tuple[str, str]]:
+    """Extract (claim_text, chunk_id) pairs from an answer with inline [chunk_id] citations.
+
+    Filters out fragments shorter than _MIN_CLAIM_WORDS to avoid matching
+    sentence connectors like "Additionally," or "The rules also specify in"
+    as standalone claims.
+    """
     pattern = re.compile(r"([^\n\[]+?)\s*\[([^\]]+)\]")
     claims: list[tuple[str, str]] = []
     for match in pattern.finditer(answer):
         claim = match.group(1).strip(" \t\n\r.:;-")
         chunk_id = match.group(2).strip()
-        if claim and chunk_id:
+        if claim and chunk_id and len(claim.split()) >= _MIN_CLAIM_WORDS:
             claims.append((claim, chunk_id))
     return claims
 
@@ -128,13 +137,7 @@ def verify_citations(
                 )
             )
 
-    supported_count = sum(1 for d in details if d.supported)
-    total_count = len(details)
-    # Downgrade to Tier 3 only if majority of claims are unsupported.
-    # A single borderline false-negative from the entailment check should
-    # not nuke an otherwise well-cited answer.
-    majority_supported = supported_count > total_count / 2 if total_count > 0 else True
     return VerificationResult(
-        all_supported=majority_supported,
+        all_supported=all(d.supported for d in details),
         details=details,
     )
