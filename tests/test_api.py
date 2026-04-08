@@ -31,8 +31,8 @@ class TestHealthEndpoint:
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "ok"
-        assert "pinecone" in data
-        assert "bm25_loaded" in data
+        assert "games_loaded" in data
+        assert isinstance(data["games_loaded"], list)
 
 
 class TestFeedbackEndpoint:

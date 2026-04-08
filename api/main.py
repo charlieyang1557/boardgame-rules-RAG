@@ -17,7 +17,7 @@ app = FastAPI(title="BoardGameOracle", version="0.1.0")
 class AskRequest(BaseModel):
     query: str = Field(..., max_length=2000)
     session_id: str | None = Field(None, max_length=64)
-    game_name: str | None = Field(None, max_length=50)
+    game_name: str = Field(..., max_length=50)
 
 
 class ChunkInfo(BaseModel):
@@ -38,13 +38,12 @@ class AskResponse(BaseModel):
 
 class HealthResponse(BaseModel):
     status: str
-    pinecone: bool
-    bm25_loaded: bool
+    games_loaded: list[str]
 
 
 # ── Global state (initialized at startup) ────────────────────────────────────
 
-_searcher = None
+_searchers: dict[str, object] = {}  # game_name -> HybridSearcher
 _reranker = None
 _cache = None
 _session_manager = None
@@ -54,8 +53,8 @@ _openai_client = None
 
 
 def _init_components() -> None:
-    """Lazy-initialize all pipeline components."""
-    global _searcher, _reranker, _cache, _session_manager, _logger
+    """Lazy-initialize all pipeline components (except per-game searchers)."""
+    global _reranker, _cache, _session_manager, _logger
     global _anthropic_client, _openai_client
 
     if _logger is not None:
@@ -87,15 +86,21 @@ def _init_components() -> None:
     except Exception:
         pass
 
-    bm25_path = "ingestion/cache/splendor_bm25.pkl"
-    if os.path.exists(bm25_path):
-        from retrieval.hybrid_search import HybridSearcher
-
-        _searcher = HybridSearcher(game_name="splendor", bm25_pickle_path=bm25_path)
-
     # Set up feedback router with logger
     from api.feedback import set_logger
     set_logger(_logger)
+
+
+def _get_searcher(game_name: str):
+    """Get or lazily initialize a HybridSearcher for the given game."""
+    if game_name not in _searchers:
+        bm25_path = f"ingestion/cache/{game_name}_bm25.pkl"
+        if not os.path.exists(bm25_path):
+            return None
+        from retrieval.hybrid_search import HybridSearcher
+
+        _searchers[game_name] = HybridSearcher(game_name=game_name, bm25_pickle_path=bm25_path)
+    return _searchers[game_name]
 
 
 def _embed_query(query: str) -> list[float]:
@@ -107,7 +112,7 @@ def _embed_query(query: str) -> list[float]:
     return response.data[0].embedding
 
 
-def _run_pipeline(query: str, session_id: str, game_name: str | None) -> AskResponse:
+def _run_pipeline(query: str, session_id: str, game_name: str) -> AskResponse:
     """Execute the full RAG pipeline."""
     _init_components()
     start = time.time()
@@ -117,32 +122,31 @@ def _run_pipeline(query: str, session_id: str, game_name: str | None) -> AskResp
     if _reranker is None:
         raise HTTPException(status_code=503, detail="Reranker model not loaded.")
 
-    if _searcher is None:
-        raise HTTPException(status_code=503, detail="BM25 index not loaded. Run ingestion first.")
+    # Validate game_name against GAME_CONFIG
+    from routing.game_config import GAME_CONFIG, get_config
+
+    game_name = game_name.lower().strip()
+    if game_name not in GAME_CONFIG:
+        raise HTTPException(status_code=400, detail=f"Unknown game: '{game_name}'. Supported: {list(GAME_CONFIG.keys())}")
+
+    searcher = _get_searcher(game_name)
+    if searcher is None:
+        raise HTTPException(status_code=503, detail=f"BM25 index not loaded for '{game_name}'. Run ingestion first.")
 
     # 1. Session management
     history = _session_manager.get_history_text(session_id)
 
-    # 2. Query rewriting + game resolution (BEFORE cache lookup)
+    # 2. Query rewriting (game_name is already resolved from request)
     from retrieval.query_rewriter import rewrite_query
 
     rewrite_result = rewrite_query(
         raw_query=query,
         history=history,
         anthropic_client=_anthropic_client,
-        default_game=game_name or "splendor",
+        default_game=game_name,
     )
     rewritten = rewrite_result.rewritten_query
-    resolved_game = rewrite_result.game_name
-
-    # 3. Phase 1: only Splendor is supported
-    from routing.game_config import get_config
-
-    # Reject if user explicitly requested a non-splendor game
-    if game_name is not None and game_name.lower() != "splendor":
-        raise HTTPException(status_code=400, detail="Only 'splendor' is supported in Phase 1.")
-    # Coerce rewriter-resolved game to splendor (rewriter may misidentify)
-    resolved_game = "splendor"
+    resolved_game = game_name  # Trust the request, not the rewriter
 
     # 4. Embed rewritten query (used for cache lookup AND search)
     query_embedding = _embed_query(rewritten)
@@ -172,8 +176,9 @@ def _run_pipeline(query: str, session_id: str, game_name: str | None) -> AskResp
             cache_hit=True,
             latency_ms=latency,
         )
+    # 6. Hybrid search
     config = get_config(resolved_game)
-    search_results = _searcher.search(
+    search_results = searcher.search(
         query=rewritten,
         query_embedding=query_embedding,
         top_k=config.hybrid_top_k,
@@ -257,10 +262,13 @@ def _run_pipeline(query: str, session_id: str, game_name: str | None) -> AskResp
 @app.get("/health", response_model=HealthResponse)
 async def health() -> HealthResponse:
     _init_components()
+    # Check which games have BM25 indexes available
+    from routing.game_config import GAME_CONFIG
+
+    loaded = [g for g in GAME_CONFIG if _get_searcher(g) is not None]
     return HealthResponse(
         status="ok",
-        pinecone=_searcher is not None,
-        bm25_loaded=_searcher is not None,
+        games_loaded=loaded,
     )
 
 

@@ -26,6 +26,17 @@ GAME_CONFIG: dict[str, GameConfig] = {
         version_aware=False,
         parser_mode="cost_effective",
     ),
+    "catan": GameConfig(
+        retrieval_hops=1,
+        rerank_top_k=5,
+        hybrid_top_k=20,
+        rrf_k=60,
+        multi_system_detection=False,
+        use_secondary_kb=False,
+        version_aware=False,
+        parser_mode="cost_effective",
+    ),
+    # Phase 2+
     "speakeasy": GameConfig(
         retrieval_hops=2,
         rerank_top_k=5,
