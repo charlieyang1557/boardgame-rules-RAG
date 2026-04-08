@@ -181,7 +181,9 @@ def _run_pipeline(query: str, session_id: str, game_name: str | None) -> AskResp
     chunks_for_rerank = [
         {"chunk_id": r.chunk_id, "text": r.text} for r in search_results
     ]
-    reranked = _reranker.rerank(rewritten, chunks_for_rerank, top_k=config.rerank_top_k)
+    reranked = _reranker.rerank(
+        rewritten, chunks_for_rerank, top_k=config.rerank_top_k, alt_query=query
+    )
 
     # 7. Tier routing
     from routing.tier_router import route_tier

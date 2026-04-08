@@ -49,12 +49,12 @@ class TestRouteTier:
         assert result.tier == 1
         assert abs(result.relevance_score - 0.5) < 1e-9
 
-    def test_default_threshold_is_050(self) -> None:
-        # sigmoid(0.1) ≈ 0.525 > 0.50 → Tier 1
-        result = route_tier(cross_encoder_logit=0.1)
+    def test_default_threshold_is_025(self) -> None:
+        # sigmoid(-1.0) ≈ 0.269 > 0.25 → Tier 1
+        result = route_tier(cross_encoder_logit=-1.0)
         assert result.tier == 1
 
     def test_default_threshold_tier3(self) -> None:
-        # sigmoid(-0.1) ≈ 0.475 < 0.50 → Tier 3
-        result = route_tier(cross_encoder_logit=-0.1)
+        # sigmoid(-1.2) ≈ 0.232 < 0.25 → Tier 3
+        result = route_tier(cross_encoder_logit=-1.2)
         assert result.tier == 3

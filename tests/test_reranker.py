@@ -40,6 +40,34 @@ class TestReranker:
         results = self.reranker.rerank("query", [])
         assert results == []
 
+    def test_dual_query_takes_max_score(self) -> None:
+        chunks = [
+            {"chunk_id": "c1", "text": "[Splendor - Gems] A player may take 2 gem tokens of the same color if at least 4 tokens of that color are available."},
+        ]
+        # Score with a weak query
+        weak = self.reranker.rerank("something unrelated about weather", chunks, top_k=1)
+        # Score with dual query where alt_query is strong
+        dual = self.reranker.rerank(
+            "something unrelated about weather", chunks, top_k=1,
+            alt_query="Can I take 2 gems of the same color?",
+        )
+        # Dual should be >= weak because it takes max
+        assert dual[0].sigmoid_score >= weak[0].sigmoid_score
+
+    def test_dual_query_same_as_single_when_identical(self) -> None:
+        chunks = [{"chunk_id": "c1", "text": "Splendor is about collecting gems."}]
+        q = "How do I collect gems?"
+        single = self.reranker.rerank(q, chunks, top_k=1)
+        dual = self.reranker.rerank(q, chunks, top_k=1, alt_query=q)
+        assert abs(single[0].sigmoid_score - dual[0].sigmoid_score) < 1e-6
+
+    def test_dual_query_none_alt_same_as_single(self) -> None:
+        chunks = [{"chunk_id": "c1", "text": "Splendor is about collecting gems."}]
+        q = "How do I collect gems?"
+        single = self.reranker.rerank(q, chunks, top_k=1)
+        dual = self.reranker.rerank(q, chunks, top_k=1, alt_query=None)
+        assert abs(single[0].sigmoid_score - dual[0].sigmoid_score) < 1e-6
+
     def test_relevant_chunk_scores_higher(self) -> None:
         chunks = [
             {"chunk_id": "relevant", "text": "[Splendor - Gems] A player may take 2 gem tokens of the same color if at least 4 tokens of that color are available."},
