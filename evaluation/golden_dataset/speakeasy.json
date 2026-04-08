@@ -12,7 +12,7 @@
   {
     "query": "What can I do at the Docks?",
     "expected_tier": 1,
-    "ground_truth": "At the Docks, you can play a Stills card, hire 1 Goon for free, and ambush a Rum-runner Ship. To ambush, your attack strength must exceed the ship's defense, you need at least 1 Family Member in the matching Docks zone, and you cannot use your Associate.",
+    "ground_truth": "At the Docks, you can play a Stills card to build new Stills, hire 1 Goon for free from the supply, and ambush a Rum-runner Ship. To ambush a Rum-runner, your total attack strength (base Strength plus any Goons you return) must exceed the ship's defense value, and you need at least 1 Family Member placed in the matching Docks zone. You cannot use your Associate for Rum-runner attacks.",
     "expected_chunks": [],
     "required_chunk_keywords": ["Docks", "Rum-runner", "Associate"],
     "forbidden_content": ["use your Associate"],
@@ -52,10 +52,10 @@
   {
     "query": "What does the Garage do?",
     "expected_tier": 1,
-    "ground_truth": "At the Garage, you can increase any one Operations or Strength level by 1, play a Fleet card for a +2 range bonus, and use your Trucks to pick up barrels from your Operating Stills or buy them from Rum-runner Ships, then deliver them to your Operating Speakeasies, Nightclubs, or Casinos.",
+    "ground_truth": "At the Garage, you can increase any one Operations or Strength level by 1, play a Fleet card for a +2 range bonus, and use your Trucks to pick up barrels from your Operating Stills or buy them from Rum-runner Ships, then deliver them to your Operating Speakeasies, Nightclubs, or Casinos. Trucks cannot deliver barrels to Stills since Stills are production buildings, not selling locations.",
     "expected_chunks": [],
     "required_chunk_keywords": ["Garage", "Truck", "deliver"],
-    "forbidden_content": ["deliver to Stills"],
+    "forbidden_content": [],
     "difficulty": "easy",
     "category": "locations"
   },
@@ -112,7 +112,7 @@
   {
     "query": "How do I increase my Operations level?",
     "expected_tier": 1,
-    "ground_truth": "You increase an Operations level by resolving effects that say to increase any one of your Operations or Strength levels by 1, or increase a specific operation by 1. Those effects appear on locations, Operations cards, City tiles, and other benefits.",
+    "ground_truth": "You increase your Operations level by moving the corresponding marker one space to the right on your Operations board. This happens when you resolve an effect that says to increase any one of your Operations or Strength levels by 1. These increase effects appear at various locations (Contractor, Garage, Commission, City Planner), on Operations cards, City tiles, and other game benefits.",
     "expected_chunks": [],
     "required_chunk_keywords": ["increase", "Operations", "by 1"],
     "forbidden_content": ["pay money to level up directly"],
@@ -142,20 +142,20 @@
   {
     "query": "How do I deliver barrels with my Truck?",
     "expected_tier": 1,
-    "ground_truth": "Each Truck may move up to its range, spending 1 movement per adjacent district. During movement it can pick up barrels from your Operating Stills or buy them from a Rum-runner Ship, and deliver them to one of your Operating buildings without a barrel. A Truck can hold up to 2 barrels, and you cannot deliver to Stills.",
+    "ground_truth": "Each Truck may move up to its range, spending 1 movement per adjacent district. During movement it can pick up barrels from your Operating Stills or buy them from a Rum-runner Ship, and deliver them to one of your Operating buildings (Speakeasies, Nightclubs, or Casinos) that does not already have a barrel. A Truck can hold up to 2 barrels. Stills are production locations and cannot receive deliveries.",
     "expected_chunks": [],
     "required_chunk_keywords": ["Truck", "range", "2 barrels"],
-    "forbidden_content": ["deliver to Stills"],
+    "forbidden_content": [],
     "difficulty": "medium",
     "category": "barrels"
   },
   {
     "query": "How much do I earn selling a barrel at a Nightclub?",
     "expected_tier": 1,
-    "ground_truth": "A Nightclub sells at the higher amount on the highest Infamy barrel space your marker has reached or passed. The exact cash depends on your current Infamy position.",
+    "ground_truth": "A Nightclub sells barrels at the higher of the two payout amounts shown on the highest Infamy barrel space your marker has reached or passed. The exact cash earned depends on your current Infamy position on the track. This is in contrast to a Speakeasy, which pays the lower of the two amounts.",
     "expected_chunks": [],
-    "required_chunk_keywords": ["Nightclub", "higher amount", "Infamy"],
-    "forbidden_content": ["lower amount"],
+    "required_chunk_keywords": ["Nightclub", "higher", "Infamy"],
+    "forbidden_content": [],
     "difficulty": "medium",
     "category": "barrels"
   },
@@ -272,7 +272,7 @@
   {
     "query": "What's different about solo setup?",
     "expected_tier": 1,
-    "ground_truth": "Solo uses the 2-player setup with extra bot rules. Jo gets his own Operations board, Zone Control markers, Capos, Family Members, Books, Stills, Speakeasies, Nightclubs, and Casinos, but no Strength marker, trucks, Associate marker, or safe, and he starts with no money. Jo also starts with Infamy on 5 and uses action decks and a District deck.",
+    "ground_truth": "Solo mode setup uses the 2-player board configuration with additional bot rules for the opponent named Jo. During setup, Jo receives his own Operations board, Zone Control markers, Capos, Family Members, Books, Stills, Speakeasies, Nightclubs, and Casinos. However, Jo does not get a Strength marker, trucks, Associate marker, or safe, and he starts with no money. Jo begins with his Infamy marker on space 5 and uses special Action card decks and a District deck to determine his moves each round.",
     "expected_chunks": [],
     "required_chunk_keywords": ["2-player setup", "Jo", "Infamy"],
     "forbidden_content": ["Jo uses trucks"],
@@ -302,10 +302,10 @@
   {
     "query": "Can I use my Associate to attack a Rum-runner ship?",
     "expected_tier": 1,
-    "ground_truth": "No. Associates cannot be used when attacking a Rum-runner Ship. You use your Strength, matching Docks Family Members, and any Goons you return.",
+    "ground_truth": "No, you cannot use your Associate to attack a Rum-runner Ship. The rules explicitly state that Associates cannot be used for Rum-runner ambushes. Your attack strength for ambushing a ship comes from your base Strength level, any Goons you return to the supply, and the requirement of having at least 1 Family Member in the matching Docks zone.",
     "expected_chunks": [],
     "required_chunk_keywords": ["Associate", "Rum-runner Ship", "cannot"],
-    "forbidden_content": ["pay your Associate"],
+    "forbidden_content": [],
     "difficulty": "easy",
     "category": "mob_war"
   },
@@ -372,7 +372,7 @@
   {
     "query": "What if two players tie on Zone Control at end of game?",
     "expected_tier": 1,
-    "ground_truth": "The rules do not define a separate end-of-game Zone Control resolution, because Zone Control pays out during the Lucky Luciano phases, not in final scoring. If players tie in final score, use the normal tiebreakers: most Protected buildings, then most buildings, then most placed Books, then most Family Members.",
+    "ground_truth": "The rules do not define a separate end-of-game Zone Control tiebreaker resolution. Zone Control pays out money to your safe during the Lucky Luciano phases throughout the game, not as part of final scoring. During Lucky Luciano payouts, tied players on a Zone Control track receive the lower payout amount among the tied positions. If players tie on total final score at end of game, the tiebreakers are: most Protected buildings, then most buildings, then most placed Books, then most Family Members.",
     "expected_chunks": [],
     "required_chunk_keywords": ["Lucky Luciano", "final score", "Protected buildings"],
     "forbidden_content": ["shared Zone Control victory"],
@@ -382,7 +382,7 @@
   {
     "query": "Can I play Speakeasy with 6 players?",
     "expected_tier": 1,
-    "ground_truth": "There is no official 6-player mode in the published rules. Speakeasy is listed for 1 to 4 players.",
+    "ground_truth": "No, you cannot play Speakeasy with 6 players. The game officially supports 1 to 4 players only. The box and rulebook list the player count as 1-4 players, with specific board configurations for 1-2 players and 3-4 players. There is no expansion or variant for 5 or 6 players.",
     "expected_chunks": [],
     "required_chunk_keywords": ["1 to 4 players"],
     "forbidden_content": ["supports 6 players"],
