@@ -91,3 +91,24 @@ class TestChunkParsedPages:
         pages = [{"page": 1, "text": "No section provided."}]
         chunks = chunk_parsed_pages(pages, "splendor")
         assert chunks[0]["section"] == "General"
+
+    def test_milestone_index_chunk_created(self) -> None:
+        """When chunks contain individual milestones, a synthetic index chunk is created."""
+        pages = [
+            {"page": 12, "text": "## Milestone A\nFirst billboard placed: eternal marketing.", "section": "Milestones"},
+            {"page": 13, "text": "## Milestone B\nFirst burger marketed: $5 bonus per burger.", "section": "Milestones"},
+        ]
+        chunks = chunk_parsed_pages(pages, "fcm", chunk_size=300, overlap=50)
+        index_chunks = [c for c in chunks if "Milestone Index" in c.get("section", "")]
+        assert len(index_chunks) == 1
+        assert "First billboard placed" in index_chunks[0]["text"]
+        assert "First burger marketed" in index_chunks[0]["text"]
+
+    def test_no_milestone_index_when_insufficient(self) -> None:
+        """No index chunk when fewer than 2 milestone chunks."""
+        pages = [
+            {"page": 1, "text": "## Setup\nPlace the board in the center.", "section": "Setup"},
+        ]
+        chunks = chunk_parsed_pages(pages, "splendor", chunk_size=300, overlap=50)
+        index_chunks = [c for c in chunks if "Milestone Index" in c.get("section", "")]
+        assert len(index_chunks) == 0

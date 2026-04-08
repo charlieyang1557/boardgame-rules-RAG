@@ -101,6 +101,37 @@ def _split_by_headings(text: str, max_section_tokens: int) -> list[tuple[str, st
     return [(h, b) for h, b in sections if b]
 
 
+def _create_milestone_index(chunks: list[dict], game_name: str) -> dict | None:
+    """Create a synthetic Milestone Index chunk if individual milestone chunks exist."""
+    milestone_chunks = [
+        c for c in chunks
+        if "milestone" in c.get("section", "").lower()
+        and "index" not in c.get("section", "").lower()
+    ]
+    if len(milestone_chunks) < 2:
+        return None
+
+    game_display = game_name.upper() if len(game_name) <= 4 else game_name.title()
+    lines = [f"[{game_display} - Milestone Index] Summary of all milestones:"]
+    for mc in milestone_chunks:
+        # Extract first sentence as summary
+        text = mc["text"]
+        # Strip the prefix if present
+        if "]" in text:
+            text = text.split("]", 1)[1].strip()
+        summary = text.split(".")[0] + "."
+        lines.append(f"- {summary}")
+
+    return {
+        "chunk_id": f"{game_name}_milestone_index",
+        "text": "\n".join(lines),
+        "game_name": game_name,
+        "section": "Milestone Index",
+        "page": milestone_chunks[0].get("page", 0),
+        "source_pdf": milestone_chunks[0].get("source_pdf", ""),
+    }
+
+
 def chunk_parsed_pages(
     pages: list[dict],
     game_name: str,
@@ -167,5 +198,10 @@ def chunk_parsed_pages(
                     "source_pdf": source_pdf,
                 })
                 global_idx += 1
+
+    # Generate milestone index for games with milestone chunks
+    index_chunk = _create_milestone_index(all_chunks, game_name)
+    if index_chunk is not None:
+        all_chunks.append(index_chunk)
 
     return all_chunks
