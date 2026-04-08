@@ -26,7 +26,7 @@ information from multiple rule sections.
 Here are the rule chunks retrieved so far:
 {chunks_text}
 
-Question: {query}
+{existing_ids_note}Question: {query}
 
 Can you fully answer this question from the chunks above?
 - If YES: provide the answer with [chunk_id] citations using EXACT terminology from chunks.
@@ -136,7 +136,18 @@ class ChainOfRetrieval:
 
     def _check_answerable(self, query: str, chunks: list[dict]) -> HopResult:
         chunks_text = _format_chunks(chunks)
-        prompt = ANSWERABLE_CHECK_PROMPT.format(chunks_text=chunks_text, query=query)
+        chunk_ids = [c["chunk_id"] for c in chunks]
+        existing_ids_note = ""
+        if chunk_ids:
+            existing_ids_note = (
+                f"Already retrieved chunk IDs (do NOT search for these again): "
+                f"{', '.join(chunk_ids)}\n"
+            )
+        prompt = ANSWERABLE_CHECK_PROMPT.format(
+            chunks_text=chunks_text,
+            query=query,
+            existing_ids_note=existing_ids_note,
+        )
 
         message = self.anthropic_client.messages.create(
             model="claude-sonnet-4-20250514",
@@ -192,50 +203,53 @@ class ChainOfRetrieval:
     ) -> ChainResult:
         """Multi-hop retrieval with reasoning steps.
 
-        Returns ChainResult with merged chunks and answer (if answerable).
+        Iterates up to max_hops times, checking answerability at each hop.
+        Terminates early if answerable or if no follow-up query is generated.
         """
-        # Hop 1
-        if initial_chunks:
-            hop1_chunks = initial_chunks
-        else:
-            hop1_chunks = self._search_and_rerank(
-                query, top_k=config.rerank_top_k, alt_query=alt_query,
-                location_names=location_names,
-                rrf_k=config.rrf_k, hybrid_top_k=config.hybrid_top_k,
-            )
+        all_merged: list[dict] = []
+        current_query = query
 
-        hop1_result = self._check_answerable(query, hop1_chunks)
+        for hop_num in range(1, self.max_hops + 1):
+            # Search
+            if hop_num == 1 and initial_chunks:
+                hop_chunks = initial_chunks
+            else:
+                hop_chunks = self._search_and_rerank(
+                    current_query, top_k=config.rerank_top_k,
+                    alt_query=alt_query if hop_num == 1 else None,
+                    location_names=location_names if hop_num == 1 else None,
+                    rrf_k=config.rrf_k, hybrid_top_k=config.hybrid_top_k,
+                )
 
-        if hop1_result.is_answerable:
-            return ChainResult(
-                merged_chunks=hop1_chunks,
-                answer=hop1_result.answer,
-                hops_used=1,
-                is_answerable=True,
-            )
+            # Merge with previous hops
+            all_merged = self._merge_chunks(all_merged, hop_chunks)
 
-        # Hop 2 (if allowed and follow-up query exists)
-        if self.max_hops < 2 or not hop1_result.follow_up_query:
-            return ChainResult(
-                merged_chunks=hop1_chunks,
-                answer="",
-                hops_used=1,
-                is_answerable=False,
-            )
+            # Check answerability
+            hop_result = self._check_answerable(query, all_merged)
 
-        hop2_chunks = self._search_and_rerank(
-            hop1_result.follow_up_query, top_k=config.rerank_top_k,
-            alt_query=query, location_names=location_names,
-            rrf_k=config.rrf_k, hybrid_top_k=config.hybrid_top_k,
-        )
-        merged = self._merge_chunks(hop1_chunks, hop2_chunks)
+            if hop_result.is_answerable:
+                return ChainResult(
+                    merged_chunks=all_merged,
+                    answer=hop_result.answer,
+                    hops_used=hop_num,
+                    is_answerable=True,
+                )
 
-        # Final generation on merged chunks
-        answer = self._generate_final(query, merged)
+            # Not answerable — check if we can continue
+            if hop_num == self.max_hops or not hop_result.follow_up_query:
+                # Max hops reached or no follow-up — generate best-effort
+                answer = self._generate_final(query, all_merged)
+                return ChainResult(
+                    merged_chunks=all_merged,
+                    answer=answer,
+                    hops_used=hop_num,
+                    is_answerable=True,
+                )
 
+            # Continue to next hop with follow-up query
+            current_query = hop_result.follow_up_query
+
+        # Safety fallback (should not reach)
         return ChainResult(
-            merged_chunks=merged,
-            answer=answer,
-            hops_used=2,
-            is_answerable=True,
+            merged_chunks=all_merged, answer="", hops_used=self.max_hops, is_answerable=False,
         )
