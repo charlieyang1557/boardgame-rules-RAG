@@ -1,0 +1,663 @@
+[
+  {
+    "query": "How many slots does the CEO have?",
+    "expected_tier": 1,
+    "ground_truth": "The CEO initially has 3 slots for cards reporting to him. These slots can be used for normal staff or managers. After the bank reserve cards are opened, CEOs may gain or lose slots based on the majority of reserve card slot values chosen by players.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["CEO", "3", "slots"],
+    "forbidden_content": ["4 slots by default", "2 slots by default"],
+    "difficulty": "easy",
+    "category": "company_structure"
+  },
+  {
+    "query": "What does the Burger Cook produce?",
+    "expected_tier": 1,
+    "ground_truth": "The Burger Cook produces 3 burgers per turn when placed in the company structure.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Burger Cook", "3", "burgers"],
+    "forbidden_content": ["8 burgers", "1 burger"],
+    "difficulty": "easy",
+    "category": "employee"
+  },
+  {
+    "query": "How much salary do employees cost?",
+    "expected_tier": 1,
+    "ground_truth": "Each employee card that has a dollar sign symbol on it costs $5 in salary during Phase 5 (Payday). Not all employees require a salary — only those marked with the salary symbol. Various milestones and abilities can reduce salary costs, but the minimum salary payment is $0.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["$5", "salary"],
+    "forbidden_content": ["$10 salary", "$3 salary"],
+    "difficulty": "easy",
+    "category": "phase"
+  },
+  {
+    "query": "What happens in Phase 1 Restructuring?",
+    "expected_tier": 1,
+    "ground_truth": "In Phase 1 (Restructuring), each player simultaneously chooses which employees to use this turn by placing them face down. After all players have chosen, they simultaneously reveal their cards. Cards in use are 'at work' and must be placed into a pyramid company structure under the CEO. Cards not used are 'on the beach' — they cannot act this turn but still require salary and can be trained.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Restructuring", "face down", "company structure", "at work"],
+    "forbidden_content": ["turn order"],
+    "difficulty": "easy",
+    "category": "phase"
+  },
+  {
+    "query": "How does the billboard campaign work?",
+    "expected_tier": 1,
+    "ground_truth": "A billboard reaches all houses it is orthogonally adjacent to, normally reaching 1 or 2 houses. It places a demand token of the advertised type on each adjacent house. Billboards must be placed on empty squares connected to a road. A house is reached even if only its garden is adjacent to the billboard.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["billboard", "adjacent", "demand"],
+    "forbidden_content": ["all houses on the tile"],
+    "difficulty": "easy",
+    "category": "marketing"
+  },
+  {
+    "query": "What does the Waitress do?",
+    "expected_tier": 1,
+    "ground_truth": "The Waitress provides $3 cash after all houses have been processed during Phase 4 (Dinnertime). With the 'First waitress played' milestone, each waitress earns $5 instead. Additionally, when two competing chains have the same (unit price + distance), inhabitants will go to the restaurant with the most waitresses in its structure.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Waitress", "$3", "ties"],
+    "forbidden_content": ["$10 per waitress"],
+    "difficulty": "easy",
+    "category": "employee"
+  },
+  {
+    "query": "How many players can play FCM?",
+    "expected_tier": 1,
+    "ground_truth": "Food Chain Magnate can be played by 2-5 players. The number of players determines the map size and setup: 2 players use a 3x3 map, 3 players use 3x4, 4 players use 4x4, and 5 players use 5x4.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["2", "5", "players"],
+    "forbidden_content": ["6 players", "1 player"],
+    "difficulty": "easy",
+    "category": "setup"
+  },
+  {
+    "query": "When does the game end?",
+    "expected_tier": 1,
+    "ground_truth": "The game ends when the bank breaks for the second time. When the bank runs out of money during Phase 4 (Dinnertime), the first break opens the reserve cards and adds money to the bank. If the bank breaks a second time, Phase 4 is finished (all players get paid, using IOUs if needed), but salaries in Phase 5 are not paid. The player with the most cash wins. In case of a tie, the tied player earlier in turn order wins.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["bank", "second time", "most cash"],
+    "forbidden_content": ["victory points", "fixed number of rounds"],
+    "difficulty": "easy",
+    "category": "general"
+  },
+  {
+    "query": "How is turn order determined?",
+    "expected_tier": 1,
+    "ground_truth": "Turn order is determined in Phase 2 (Order of Business). The player with the most open slots in their company structure chooses their position on the turn order track first, followed by the next player with most open slots. If players tie in open slots, the one who was ahead in previous turn order chooses first. The 'First airplane campaign' milestone adds 2 extra open slots for this calculation only.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["open slots", "turn order", "choose"],
+    "forbidden_content": ["random", "dice"],
+    "difficulty": "easy",
+    "category": "phase"
+  },
+  {
+    "query": "Can I see other players' cards?",
+    "expected_tier": 1,
+    "ground_truth": "During all phases except Phase 1 (Restructuring), every player can at any time request to see the cards of another player. This includes both the cards at work and those cards on the beach. During Phase 7 (Clean Up), other players may also ask to see cards.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["see", "cards", "request"],
+    "forbidden_content": ["hidden information", "secret"],
+    "difficulty": "easy",
+    "category": "general"
+  },
+  {
+    "query": "What is the starting bank amount?",
+    "expected_tier": 1,
+    "ground_truth": "The starting bank amount is $50 multiplied by the number of players. Players do not get any money at the start of the game. In the introductory game variant, the bank starts with $75 per player instead.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["$50", "number of players"],
+    "forbidden_content": ["$100 per player", "each player receives"],
+    "difficulty": "easy",
+    "category": "setup"
+  },
+  {
+    "query": "How does a new business developer work?",
+    "expected_tier": 1,
+    "ground_truth": "A new business developer allows you to place a new house on any empty area of the map (connected to at least one road, no range limitation) or add a garden to an existing house printed on a map tile. Houses placed by a new business developer automatically come with a garden and may not get another one. Gardens placed on printed houses must form a 2x3 rectangle and can only be placed on empty squares.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["new business developer", "house", "garden"],
+    "forbidden_content": ["range limitation"],
+    "difficulty": "easy",
+    "category": "employee"
+  },
+  {
+    "query": "What range does the Cart Operator have?",
+    "expected_tier": 1,
+    "ground_truth": "The Cart Operator has a range of 2 over roads, covering up to 3 tiles (including the restaurant tile). It collects 2 drinks from the stock for each drink symbol passed on either side of the road. With the 'First cart operator played' milestone, the range increases to 3.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Cart Operator", "range", "2"],
+    "forbidden_content": ["range of 4", "ignoring roads"],
+    "difficulty": "easy",
+    "category": "employee"
+  },
+  {
+    "query": "How does the reserve card system work?",
+    "expected_tier": 1,
+    "ground_truth": "At game setup, each player chooses one of their 3 bank reserve cards and places it face down next to the bank; the others are discarded unseen. When the bank breaks the first time, the reserve cards are opened. Their money amounts are summed and added to the bank. Each reserve card also shows 2, 3, or 4 open slots — the most common number determines how many slots all CEOs will have for the rest of the game. If tied, the highest number wins.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["reserve", "bank", "slots"],
+    "forbidden_content": ["all cards are used"],
+    "difficulty": "medium",
+    "category": "general"
+  },
+  {
+    "query": "What happens in the introductory game?",
+    "expected_tier": 1,
+    "ground_truth": "In the introductory game: reserve cards are not used, the bank starts with $75 per player instead of $50, all milestones are removed, no salaries are paid (Phase 5 is skipped), and the game ends when the bank breaks once instead of twice. This creates a shorter, more forgiving game for learning.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["introductory", "$75", "milestones"],
+    "forbidden_content": ["normal rules apply"],
+    "difficulty": "easy",
+    "category": "setup"
+  },
+  {
+    "query": "What does the Burger Chef produce?",
+    "expected_tier": 1,
+    "ground_truth": "The Burger Chef produces 8 burgers per turn when placed in the company structure. The Burger Chef is the upgraded version of the Burger Cook (which produces 3 burgers).",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Burger Chef", "8", "burgers"],
+    "forbidden_content": ["3 burgers"],
+    "difficulty": "easy",
+    "category": "employee"
+  },
+  {
+    "query": "What does the Kitchen Trainee do?",
+    "expected_tier": 1,
+    "ground_truth": "The Kitchen Trainee produces 1 burger or 1 pizza per turn. It is an entry-level kitchen staff card that can be trained into either a Burger Cook or a Pizza Cook.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Kitchen Trainee", "1 burger", "1 pizza"],
+    "forbidden_content": ["3 burgers", "8 burgers"],
+    "difficulty": "easy",
+    "category": "employee"
+  },
+  {
+    "query": "How does the Recruiting Girl work?",
+    "expected_tier": 1,
+    "ground_truth": "The Recruiting Girl provides 1 recruitment action, allowing you to hire 1 person at an entry position (marked with the entry symbol). The hired card is placed on the beach. The CEO also provides one free recruitment action each turn, so a Recruiting Girl gives an additional hire.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Recruiting Girl", "hire", "1 person"],
+    "forbidden_content": ["2 people", "4 people"],
+    "difficulty": "easy",
+    "category": "employee"
+  },
+  {
+    "query": "How does the mailbox campaign work?",
+    "expected_tier": 1,
+    "ground_truth": "A mailbox campaign reaches all houses it can get to without crossing a road — the area enclosed by roads and the board border forms a 'block'. The mailbox freely passes through other map elements such as restaurants and houses. It places a demand token of the advertised type on each house in the block.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["mailbox", "road", "block"],
+    "forbidden_content": ["adjacent only", "all houses on tile"],
+    "difficulty": "easy",
+    "category": "marketing"
+  },
+  {
+    "query": "What is the standard unit price of goods in FCM?",
+    "expected_tier": 1,
+    "ground_truth": "The standard unit price of each good is $10. This can be modified by pricing managers (-$1 each), discount managers (-$3 each), luxury managers (+$10), and the 'First to lower prices' milestone (-$1 permanently). Bonuses from CFO, 'First burger marketed', etc. do not alter the unit price.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["$10", "unit price"],
+    "forbidden_content": ["$5 unit price", "$15 unit price"],
+    "difficulty": "easy",
+    "category": "dinnertime"
+  },
+  {
+    "query": "What are the 7 phases of a turn in Food Chain Magnate?",
+    "expected_tier": 1,
+    "ground_truth": "The 7 phases are: Phase 1 — Restructuring (choose employees to use), Phase 2 — Order of Business (determine turn order), Phase 3 — Working 9:00-5:00 (perform actions), Phase 4 — Dinnertime (houses buy food, income earned), Phase 5 — Payday (fire employees, pay salaries), Phase 6 — Marketing Campaigns (campaigns place demand), Phase 7 — Clean Up (discard food/drinks, flip COMING SOON restaurants).",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Restructuring", "Dinnertime", "Payday", "Marketing"],
+    "forbidden_content": ["8 phases", "6 phases"],
+    "difficulty": "medium",
+    "category": "phase"
+  },
+  {
+    "query": "How much income do I get selling 1 burger and 2 beer to a house with a garden, if I have the 'First burger marketed' milestone and a luxury manager?",
+    "expected_tier": 2,
+    "ground_truth": "The unit price is $10 (base) + $10 (luxury manager) = $20. The garden doubles the unit price, so each item earns 2 x $20 = $40. The 'First burger marketed' milestone adds a $5 bonus per burger sold (not doubled by garden). So the burger earns $40 + $5 = $45. Each beer earns $40 (no drink bonus). Total income = $45 + 2 x $40 = $125.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["garden", "unit price", "luxury", "milestone"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "dinnertime",
+    "canary": true
+  },
+  {
+    "query": "If I have the 'First to train someone' milestone and a Recruiting Manager who did not hire anyone, how much do I pay in salaries with 4 employees that require salary?",
+    "expected_tier": 2,
+    "ground_truth": "Base salary is 4 employees x $5 = $20. The Recruiting Manager has 2 hiring slots; if unused, each gives a $5 salary discount, totaling $10 discount. The 'First to train someone' milestone gives a $15 salary discount. Total discounts = $10 + $15 = $25. Since $25 exceeds $20, the salary is reduced to $0 (minimum). All discounts are mandatory.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["salary", "discount", "$15", "Recruiting Manager"],
+    "forbidden_content": ["negative salary"],
+    "difficulty": "hard",
+    "category": "milestone"
+  },
+  {
+    "query": "Can I train a Kitchen Trainee to a Burger Chef in one turn?",
+    "expected_tier": 2,
+    "ground_truth": "Not normally. A Kitchen Trainee trains to a Burger Cook (one step), and a Burger Cook trains to a Burger Chef (second step). In one turn, you would need either a Coach (who can train the same person two steps) or a Guru (up to three steps). With the 'First to pay $20 or more in salaries' milestone, you may also use multiple trainers on the same person. The intermediate Burger Cook card does not need to be available in the stock, but the final Burger Chef card must be.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["train", "Kitchen Trainee", "Coach", "Guru"],
+    "forbidden_content": ["one step", "cannot be trained"],
+    "difficulty": "hard",
+    "category": "training"
+  },
+  {
+    "query": "How do tiebreakers work when two chains compete for the same house?",
+    "expected_tier": 2,
+    "ground_truth": "When multiple chains can provide the full menu and are connected by road, competition is resolved by: (1) Calculate each chain's (unit price + distance) — inhabitants go to the lowest. (2) If tied on (unit price + distance), the chain with the most waitresses in its structure wins. (3) If still tied on waitresses, the chain earlier in turn order wins.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["unit price", "distance", "waitresses", "turn order"],
+    "forbidden_content": ["random", "dice"],
+    "difficulty": "medium",
+    "category": "dinnertime"
+  },
+  {
+    "query": "If I hire a Management Trainee and have a Coach in my structure, can I train it to an Executive Vice President in one turn?",
+    "expected_tier": 2,
+    "ground_truth": "No. A Coach can train the same person only two steps. Management Trainee to Executive VP would require 4 steps (Management Trainee -> Junior VP -> VP -> Senior VP -> Executive VP). You would need a Guru (3 steps max) plus the 'First to pay $20 or more in salaries' milestone (which allows multiple trainers on the same person) with additional training capacity to reach Executive VP in one turn.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Coach", "two steps", "Management Trainee"],
+    "forbidden_content": ["Coach can train 3 steps"],
+    "difficulty": "hard",
+    "category": "training"
+  },
+  {
+    "query": "What happens if I place a billboard to get the 'First billboard placed' milestone — does that billboard become eternal?",
+    "expected_tier": 2,
+    "ground_truth": "Yes. The 'First billboard placed' milestone states that its effects already apply to the billboard you place to get the milestone. All your marketing campaigns become eternal — placed on their eternal side with a single wooden piece. The corresponding marketeer card becomes unavailable for the rest of the game (not returned to stock or player's hand). You also no longer pay salaries for marketeers (campaign manager, brand manager, brand director).",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["First billboard placed", "eternal", "salaries", "marketeers"],
+    "forbidden_content": ["next turn"],
+    "difficulty": "medium",
+    "category": "milestone"
+  },
+  {
+    "query": "How does the CFO interact with the 'First to have $100' milestone?",
+    "expected_tier": 2,
+    "ground_truth": "If you achieve the 'First to have $100' milestone, your CEO gains the CFO ability (50% cash bonus at end of Phase 4). If you already have a CFO card, you must fire the CFO in Phase 5 of that turn. You may not train a CFO anymore after achieving this milestone. The milestone's CEO-as-CFO effect takes effect only from the next turn onward, since you can only get it after Phase 4 has ended.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["$100", "CFO", "CEO", "fire"],
+    "forbidden_content": ["stacks with CFO", "both apply"],
+    "difficulty": "hard",
+    "category": "milestone"
+  },
+  {
+    "query": "If I have the 'First errand boy played' milestone, how many drinks does a Truck Driver collect per source?",
+    "expected_tier": 2,
+    "ground_truth": "A Truck Driver normally collects 3 drinks per drink symbol passed. With the 'First errand boy played' milestone, all buyers get +1 drink per source. So a Truck Driver with this milestone collects 4 drinks per drink symbol. The Truck Driver has a range of 3 (covering up to 4 tiles). With the 'First cart operator played' milestone, range increases to 4.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Truck Driver", "3 drinks", "errand boy", "+1"],
+    "forbidden_content": ["2 drinks per source"],
+    "difficulty": "medium",
+    "category": "milestone"
+  },
+  {
+    "query": "Can I fire a busy marketeer?",
+    "expected_tier": 2,
+    "ground_truth": "Normally, busy marketeers may not be fired. However, in the exceptional case where a player has no money but must pay salary for a busy marketeer, the marketeer must be fired — but only if the player has already fired all other employees that require a salary first. The corresponding marketing campaign remains on the board even after the marketeer is fired.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["busy", "marketeer", "fired", "salary"],
+    "forbidden_content": ["freely fire"],
+    "difficulty": "medium",
+    "category": "employee"
+  },
+  {
+    "query": "Does a billboard campaign placed this turn create demand in the same turn?",
+    "expected_tier": 2,
+    "ground_truth": "No. Marketing campaigns are placed during Phase 3 (Working 9:00-5:00), but campaigns run during Phase 6 (Marketing Campaigns). Dinnertime (Phase 4) happens before Phase 6, so demand from a newly placed campaign is not available for sales in the same turn it is placed. The demand tokens will be on houses starting from Phase 6 of that turn, available for Dinnertime in the next turn.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Phase 3", "Phase 6", "Phase 4", "marketing"],
+    "forbidden_content": ["same turn sales"],
+    "difficulty": "medium",
+    "category": "phase"
+  },
+  {
+    "query": "What are the differences between the Truck Driver and the Zeppelin Pilot?",
+    "expected_tier": 2,
+    "ground_truth": "The Truck Driver has range 3, follows roads, and collects 3 drinks per drink symbol passed on either side of the road. The Zeppelin Pilot has range 4, ignores roads entirely, and collects 2 drinks per drink symbol on tiles flown over (including multiple symbols on the same tile). The Zeppelin cannot cover the same tile twice. Both are affected by the 'First errand boy played' milestone (+1 drink per source) and 'First cart operator played' milestone (+1 range).",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Truck Driver", "Zeppelin", "range", "roads"],
+    "forbidden_content": ["same range", "same drinks"],
+    "difficulty": "medium",
+    "category": "employee"
+  },
+  {
+    "query": "How do VP reporting slots work in the company structure?",
+    "expected_tier": 2,
+    "ground_truth": "In the company structure pyramid, the CEO has 3 slots (modifiable by reserve cards). Managers (black cards) can be placed in CEO slots, and each manager has between 2-10 subordinate slots as indicated on their card. Only normal employees (not other managers) can report to managers. The Junior VP has 2 slots, VP has 3 slots, Senior VP has 4 slots, and Executive VP has 5 slots. The Local Manager and Regional Manager each have 3 slots.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["slots", "manager", "CEO"],
+    "forbidden_content": ["unlimited slots"],
+    "difficulty": "medium",
+    "category": "company_structure"
+  },
+  {
+    "query": "If I sell 3 burgers at base price to a house without a garden, and I have the 'First burger marketed' milestone and a CFO, how much do I earn from the sale?",
+    "expected_tier": 2,
+    "ground_truth": "Base unit price is $10. No garden, so no doubling. Each burger earns $10 + $5 (First burger marketed bonus) = $15. For 3 burgers: 3 x $15 = $45. The CFO adds 50% bonus to all cash earned this turn (rounded up). So total from this sale after CFO: $45 x 1.5 = $67.50, rounded up to $68. Note: the CFO bonus applies to all cash earned in the turn, including waitress tips, not just this sale.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["unit price", "CFO", "50%", "burger"],
+    "forbidden_content": ["doubled by garden"],
+    "difficulty": "hard",
+    "category": "dinnertime"
+  },
+  {
+    "query": "What happens to the 'First billboard placed' milestone's no-salary benefit — does it apply to marketing trainees too?",
+    "expected_tier": 2,
+    "ground_truth": "The milestone specifically says you no longer pay salaries for 'marketeers (campaign manager, brand manager, brand director)'. Marketing trainees are not listed in this benefit. However, marketing trainees do not have a salary symbol on their card, so they do not require salary payment regardless of the milestone.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["First billboard placed", "salary", "marketeers"],
+    "forbidden_content": ["all employees free"],
+    "difficulty": "hard",
+    "category": "milestone"
+  },
+  {
+    "query": "How does the radio campaign differ from other marketing types?",
+    "expected_tier": 2,
+    "ground_truth": "A radio campaign reaches every house on its placed tile plus all 8 surrounding tiles (a 3x3 tile area). This gives it by far the largest coverage area of any campaign type. With the 'First radio campaign' milestone, it places 2 demand tokens per house instead of 1. Unlike billboards and mailboxes, radios have wider reach but still must be placed on an empty square adjacent to a road. Brand directors can place radios with maximum duration 5.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["radio", "surrounding tiles", "2 goods"],
+    "forbidden_content": ["single tile only"],
+    "difficulty": "medium",
+    "category": "marketing"
+  },
+  {
+    "query": "If I hire someone with my CEO's free action and then immediately train them with a Trainer, is that allowed?",
+    "expected_tier": 2,
+    "ground_truth": "Yes. You may train employees that are on the beach, including employees you just hired. Actions in Phase 3 must be performed in a fixed order, and Recruit comes before Train. So you hire first, the new employee goes to the beach, and then your Trainer can train that person one step. You can even hire a card and immediately train it to a higher level without taking the intermediate card if you train multiple steps with a Coach or Guru.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["hire", "train", "beach", "same turn"],
+    "forbidden_content": ["cannot train newly hired"],
+    "difficulty": "medium",
+    "category": "training"
+  },
+  {
+    "query": "What is the maximum demand a house can hold?",
+    "expected_tier": 1,
+    "ground_truth": "A house can have at most 3 demand tokens in total. If the house has a garden, it can have up to 5 demand tokens. If a marketing campaign reaches a house that is already at its limit, the campaign has no additional effect on that house.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["3", "demand", "garden", "5"],
+    "forbidden_content": ["unlimited demand"],
+    "difficulty": "easy",
+    "category": "marketing"
+  },
+  {
+    "query": "What happens when a chain cannot deliver all the food a house demands?",
+    "expected_tier": 2,
+    "ground_truth": "A chain must be able to deliver ALL of the food and drinks a house demands to serve that house. If a chain has only burgers but the house also demands beer, the chain cannot serve that house. The inhabitants will look for another chain that can fulfill the complete order, or if no chain can, they will not eat. Partial orders are not allowed.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["all", "demand", "food", "drinks"],
+    "forbidden_content": ["partial delivery", "some items"],
+    "difficulty": "medium",
+    "category": "dinnertime"
+  },
+  {
+    "query": "How does the Local Manager differ from the Regional Manager for placing restaurants?",
+    "expected_tier": 2,
+    "ground_truth": "The Local Manager places a new restaurant within range 3 by road from an existing restaurant, but it opens with 'COMING SOON' side up (only opens at end of turn). The Regional Manager can place a restaurant anywhere on the board (or move an existing one) and it opens immediately with no waiting period. Both managers give all chain restaurants a drive-in (entrances in each corner) while active. Neither can place restaurants on non-empty squares.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Local Manager", "Regional Manager", "COMING SOON", "drive-in"],
+    "forbidden_content": ["same range", "both immediate"],
+    "difficulty": "medium",
+    "category": "employee"
+  },
+  {
+    "query": "What happens if I accidentally place more cards than fit in my company structure?",
+    "expected_tier": 1,
+    "ground_truth": "If a player has inadvertently placed more cards than can fit into the company structure, all cards except the CEO are placed on the beach and the player has to play the turn with only the CEO.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["CEO", "beach", "inadvertently"],
+    "forbidden_content": ["choose which cards to keep"],
+    "difficulty": "easy",
+    "category": "company_structure"
+  },
+  {
+    "query": "How does the airplane campaign work?",
+    "expected_tier": 1,
+    "ground_truth": "Airplanes are placed on the side of the board and fly over 1, 3, or 5 rows or columns. They reach every house in the fly-over zone, including houses where only the garden is in the zone. Airplanes do not need to be connected to a road and are not affected by range. They must be placed so they fly over the corresponding number of rows/columns — they cannot fly outside the board.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["airplane", "side of the board", "fly over"],
+    "forbidden_content": ["adjacent only", "connected to road"],
+    "difficulty": "easy",
+    "category": "marketing"
+  },
+  {
+    "query": "What order are actions performed in during Phase 3?",
+    "expected_tier": 2,
+    "ground_truth": "Actions in Phase 3 must be performed in a fixed order regardless of position in the organizational chart: (1) Recruit, (2) Train, (3) Initiate marketing campaigns, (4) Get food & drinks, (5) Place new houses and gardens, (6) Place or move restaurants. Some actions are mandatory (pricing/discount/luxury manager, CFO, recruiting manager/HR director, waitress) while others are optional. A player completes all actions before the next player takes their turn.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["order", "Recruit", "Train", "marketing"],
+    "forbidden_content": ["any order", "simultaneous"],
+    "difficulty": "medium",
+    "category": "phase"
+  },
+  {
+    "query": "If the bank breaks during Phase 4 and I still have houses to process, what happens?",
+    "expected_tier": 2,
+    "ground_truth": "When the bank breaks the first time during Phase 4, the reserve cards are opened and their money is added to the bank. Phase 4 continues processing remaining houses. If the bank breaks a second time, Phase 4 is still finished — all players get their earnings, using paper IOUs if necessary. However, salaries in Phase 5 will not be paid that turn. The player with the most cash at the end of Phase 4 wins.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["bank breaks", "reserve cards", "finish"],
+    "forbidden_content": ["Phase 4 stops immediately"],
+    "difficulty": "hard",
+    "category": "dinnertime"
+  },
+  {
+    "query": "What happens if all employee cards of a type are taken by players?",
+    "expected_tier": 1,
+    "ground_truth": "If a certain deck runs out of cards, you may no longer hire that type of employee until cards become available again (e.g., when someone fires that employee type). However, you may hire such a card if you immediately train it to a higher level in the training sub-phase of that turn, so you don't actually have to take the card from the stock.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["runs out", "hire", "train", "available"],
+    "forbidden_content": ["unlimited supply"],
+    "difficulty": "medium",
+    "category": "employee"
+  },
+  {
+    "query": "How does the 'First to pay $20 or more in salaries' milestone work?",
+    "expected_tier": 2,
+    "ground_truth": "This milestone is awarded when you actually pay $20 or more in salaries in Phase 5. The salaries must be actually paid out — discounts that reduce your salary do not count. All available discounts must be used first (you cannot voluntarily pay more). Once earned, you may use multiple trainers, coaches, and gurus to train the same person in one turn. For example, with 2 trainers and a coach, you could train a Management Trainee to Executive VP.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["$20", "salaries", "multiple trainers", "same person"],
+    "forbidden_content": ["voluntary overpayment"],
+    "difficulty": "hard",
+    "category": "milestone"
+  },
+  {
+    "query": "What is the effect of a garden on income?",
+    "expected_tier": 2,
+    "ground_truth": "If a house has a garden, the selling chain receives double the unit price for each item sold. However, milestone bonuses (such as 'First burger marketed' +$5) are NOT doubled — they are added after the doubling. So the formula is: (2 x unit price) + bonuses per item. The CFO's 50% bonus is applied after all income is calculated, including garden-doubled amounts.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["garden", "double", "unit price", "bonuses"],
+    "forbidden_content": ["bonuses are doubled"],
+    "difficulty": "medium",
+    "category": "dinnertime"
+  },
+  {
+    "query": "How does the Coach differ from the Guru in training?",
+    "expected_tier": 2,
+    "ground_truth": "A Coach has 2 training slots and may train the same person two steps. A Guru has 3 training slots and may train the same person up to three steps. Both may alternatively divide their attention over multiple employees (e.g., training each one step). Both can only train employees that are on the beach (not at work or busy). The final card of a multi-step training must be available in the stock, but intermediate cards do not need to be.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Coach", "Guru", "two steps", "three steps"],
+    "forbidden_content": ["unlimited steps"],
+    "difficulty": "medium",
+    "category": "training"
+  },
+  {
+    "query": "What happens when the first burger is produced — what is the milestone effect?",
+    "expected_tier": 2,
+    "ground_truth": "The 'First burger produced' milestone is awarded when you produce a burger. You immediately receive a free Burger Cook card. Since this milestone is awarded during production (which comes after training in Phase 3), you may not train the newly received Burger Cook in that turn. The cook requires salary in Phase 5. If no Burger Cook cards remain in stock, you receive nothing. You may fire the cook in Phase 5 if you don't want to pay her salary.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["First burger produced", "Burger Cook", "salary"],
+    "forbidden_content": ["Burger Chef", "trained immediately"],
+    "difficulty": "medium",
+    "category": "milestone"
+  },
+  {
+    "query": "Can multiple players claim the same milestone?",
+    "expected_tier": 1,
+    "ground_truth": "Yes, but only during the same turn. If a player fulfills a milestone's requirements, they are immediately awarded the milestone card. Other players can claim the same milestone provided they do so during the same turn. In Phase 7 (Clean Up), all remaining milestone cards that have been claimed at least once are removed from the game and can no longer be claimed by other players.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["same turn", "milestone", "claimed"],
+    "forbidden_content": ["only one player", "exclusive"],
+    "difficulty": "medium",
+    "category": "milestone"
+  },
+  {
+    "query": "What happens if the bank breaks during Phase 5 Payday?",
+    "expected_tier": 3,
+    "ground_truth": "The rulebook specifies that the bank breaks during Phase 4 (Dinnertime) when it has insufficient funds to pay out income. The rules do not address the bank breaking during Phase 5 (Payday), as salaries are paid TO the bank (returned to the bank), not from it. This scenario is not covered in the rulebook.",
+    "expected_chunks": [],
+    "required_chunk_keywords": [],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "phase"
+  },
+  {
+    "query": "Can two players share a billboard space?",
+    "expected_tier": 3,
+    "ground_truth": "The rulebook does not address whether two players can place billboards on the same square. Billboards must be placed on 'empty squares,' which suggests a square with an existing billboard is no longer empty. However, the rules do not explicitly prohibit or address this scenario.",
+    "expected_chunks": [],
+    "required_chunk_keywords": [],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "marketing"
+  },
+  {
+    "query": "If a house has demand but no chain can deliver, does demand persist to the next turn?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. Demand tokens that have been placed on houses remain on the board between turns. During Phase 7 (Clean Up), the rules state that 'demand tokens that have been placed on houses remain on the board.' If no chain can fulfill the demand in a given turn, the demand stays for future turns, and more demand may be added by new marketing campaigns (up to the house's capacity of 3, or 5 with a garden).",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["demand", "remain", "board"],
+    "forbidden_content": ["removed", "discarded"],
+    "difficulty": "medium",
+    "category": "dinnertime"
+  },
+  {
+    "query": "Can I voluntarily leave an open slot in my structure even if I have employees available?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. In Phase 1 (Restructuring), you choose which employees to use this turn. You can place any subset of your employees at work and leave the rest on the beach. Having open slots in your structure is actually strategically important because more open slots mean earlier choice in Phase 2 turn order selection.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["open slot", "choose", "beach"],
+    "forbidden_content": ["must fill all slots"],
+    "difficulty": "easy",
+    "category": "company_structure"
+  },
+  {
+    "query": "Can I use the freezer milestone to store food in the same turn I earn it?",
+    "expected_tier": 2,
+    "ground_truth": "The 'First to throw away drink/food' milestone is awarded when you throw away at least one food or drink token in Phase 7 (Cleanup). The milestone explicitly states: 'You may not yet store anything in the freezer in the turn in which you receive this milestone.' From the next turn onward, you may store up to 10 tokens (food and/or drink) in the freezer during Phase 7.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["freezer", "10 tokens", "not yet store"],
+    "forbidden_content": ["immediately store"],
+    "difficulty": "hard",
+    "category": "milestone"
+  },
+  {
+    "query": "What happens if two reserve card slot values are tied?",
+    "expected_tier": 2,
+    "ground_truth": "When reserve cards are opened and two types of slot values occur equally often (e.g., two '2 slots' cards and two '4 slots' cards), the highest number determines the CEO slots. So in the example of two '2 slots' and two '4 slots' cards, all CEOs would have 4 slots for the rest of the game.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["reserve", "slots", "highest", "tied"],
+    "forbidden_content": ["average", "lowest wins"],
+    "difficulty": "hard",
+    "category": "general"
+  },
+  {
+    "query": "If I have the 'First billboard placed' milestone and place a radio campaign, does the radio also become eternal?",
+    "expected_tier": 2,
+    "ground_truth": "Yes. The 'First billboard placed' milestone states that when you place ANY marketing campaign, it remains on the board forever. The eternal effect applies to all campaign types (billboards, mailboxes, airplanes, and radios) placed by that player, not just billboards. The campaign is placed on its eternal side with a single wooden piece, and the corresponding marketeer becomes permanently unavailable.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["First billboard placed", "eternal", "marketing campaign"],
+    "forbidden_content": ["billboards only"],
+    "difficulty": "hard",
+    "category": "milestone"
+  },
+  {
+    "query": "Can the Discount Manager's price reduction make the unit price go below $0?",
+    "expected_tier": 3,
+    "ground_truth": "The rulebook does not explicitly state whether prices can go below $0 or what the minimum unit price is. The rules describe price modifiers (Pricing Manager -$1, Discount Manager -$3, Luxury Manager +$10, 'First to lower prices' milestone -$1) but do not specify a floor for the unit price.",
+    "expected_chunks": [],
+    "required_chunk_keywords": [],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "dinnertime"
+  },
+  {
+    "query": "What happens if the drive-in from a Local Manager conflicts with the restaurant's printed entrance?",
+    "expected_tier": 3,
+    "ground_truth": "The rulebook states that while a Local Manager or Regional Manager is active, restaurants have a drive-in and 'are considered to have entrances in each corner.' The rules do not address any conflict between the drive-in entrances and the printed entrance, as the drive-in simply adds additional entrance points in all corners.",
+    "expected_chunks": [],
+    "required_chunk_keywords": [],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "employee"
+  },
+  {
+    "query": "Can I place a marketing campaign in a location where it will not reach any houses?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. The rules explicitly state: 'It is allowed to place a marketing campaign in a location where it will not reach any houses.' This may be done strategically to block spaces or claim milestones.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["allowed", "not reach", "houses"],
+    "forbidden_content": ["must reach a house"],
+    "difficulty": "easy",
+    "category": "marketing"
+  },
+  {
+    "query": "If I have no money and must pay a busy marketeer's salary, what exactly happens?",
+    "expected_tier": 2,
+    "ground_truth": "If you have no money but an obligation to pay a busy marketeer's salary, the marketeer must be fired — but only after you have already fired all other employees that require a salary. The corresponding marketing campaign remains on the board even though the marketeer is fired. This is the only exception to the rule that busy marketeers cannot be fired.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["busy", "no money", "fired", "campaign remains"],
+    "forbidden_content": ["campaign is removed"],
+    "difficulty": "hard",
+    "category": "employee"
+  },
+  {
+    "query": "Can a player use multiple CFOs to stack the 50% bonus?",
+    "expected_tier": 3,
+    "ground_truth": "The rulebook does not explicitly address whether a player can have multiple CFO cards or whether their bonuses stack. However, the CFO card is marked with a unique symbol indicating each player may only own one of that particular card. The 'First to have $100' milestone also states you must fire your CFO if you have one, and may not train a CFO afterward.",
+    "expected_chunks": [],
+    "required_chunk_keywords": [],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "company_structure"
+  },
+  {
+    "query": "How does the HR Director's hiring capacity work?",
+    "expected_tier": 1,
+    "ground_truth": "The HR Director provides 4 recruitment actions, allowing you to hire up to 4 additional employees per turn (on top of the CEO's free hire). Any unused recruitment actions from the HR Director provide a $5 salary discount each during Phase 5 (Payday). All available discounts must be used — they are not optional.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["HR Director", "4", "hire", "salary discount"],
+    "forbidden_content": ["2 hires", "optional discount"],
+    "difficulty": "easy",
+    "category": "employee"
+  },
+  {
+    "query": "What is the effect of the 'First to lower prices' milestone on dinnertime competition?",
+    "expected_tier": 2,
+    "ground_truth": "The 'First to lower prices' milestone permanently reduces your unit price by $1. This directly affects the (unit price + distance) calculation that determines where inhabitants eat. For example, if your base price was $10, it becomes $9 permanently. This means inhabitants would walk 1 extra tile to eat at a competitor with standard $10 pricing, since $9 + 1 = $10 ties with $10 + 0 = $10 (resolved by waitresses, then turn order). The $1 reduction cannot be undone.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["$1", "lower prices", "unit price", "permanent"],
+    "forbidden_content": ["temporary", "optional"],
+    "difficulty": "medium",
+    "category": "milestone"
+  },
+  {
+    "query": "Is there a limit to how many restaurants a player can have on the board?",
+    "expected_tier": 1,
+    "ground_truth": "Each player has exactly 3 restaurants available. These are all the restaurants a player can have for the entire game. New restaurants can be placed by the Local Manager or Regional Manager, but a player cannot exceed their 3 restaurant limit.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["3 restaurants"],
+    "forbidden_content": ["unlimited", "4 restaurants"],
+    "difficulty": "easy",
+    "category": "setup"
+  },
+  {
+    "query": "If I have a Guru and the '$20 salaries' milestone, can I train a Marketing Trainee all the way to Brand Director in one turn?",
+    "expected_tier": 2,
+    "ground_truth": "The Marketing Trainee upgrade path goes: Marketing Trainee -> Campaign Manager -> Brand Manager -> Brand Director (3 steps). A Guru can train the same person up to 3 steps, which is exactly enough to go from Marketing Trainee to Brand Director in one turn. You would not even need the '$20 salaries' milestone for this specific path, since the Guru alone covers 3 steps. The milestone would only be needed if you wanted to combine multiple trainers on the same person.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Guru", "three steps", "Marketing Trainee", "Brand Director"],
+    "forbidden_content": ["cannot reach"],
+    "difficulty": "hard",
+    "category": "training"
+  }
+]
