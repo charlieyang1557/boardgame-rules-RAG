@@ -351,7 +351,7 @@
   },
   {
     "query": "What happens if all Mobster Speakeasies in a district are destroyed?",
-    "expected_tier": 3,
+    "expected_tier": 1,
     "ground_truth": "The rules do not give a general special rule for that exact situation. What they do say is that Mobsters from previous Acts stay on the Mobster board even if all their Speakeasies are lost, and a newly entering Mobster is removed only if it places no Speakeasies during that Mob War.",
     "expected_chunks": [],
     "required_chunk_keywords": ["Mobsters stay on the Mobster board", "places no Speakeasies"],
@@ -361,7 +361,7 @@
   },
   {
     "query": "Can I trade buildings with another player?",
-    "expected_tier": 3,
+    "expected_tier": 1,
     "ground_truth": "No official rule allows players to trade or swap buildings. Buildings are opened, upgraded, protected, destroyed, or taken over from Mobsters, not exchanged between players.",
     "expected_chunks": [],
     "required_chunk_keywords": ["no official rule", "Mobsters"],
@@ -371,7 +371,7 @@
   },
   {
     "query": "What if two players tie on Zone Control at end of game?",
-    "expected_tier": 3,
+    "expected_tier": 1,
     "ground_truth": "The rules do not define a separate end-of-game Zone Control resolution, because Zone Control pays out during the Lucky Luciano phases, not in final scoring. If players tie in final score, use the normal tiebreakers: most Protected buildings, then most buildings, then most placed Books, then most Family Members.",
     "expected_chunks": [],
     "required_chunk_keywords": ["Lucky Luciano", "final score", "Protected buildings"],
@@ -381,7 +381,7 @@
   },
   {
     "query": "Can I play Speakeasy with 6 players?",
-    "expected_tier": 3,
+    "expected_tier": 1,
     "ground_truth": "There is no official 6-player mode in the published rules. Speakeasy is listed for 1 to 4 players.",
     "expected_chunks": [],
     "required_chunk_keywords": ["1 to 4 players"],
