@@ -1,0 +1,272 @@
+[
+  {
+    "query": "How many gems can I take on my turn?",
+    "expected_tier": 1,
+    "ground_truth": "On your turn, you may take 3 gem tokens of different colors, or 2 gem tokens of the same color (only if there are at least 4 tokens of that color available).",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["token", "different", "color"],
+    "forbidden_content": ["coin"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "What happens when I reserve a card?",
+    "expected_tier": 1,
+    "ground_truth": "When you reserve a development card, you take it into your hand (face down) and receive 1 gold token (joker). You may have a maximum of 3 reserved cards at any time.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["reserve", "gold", "joker"],
+    "forbidden_content": [],
+    "difficulty": "easy"
+  },
+  {
+    "query": "How do you win at Splendor?",
+    "expected_tier": 1,
+    "ground_truth": "The first player to reach 15 or more prestige points triggers the end of the game. The current round is completed so all players have the same number of turns, then the player with the most prestige points wins.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["15", "prestige", "points"],
+    "forbidden_content": ["20"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "Can I take 2 blue gems if there are only 3 blue ones left?",
+    "expected_tier": 1,
+    "ground_truth": "No. You can only take 2 tokens of the same color if there are at least 4 tokens of that color available in the supply. With only 3 blue tokens available, you cannot take 2 blue tokens.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["4", "same", "color", "token"],
+    "forbidden_content": [],
+    "difficulty": "medium"
+  },
+  {
+    "query": "What are the gold tokens used for?",
+    "expected_tier": 1,
+    "ground_truth": "Gold tokens act as jokers and can substitute for any gem color when purchasing a development card. You receive a gold token when you reserve a card.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["gold", "joker", "substitute"],
+    "forbidden_content": ["wild"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "How do nobles work in Splendor?",
+    "expected_tier": 1,
+    "ground_truth": "Noble tiles visit you automatically at the end of your turn if you have the required number of development card bonuses (not tokens). A noble visit is not an action and cannot be refused. Each noble is worth 3 prestige points.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["noble", "bonus", "prestige"],
+    "forbidden_content": [],
+    "difficulty": "easy"
+  },
+  {
+    "query": "What's the max number of tokens I can hold?",
+    "expected_tier": 1,
+    "ground_truth": "A player may not have more than 10 tokens at the end of their turn (including gold tokens). If you have more than 10, you must return tokens until you have exactly 10.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["10", "token", "return"],
+    "forbidden_content": ["12"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "How many actions can I do on my turn?",
+    "expected_tier": 1,
+    "ground_truth": "On your turn, you must perform exactly one of the following actions: take gem tokens, purchase a development card, or reserve a development card.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["one", "action", "turn"],
+    "forbidden_content": ["two actions", "multiple actions"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "Do development cards give you a permanent bonus?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. Each development card provides a permanent gem bonus of a specific color. This bonus acts as a discount, reducing the cost of future card purchases by one gem of that color. The bonus is permanent and cumulative.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["bonus", "permanent", "discount"],
+    "forbidden_content": [],
+    "difficulty": "easy"
+  },
+  {
+    "query": "How many nobles do you use in a 3-player game?",
+    "expected_tier": 1,
+    "ground_truth": "In a 3-player game, you use 4 noble tiles (number of players + 1).",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["noble", "3", "4"],
+    "forbidden_content": ["5 nobles"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "Can I buy a card from the reserve?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. On your turn, you may purchase a development card from your reserved cards (hand) by paying its gem cost, just as you would purchase a face-up card from the table.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["reserve", "purchase", "hand"],
+    "forbidden_content": [],
+    "difficulty": "easy"
+  },
+  {
+    "query": "If I already have 10 tokens and I reserve a card, what do I do with the gold?",
+    "expected_tier": 1,
+    "ground_truth": "When you reserve a card and receive a gold token, if you now exceed 10 tokens total, you must return tokens of your choice until you have exactly 10. You may return the gold token you just received or any other tokens.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["10", "return", "gold"],
+    "forbidden_content": [],
+    "difficulty": "hard"
+  },
+  {
+    "query": "How many gem chips are there in a 2-player game?",
+    "expected_tier": 1,
+    "ground_truth": "In a 2-player game, there are 4 tokens of each gem color. There are always 5 gold tokens regardless of player count.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["2", "4", "token"],
+    "forbidden_content": ["7"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "Can two nobles visit me on the same turn?",
+    "expected_tier": 1,
+    "ground_truth": "No. Only one noble can visit you per turn, even if you meet the requirements for multiple nobles. If you qualify for more than one, you choose which noble visits you.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["noble", "one", "turn"],
+    "forbidden_content": [],
+    "difficulty": "hard"
+  },
+  {
+    "query": "What are the three tiers of development cards?",
+    "expected_tier": 1,
+    "ground_truth": "There are three levels of development cards. Level 1 cards are the cheapest and usually give 0 prestige points. Level 2 cards are mid-range. Level 3 cards are the most expensive and give the most prestige points.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["level", "card", "prestige"],
+    "forbidden_content": ["tier 4"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "Can I use my card bonuses to help pay for a new card?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. The permanent gem bonuses from your purchased development cards automatically reduce the gem cost of future purchases. Each bonus of a given color reduces the cost of that color by 1. If your bonuses cover the entire cost, you can acquire the card for free without spending any tokens.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["bonus", "reduce", "cost"],
+    "forbidden_content": [],
+    "difficulty": "easy"
+  },
+  {
+    "query": "Do I have to take 3 different gems or can I take fewer?",
+    "expected_tier": 1,
+    "ground_truth": "You may take fewer than 3 gem tokens of different colors only if there are not enough different colors available. If there are tokens of at least 3 different colors, you must take exactly 3 different tokens if you choose this action.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["3", "different", "color"],
+    "forbidden_content": [],
+    "difficulty": "medium"
+  },
+  {
+    "query": "What happens after someone hits 15 points? Does the game end right away?",
+    "expected_tier": 1,
+    "ground_truth": "No, the game does not end immediately. When a player reaches 15 or more prestige points, the current round is completed so that each player has played the same number of turns. Then the player with the most points wins.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["15", "round", "complete"],
+    "forbidden_content": ["immediately ends"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "Can I reserve a card from the top of a deck instead of one that's face up?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. When reserving a card, you may take the top card from one of the three decks (face-down) instead of taking a face-up card from the table. You still receive a gold token.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["reserve", "deck", "face-down"],
+    "forbidden_content": [],
+    "difficulty": "medium"
+  },
+  {
+    "query": "Is there a limit to how many cards I can reserve?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. You can have a maximum of 3 reserved cards in your hand at any time. You cannot reserve a fourth card until you purchase or otherwise use one of your reserved cards.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["3", "reserve", "maximum"],
+    "forbidden_content": ["5 reserved"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "How many prestige points is a noble worth?",
+    "expected_tier": 1,
+    "ground_truth": "Each noble tile is worth 3 prestige points.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["noble", "3", "prestige"],
+    "forbidden_content": ["5 points"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "Can gold tokens be used as any color when buying cards?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. Gold tokens (jokers) can be used as any gem color when purchasing development cards. Each gold token replaces one gem of any color.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["gold", "any", "color"],
+    "forbidden_content": [],
+    "difficulty": "easy"
+  },
+  {
+    "query": "What if two players tie at 15 points at the end of the round?",
+    "expected_tier": 1,
+    "ground_truth": "If there is a tie, the player with the fewest purchased development cards among the tied players wins.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["tie", "fewest", "card"],
+    "forbidden_content": [],
+    "difficulty": "hard"
+  },
+  {
+    "query": "Can I choose not to take a token when reserving if I already have 10?",
+    "expected_tier": 1,
+    "ground_truth": "If there are no gold tokens available when you reserve a card, you simply do not receive one. However, if gold tokens are available you must take one; you then return tokens of your choice if you exceed 10.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["gold", "reserve", "10"],
+    "forbidden_content": [],
+    "difficulty": "hard"
+  },
+  {
+    "query": "How many gem tokens per color in a 4-player game?",
+    "expected_tier": 1,
+    "ground_truth": "In a 4-player game, there are 7 tokens of each gem color available. There are always 5 gold tokens.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["7", "token", "4"],
+    "forbidden_content": ["4 tokens"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "Do card bonuses count toward noble requirements or do I need actual tokens?",
+    "expected_tier": 1,
+    "ground_truth": "Noble requirements are met by development card bonuses only, not by gem tokens. You must have the required number of permanent bonuses (purchased cards) of each specified color for a noble to visit you.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["noble", "bonus", "card"],
+    "forbidden_content": [],
+    "difficulty": "hard"
+  },
+  {
+    "query": "Can I take gems and buy a card on the same turn?",
+    "expected_tier": 1,
+    "ground_truth": "No. On your turn, you must perform exactly one action: either take gem tokens, or purchase a card, or reserve a card. You cannot combine actions in a single turn.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["one", "action", "turn"],
+    "forbidden_content": ["both"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "When a face-up card is purchased, is it replaced immediately?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. When a face-up development card is purchased or reserved from the table, it is immediately replaced by a new card drawn from the corresponding deck.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["replace", "card", "deck"],
+    "forbidden_content": [],
+    "difficulty": "easy"
+  },
+  {
+    "query": "Where do the gem tokens go when I buy a card?",
+    "expected_tier": 1,
+    "ground_truth": "When you purchase a development card, the gem tokens you spend are returned to the supply (the middle of the table) and become available for other players to take.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["return", "supply", "token"],
+    "forbidden_content": [],
+    "difficulty": "easy"
+  },
+  {
+    "query": "How many gems per color in a 3-player Splendor game?",
+    "expected_tier": 1,
+    "ground_truth": "In a 3-player game, there are 5 tokens of each gem color. There are always 5 gold tokens regardless of player count.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["5", "token", "3"],
+    "forbidden_content": ["7 tokens"],
+    "difficulty": "medium"
+  }
+]
