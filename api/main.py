@@ -136,14 +136,16 @@ def _run_pipeline(query: str, session_id: str, game_name: str) -> AskResponse:
     # 1. Session management
     history = _session_manager.get_history_text(session_id)
 
-    # 2. Query rewriting (game_name is already resolved from request)
+    # 2. Query rewriting with game-specific terminology map
     from retrieval.query_rewriter import rewrite_query
+    from routing.game_config import get_terminology_map
 
     rewrite_result = rewrite_query(
         raw_query=query,
         history=history,
         anthropic_client=_anthropic_client,
         default_game=game_name,
+        terminology_map=get_terminology_map(game_name),
     )
     rewritten = rewrite_result.rewritten_query
     resolved_game = game_name  # Trust the request, not the rewriter

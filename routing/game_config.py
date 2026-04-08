@@ -60,6 +60,44 @@ GAME_CONFIG: dict[str, GameConfig] = {
 }
 
 
+TERMINOLOGY_MAPS: dict[str, dict[str, str]] = {
+    "splendor": {
+        "gold token": "gold joker token",
+        "wild": "gold joker token",
+        "wildcard": "gold joker token",
+        "gems": "gem tokens",
+        "jewels": "gem tokens",
+        "points": "prestige points",
+        "victory points": "prestige points",
+        "reserve": "reserve a development card",
+        "hold a card": "reserve a development card",
+        "nobles": "noble tiles",
+        "noble visit": "noble tiles",
+        "buy": "purchase a development card",
+        "card bonus": "bonus",
+        "discount": "bonus",
+    },
+    "catan": {
+        "steal": "take 1 random resource card (robber)",
+        "rob": "robber",
+        "trade with bank": "maritime trade",
+        "trade with players": "domestic trade",
+        "soldier": "knight card",
+        "soldier card": "knight card",
+        "upgrade": "upgrade to a city",
+        "upgrade settlement": "upgrade to a city",
+        "wheat": "grain",
+        "corn": "grain",
+        "sheep": "wool",
+        "wood": "lumber",
+    },
+}
+
+
+def get_terminology_map(game_name: str) -> dict[str, str]:
+    return TERMINOLOGY_MAPS.get(game_name.lower().strip(), {})
+
+
 def get_config(game_name: str) -> GameConfig:
     game_name = game_name.lower().strip()
     if game_name not in GAME_CONFIG:

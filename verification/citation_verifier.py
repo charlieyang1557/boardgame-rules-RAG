@@ -77,7 +77,7 @@ def verify_citations(
             continue
 
         overlap = compute_token_overlap(claim, chunk["text"])
-        if overlap > 0.3:
+        if overlap > 0.5:
             details.append(
                 ClaimVerification(
                     claim=claim,
@@ -103,12 +103,11 @@ def verify_citations(
             max_tokens=1024,
             temperature=0,
             system=(
-                "You verify whether each claim is supported by its cited rule chunk. "
-                "A claim is SUPPORTED if the chunk contains the same information, even if "
-                "the wording differs. Accept paraphrases, synonym substitutions (e.g., "
-                "'gold token' = 'joker', 'gems' = 'tokens'), and reasonable inferences "
-                "from the chunk text. Only mark UNSUPPORTED if the chunk clearly does not "
-                "contain or imply the claimed information. "
+                "You verify whether each claim is directly supported by its cited rule chunk. "
+                "The claim must be supported by or logically entailed by the chunk text. "
+                "Minor syntactic variations are acceptable (e.g., dropping an adjective). "
+                "However, substituting game-specific terms with different words IS a mismatch — "
+                "the generator should have used the chunk's exact terminology. "
                 "Return one line per item in the form: Item N: SUPPORTED or UNSUPPORTED."
             ),
             messages=[{"role": "user", "content": prompt}],

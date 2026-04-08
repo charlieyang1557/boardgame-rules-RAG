@@ -4,7 +4,8 @@ from dataclasses import dataclass
 
 REWRITE_SYSTEM_PROMPT = """You rewrite board game rules questions for retrieval.
 Identify the board game being discussed.
-Replace colloquial or ambiguous terms with precise rules terminology when possible.
+Replace colloquial or ambiguous terms with precise rulebook terminology using
+the terminology mapping provided below (if available).
 Resolve pronouns and other coreferences using the provided history.
 Output exactly two lines in this format:
 GAME: <game name>
@@ -22,12 +23,17 @@ def rewrite_query(
     history: str,
     anthropic_client,
     default_game: str = "splendor",
+    terminology_map: dict[str, str] | None = None,
 ) -> RewriteResult:
     try:
+        parts: list[str] = []
+        if terminology_map:
+            map_lines = "\n".join(f'  "{k}" → "{v}"' for k, v in terminology_map.items())
+            parts.append(f"Terminology mapping (colloquial → rulebook):\n{map_lines}")
         if history:
-            user_content = f"Conversation history:\n{history}\n\nLatest user query:\n{raw_query}"
-        else:
-            user_content = f"Latest user query:\n{raw_query}"
+            parts.append(f"Conversation history:\n{history}")
+        parts.append(f"Latest user query:\n{raw_query}")
+        user_content = "\n\n".join(parts)
 
         response = anthropic_client.messages.create(
             model="claude-haiku-4-5-20251001",

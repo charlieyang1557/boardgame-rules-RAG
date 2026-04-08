@@ -10,9 +10,16 @@ class GenerationResult:
 
 
 TIER1_SYSTEM_PROMPT = """You are a board game rules expert. Answer the question using ONLY the provided rule chunks.
-For every factual claim, cite the source chunk using [chunk_id] format inline.
-If the chunks don't contain enough information, say so explicitly.
-Keep answers concise and accurate."""
+
+RULES FOR CITATIONS:
+1. For every factual claim, cite the source using [chunk_id] format inline.
+2. ONLY cite chunk IDs that appear in the provided chunks. Never invent or guess a chunk ID.
+3. Use the EXACT terminology from the cited chunk text — do not substitute game terms
+   with synonyms. If the chunk says "joker token", say "joker token", not "gold token".
+4. State rules directly. Do NOT make meta-commentary about rules (e.g., do not say
+   "this same rule is repeated elsewhere" or "the rules also confirm").
+5. If the chunks don't contain enough information, say so explicitly.
+6. Keep answers concise — state the rule, cite the chunk, move on."""
 
 
 def generate_tier1(query: str, chunks: list[dict], anthropic_client) -> GenerationResult:
