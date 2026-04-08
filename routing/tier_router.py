@@ -14,19 +14,26 @@ def sigmoid(x: float) -> float:
     return 1.0 / (1.0 + math.exp(-x))
 
 
-def route_tier(cross_encoder_logit: float, threshold: float = 0.25) -> TierDecision:
-    """Binary tier routing based on sigmoid-normalized cross-encoder score.
+def route_tier(
+    cross_encoder_logit: float,
+    threshold: float = 0.25,
+    tier2_threshold: float | None = None,
+) -> TierDecision:
+    """Three-tier routing based on sigmoid-normalized cross-encoder score.
 
     Args:
         cross_encoder_logit: Raw logit from cross-encoder reranker (best chunk).
-        threshold: Sigmoid score above which Tier 1 is assigned. Default 0.25,
-                   calibrated against Splendor golden dataset with dual-query reranking.
-                   Bimodal distribution: 29/30 > 0.29, 1/30 at 0.007. The 0.25 cutoff
-                   sits in the empty gap between 0.01 and 0.29.
+        threshold: Sigmoid score above which Tier 1 is assigned.
+        tier2_threshold: If set, scores between tier2_threshold and threshold
+                         route to Tier 2 (multi-hop). If None, falls back to
+                         binary Tier 1/3 routing.
 
     Returns:
-        TierDecision with tier (1 or 3) and the sigmoid relevance score.
+        TierDecision with tier (1, 2, or 3) and the sigmoid relevance score.
     """
     score = sigmoid(cross_encoder_logit)
-    tier = 1 if score > threshold else 3
-    return TierDecision(tier=tier, relevance_score=score)
+    if score > threshold:
+        return TierDecision(tier=1, relevance_score=score)
+    if tier2_threshold is not None and score > tier2_threshold:
+        return TierDecision(tier=2, relevance_score=score)
+    return TierDecision(tier=3, relevance_score=score)

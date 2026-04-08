@@ -14,6 +14,7 @@ class GameConfig:
     version_aware: bool
     parser_mode: str
     tier1_threshold: float = 0.25  # Per-game sigmoid threshold for Tier 1 routing
+    tier2_threshold: float = 0.10  # Below tier1, above this = Tier 2 multi-hop candidate
 
 
 GAME_CONFIG: dict[str, GameConfig] = {
@@ -38,15 +39,16 @@ GAME_CONFIG: dict[str, GameConfig] = {
         parser_mode="cost_effective",
     ),
     "speakeasy": GameConfig(
-        retrieval_hops=1,  # Phase 2a: single hop only
+        retrieval_hops=2,  # Phase 2b: 2-hop multi-hop
         rerank_top_k=5,
         hybrid_top_k=40,  # Larger corpus (185 chunks) needs wider net
         rrf_k=60,
         multi_system_detection=False,
-        use_secondary_kb=False,  # Phase 2b
+        use_secondary_kb=False,
         version_aware=False,
         parser_mode="agentic",
         tier1_threshold=0.15,  # Lower for domain-specific proper nouns
+        tier2_threshold=0.08,  # Lower because cross-encoder scores are lower for Speakeasy
     ),
     # Phase 2+
     "fcm": GameConfig(

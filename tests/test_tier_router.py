@@ -55,6 +55,26 @@ class TestRouteTier:
         assert result.tier == 1
 
     def test_default_threshold_tier3(self) -> None:
-        # sigmoid(-1.2) ≈ 0.232 < 0.25 → Tier 3
+        # sigmoid(-1.2) ≈ 0.232 < 0.25 → Tier 3 (no tier2_threshold set)
         result = route_tier(cross_encoder_logit=-1.2)
         assert result.tier == 3
+
+    def test_tier2_between_thresholds(self) -> None:
+        # sigmoid(-0.5) ≈ 0.378, tier1=0.5, tier2=0.10 → Tier 2
+        result = route_tier(cross_encoder_logit=-0.5, threshold=0.5, tier2_threshold=0.10)
+        assert result.tier == 2
+        assert 0.10 < result.relevance_score < 0.5
+
+    def test_tier2_above_tier1_goes_tier1(self) -> None:
+        result = route_tier(cross_encoder_logit=2.0, threshold=0.5, tier2_threshold=0.10)
+        assert result.tier == 1
+
+    def test_tier2_below_tier2_goes_tier3(self) -> None:
+        # sigmoid(-3.0) ≈ 0.047 < 0.10 → Tier 3
+        result = route_tier(cross_encoder_logit=-3.0, threshold=0.5, tier2_threshold=0.10)
+        assert result.tier == 3
+
+    def test_no_tier2_threshold_falls_to_binary(self) -> None:
+        # Without tier2_threshold, same as binary Tier 1/3
+        result = route_tier(cross_encoder_logit=-0.5, threshold=0.5)
+        assert result.tier == 3  # Not Tier 2
