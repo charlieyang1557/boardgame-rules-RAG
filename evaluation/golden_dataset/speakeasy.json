@@ -1,0 +1,402 @@
+[
+  {
+    "query": "What happens when I send a Capo to the Contractor?",
+    "expected_tier": 1,
+    "ground_truth": "At the Contractor, you can gain a Book, increase any one Operations or Strength level by 1, gain a Helper card, and up to two times open a Speakeasy or Stills or take over a Mobster Speakeasy, paying the chosen building's cost each time.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Contractor", "Speakeasy", "Stills"],
+    "forbidden_content": ["Nightclub"],
+    "difficulty": "easy",
+    "category": "locations"
+  },
+  {
+    "query": "What can I do at the Docks?",
+    "expected_tier": 1,
+    "ground_truth": "At the Docks, you can play a Stills card, hire 1 Goon for free, and ambush a Rum-runner Ship. To ambush, your attack strength must exceed the ship's defense, you need at least 1 Family Member in the matching Docks zone, and you cannot use your Associate.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Docks", "Rum-runner", "Associate"],
+    "forbidden_content": ["use your Associate"],
+    "difficulty": "easy",
+    "category": "locations"
+  },
+  {
+    "query": "What happens at the Restaurant?",
+    "expected_tier": 1,
+    "ground_truth": "At the Restaurant, you must discard an Operations card and change turn order for next round. Then you perform 2 different actions: play 1 Operations card, play up to 2 City tiles, and/or cook up to 3 Books. The Restaurant has no limit on how many Capos can be sent there.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Restaurant", "turn order", "Books"],
+    "forbidden_content": ["optional turn order change"],
+    "difficulty": "easy",
+    "category": "locations"
+  },
+  {
+    "query": "What does City Hall do?",
+    "expected_tier": 1,
+    "ground_truth": "At City Hall, you can gain a Family Member, hire Goons, gain a Leverage token, play a VIP Room card, and get protection by sending Family Members from your VIP area to protect buildings, paying Leverage based on your turn-order column.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["City Hall", "Leverage", "protect"],
+    "forbidden_content": ["zone control payout"],
+    "difficulty": "easy",
+    "category": "locations"
+  },
+  {
+    "query": "What happens at the Commission?",
+    "expected_tier": 1,
+    "ground_truth": "At the Commission, you can gain a Helper card, increase any one Operations or Strength level by 1, gain a Family Member, hire Goons, and take an Associate Mobster. If you switch Associates, return the old one first. You may not take over a Mobster Speakeasy in your Associate's district.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Commission", "Associate", "district"],
+    "forbidden_content": ["Zone Control marker"],
+    "difficulty": "easy",
+    "category": "locations"
+  },
+  {
+    "query": "What does the Garage do?",
+    "expected_tier": 1,
+    "ground_truth": "At the Garage, you can increase any one Operations or Strength level by 1, play a Fleet card for a +2 range bonus, and use your Trucks to pick up barrels from your Operating Stills or buy them from Rum-runner Ships, then deliver them to your Operating Speakeasies, Nightclubs, or Casinos.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Garage", "Truck", "deliver"],
+    "forbidden_content": ["deliver to Stills"],
+    "difficulty": "easy",
+    "category": "locations"
+  },
+  {
+    "query": "What can I do at City Planner?",
+    "expected_tier": 1,
+    "ground_truth": "At the City Planning Office, you can up to two times open a Nightclub or Casino, upgrade one of your Speakeasies into a Nightclub or Casino, or take over a Mobster Speakeasy with one of those building types. You can also play 1 Operations card, increase any one Operations or Strength level by 1, and play 1 Party card.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Nightclub", "Casino", "upgrade"],
+    "forbidden_content": ["open a Stills"],
+    "difficulty": "easy",
+    "category": "locations"
+  },
+  {
+    "query": "What happens at the Park?",
+    "expected_tier": 1,
+    "ground_truth": "At the Park, you exchange your Capo with another player's Capo from a non-Park location. Your Capo then performs that location's actions as usual, and the moved Capo's owner gains one of these Park benefits: 1 Leverage token, 1 City tile, or 1 Book.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Park", "exchange", "City tile"],
+    "forbidden_content": ["attack a ship"],
+    "difficulty": "easy",
+    "category": "locations"
+  },
+  {
+    "query": "When is a building considered Operating?",
+    "expected_tier": 1,
+    "ground_truth": "A building is Operating if there is no Cop in its district, or if it is protected by a Family Member. If either condition is true, the building is Operating.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Operating", "Cop", "Family Member"],
+    "forbidden_content": ["must have both"],
+    "difficulty": "easy",
+    "category": "operating"
+  },
+  {
+    "query": "How much does a Speakeasy cost to open?",
+    "expected_tier": 1,
+    "ground_truth": "Opening a Speakeasy costs the amount shown on the chosen Speakeasy space on your Operations board: $3, $5, or $8.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["$3", "$5", "$8"],
+    "forbidden_content": ["always $5"],
+    "difficulty": "easy",
+    "category": "operating"
+  },
+  {
+    "query": "What happens to a non-Operating building?",
+    "expected_tier": 1,
+    "ground_truth": "The Golden Rule says a non-Operating building is the same as a non-existent building. It cannot receive, produce, distribute, or sell barrels, and it does not count for Zone Control payout or final scoring unless a rule specifically breaks the Golden Rule.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Golden Rule", "non-existent", "Zone Control"],
+    "forbidden_content": ["still counts for scoring"],
+    "difficulty": "easy",
+    "category": "operating"
+  },
+  {
+    "query": "How do I increase my Operations level?",
+    "expected_tier": 1,
+    "ground_truth": "You increase an Operations level by resolving effects that say to increase any one of your Operations or Strength levels by 1, or increase a specific operation by 1. Those effects appear on locations, Operations cards, City tiles, and other benefits.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["increase", "Operations", "by 1"],
+    "forbidden_content": ["pay money to level up directly"],
+    "difficulty": "medium",
+    "category": "operating"
+  },
+  {
+    "query": "What's the difference between a Speakeasy and a Nightclub?",
+    "expected_tier": 1,
+    "ground_truth": "Both can hold 1 barrel, but a Speakeasy sells barrels at the lower Infamy value and can later be upgraded. A Nightclub sells barrels at the higher Infamy value and costs $12 to open or place when upgrading.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["lower", "higher", "upgrade"],
+    "forbidden_content": ["Nightclub holds 2 barrels"],
+    "difficulty": "medium",
+    "category": "operating"
+  },
+  {
+    "query": "How do I make booze in this game?",
+    "expected_tier": 1,
+    "ground_truth": "To produce barrels, you must have an Operating Stills. Then resolve a Produce Barrels action and place a number of barrels on your Stills area equal to your Stills Operations level, plus any applicable bonuses.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Operating Stills", "produce barrels", "Stills area"],
+    "forbidden_content": ["produce from a Speakeasy"],
+    "difficulty": "easy",
+    "category": "barrels"
+  },
+  {
+    "query": "How do I deliver barrels with my Truck?",
+    "expected_tier": 1,
+    "ground_truth": "Each Truck may move up to its range, spending 1 movement per adjacent district. During movement it can pick up barrels from your Operating Stills or buy them from a Rum-runner Ship, and deliver them to one of your Operating buildings without a barrel. A Truck can hold up to 2 barrels, and you cannot deliver to Stills.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Truck", "range", "2 barrels"],
+    "forbidden_content": ["deliver to Stills"],
+    "difficulty": "medium",
+    "category": "barrels"
+  },
+  {
+    "query": "How much do I earn selling a barrel at a Nightclub?",
+    "expected_tier": 1,
+    "ground_truth": "A Nightclub sells at the higher amount on the highest Infamy barrel space your marker has reached or passed. The exact cash depends on your current Infamy position.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Nightclub", "higher amount", "Infamy"],
+    "forbidden_content": ["lower amount"],
+    "difficulty": "medium",
+    "category": "barrels"
+  },
+  {
+    "query": "Can I sell barrels at an opponent's bar?",
+    "expected_tier": 1,
+    "ground_truth": "No. Selling barrels only uses barrels next to your own Operating buildings. You cannot sell at an opponent's Speakeasy, Nightclub, or Casino.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["your own", "Operating buildings"],
+    "forbidden_content": ["sell at an opponent's Speakeasy"],
+    "difficulty": "medium",
+    "category": "barrels"
+  },
+  {
+    "query": "How is district control determined?",
+    "expected_tier": 1,
+    "ground_truth": "Check each district. A player with the best building and a protecting Family Member controls it. Otherwise, if there is no Cop and no Family Member, the player with the best Operating building controls it. If no player has an Operating building but there is at least one Mobster Speakeasy, the Mobsters control it. Ties mean all tied players control the district.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["best building", "Family Member", "Mobster Speakeasy"],
+    "forbidden_content": ["most buildings wins"],
+    "difficulty": "medium",
+    "category": "zone_control"
+  },
+  {
+    "query": "How do I defend against a Mobster attack?",
+    "expected_tier": 1,
+    "ground_truth": "During Mob War, for each of your buildings in the attacked district, you decide whether to defend it. Your defense strength is your Strength plus any Goons you return and, if you choose to pay them, your Associate's strength. You must equal or exceed the Mob War strength to keep the building.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["defense strength", "Goons", "Associate"],
+    "forbidden_content": ["must exceed"],
+    "difficulty": "medium",
+    "category": "mob_war"
+  },
+  {
+    "query": "What determines Strength in a Mob War?",
+    "expected_tier": 1,
+    "ground_truth": "A Mobster's Mob War strength equals the Mobster's strength in the brown box plus the red strength modifier. Your building defense strength is your Strength plus any Goons you return and any Associate strength you pay for that one defense.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["brown box", "red", "Goons"],
+    "forbidden_content": ["Family Members add defense strength"],
+    "difficulty": "medium",
+    "category": "mob_war"
+  },
+  {
+    "query": "How does Zone Control scoring work?",
+    "expected_tier": 1,
+    "ground_truth": "At each Lucky Luciano phase, determine control of every district in each Zone and move player and Mobster Zone Control markers up. Then each Zone pays money to your safe based on your position on that track. Include the Mobster marker when ranking positions, and tied players get the lower payout among the tied places.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Lucky Luciano", "safe", "tied players"],
+    "forbidden_content": ["cash in pocket"],
+    "difficulty": "hard",
+    "category": "zone_control"
+  },
+  {
+    "query": "How many rounds are in each Act?",
+    "expected_tier": 1,
+    "ground_truth": "There are 4 player rounds in Act 1, 3 in Act 2, 3 in Act 3, and 1 in Act 4, for 11 player rounds total. The game also has a Setup Round and a Final Scoring Round.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["4", "3", "1"],
+    "forbidden_content": ["Act 4 has 3 rounds"],
+    "difficulty": "easy",
+    "category": "general"
+  },
+  {
+    "query": "How do I change turn order?",
+    "expected_tier": 1,
+    "ground_truth": "You change turn order by sending a Capo to the Restaurant, discarding an Operations card, and placing your Turn Order marker on an empty lower-row space. If any markers are on the lower row, the order updates at the end of the round and Casinos pay out.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Restaurant", "lower row", "end of the round"],
+    "forbidden_content": ["change it at City Hall"],
+    "difficulty": "easy",
+    "category": "general"
+  },
+  {
+    "query": "What counts toward my final score?",
+    "expected_tier": 1,
+    "ground_truth": "Your final score is your cash plus your safe money, plus the money from your Protected buildings, plus the amount from Helper cards with unique bottle types.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["cash", "safe money", "Protected buildings"],
+    "forbidden_content": ["Zone Control only"],
+    "difficulty": "easy",
+    "category": "scoring"
+  },
+  {
+    "query": "How much Leverage do I need to protect a building?",
+    "expected_tier": 1,
+    "ground_truth": "Each Family Member you send to protect a building costs Leverage based on your Turn Order column: 4 in the leftmost column, then 3, then 2, then 1 as you move right. You can spend Leverage from Operations cards and discard Leverage tokens for +1 each.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["4", "3", "Leverage"],
+    "forbidden_content": ["always costs 1"],
+    "difficulty": "medium",
+    "category": "general"
+  },
+  {
+    "query": "What is the Golden Rule about non-Operating buildings?",
+    "expected_tier": 1,
+    "ground_truth": "The Golden Rule is: a non-Operating building is the same as a non-existent building. It normally does nothing and does not count, unless a rule specifically says it breaks the Golden Rule.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Golden Rule", "non-existent"],
+    "forbidden_content": ["still operates normally"],
+    "difficulty": "easy",
+    "category": "general"
+  },
+  {
+    "query": "How does Jo's turn work in solo mode?",
+    "expected_tier": 1,
+    "ground_truth": "In solo mode, flip Jo's top Action card and send one of Jo's Capos to the left person of that location if available, otherwise the right. Ignore the printed location actions and resolve the card's actions top to bottom, left to right. If you block both spaces, your leftmost Capo goes to the Park and Jo takes one of the Park actions.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Jo", "Action card", "Park"],
+    "forbidden_content": ["Jo uses normal player choices"],
+    "difficulty": "medium",
+    "category": "solo"
+  },
+  {
+    "query": "What's different about solo setup?",
+    "expected_tier": 1,
+    "ground_truth": "Solo uses the 2-player setup with extra bot rules. Jo gets his own Operations board, Zone Control markers, Capos, Family Members, Books, Stills, Speakeasies, Nightclubs, and Casinos, but no Strength marker, trucks, Associate marker, or safe, and he starts with no money. Jo also starts with Infamy on 5 and uses action decks and a District deck.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["2-player setup", "Jo", "Infamy"],
+    "forbidden_content": ["Jo uses trucks"],
+    "difficulty": "medium",
+    "category": "solo"
+  },
+  {
+    "query": "How many building spaces per district in 2-player?",
+    "expected_tier": 1,
+    "ground_truth": "In 2-player, districts normally have 2 building spaces, including Uptown. In addition, five districts are blocked at setup: two in Downtown, two in Midtown, and one in Uptown, and blocked districts may not be built in.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["2-player", "2 building spaces", "Blocked District"],
+    "forbidden_content": ["Uptown has 3 in 2-player"],
+    "difficulty": "easy",
+    "category": "two_player"
+  },
+  {
+    "query": "Any special rules for 2-player Speakeasy?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. Use the 1/2-player side of the board, block five districts, Uptown has only 2 building spaces per district, the Docks has only 1 person, some location counts are reduced, and each Operating Casino pays $5 instead of $3 when turn order changes.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["1/2-player side", "Blocked District", "$5"],
+    "forbidden_content": ["use the 3/4-player side"],
+    "difficulty": "medium",
+    "category": "two_player"
+  },
+  {
+    "query": "Can I use my Associate to attack a Rum-runner ship?",
+    "expected_tier": 1,
+    "ground_truth": "No. Associates cannot be used when attacking a Rum-runner Ship. You use your Strength, matching Docks Family Members, and any Goons you return.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Associate", "Rum-runner Ship", "cannot"],
+    "forbidden_content": ["pay your Associate"],
+    "difficulty": "easy",
+    "category": "mob_war"
+  },
+  {
+    "query": "Can multiple Capos go to the same location?",
+    "expected_tier": 1,
+    "ground_truth": "Yes, if there are different available people there. Each person can only have one Capo, but you can send Capos to different people in the same location. The Restaurant is the exception and can hold any number of Capos.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["different people", "one Capo", "Restaurant"],
+    "forbidden_content": ["only one Capo per location"],
+    "difficulty": "easy",
+    "category": "general"
+  },
+  {
+    "query": "What happens if I run out of money mid-turn?",
+    "expected_tier": 1,
+    "ground_truth": "You may spend money from your safe at any time, but it must be laundered at a 2-to-1 ratio. So if you are short on cash, you can cover costs by spending $2 from your safe for each $1 you need.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["safe", "2-to-1", "any time"],
+    "forbidden_content": ["your turn ends immediately"],
+    "difficulty": "medium",
+    "category": "general"
+  },
+  {
+    "query": "Can I voluntarily close my own building?",
+    "expected_tier": 1,
+    "ground_truth": "No rule lets you voluntarily close or remove your own building. Buildings become non-Operating only if game conditions make them so, such as a Cop in the district without protection.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["no rule", "non-Operating", "Cop"],
+    "forbidden_content": ["you may close it anytime"],
+    "difficulty": "hard",
+    "category": "operating"
+  },
+  {
+    "query": "What happens if all Goons are hired?",
+    "expected_tier": 1,
+    "ground_truth": "Goons are a limited component. If the supply is empty, no one can hire more Goons until some are returned to the supply by being spent for attacks or defense.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["limited", "supply", "returned"],
+    "forbidden_content": ["use coins as substitute Goons"],
+    "difficulty": "medium",
+    "category": "general"
+  },
+  {
+    "query": "What happens if all Mobster Speakeasies in a district are destroyed?",
+    "expected_tier": 3,
+    "ground_truth": "The rules do not give a general special rule for that exact situation. What they do say is that Mobsters from previous Acts stay on the Mobster board even if all their Speakeasies are lost, and a newly entering Mobster is removed only if it places no Speakeasies during that Mob War.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Mobsters stay on the Mobster board", "places no Speakeasies"],
+    "forbidden_content": ["automatic district reset"],
+    "difficulty": "hard",
+    "category": "mob_war"
+  },
+  {
+    "query": "Can I trade buildings with another player?",
+    "expected_tier": 3,
+    "ground_truth": "No official rule allows players to trade or swap buildings. Buildings are opened, upgraded, protected, destroyed, or taken over from Mobsters, not exchanged between players.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["no official rule", "Mobsters"],
+    "forbidden_content": ["players may swap buildings"],
+    "difficulty": "easy",
+    "category": "general"
+  },
+  {
+    "query": "What if two players tie on Zone Control at end of game?",
+    "expected_tier": 3,
+    "ground_truth": "The rules do not define a separate end-of-game Zone Control resolution, because Zone Control pays out during the Lucky Luciano phases, not in final scoring. If players tie in final score, use the normal tiebreakers: most Protected buildings, then most buildings, then most placed Books, then most Family Members.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Lucky Luciano", "final score", "Protected buildings"],
+    "forbidden_content": ["shared Zone Control victory"],
+    "difficulty": "hard",
+    "category": "zone_control"
+  },
+  {
+    "query": "Can I play Speakeasy with 6 players?",
+    "expected_tier": 3,
+    "ground_truth": "There is no official 6-player mode in the published rules. Speakeasy is listed for 1 to 4 players.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["1 to 4 players"],
+    "forbidden_content": ["supports 6 players"],
+    "difficulty": "easy",
+    "category": "general"
+  },
+  {
+    "query": "Is there an official Speakeasy tournament format?",
+    "expected_tier": 3,
+    "ground_truth": "The rulebook does not include any official tournament format or organized-play rules.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["rulebook", "official tournament"],
+    "forbidden_content": ["Swiss rounds"],
+    "difficulty": "easy",
+    "category": "general"
+  }
+]
