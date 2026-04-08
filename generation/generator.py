@@ -34,7 +34,11 @@ def generate_tier1(query: str, chunks: list[dict], anthropic_client) -> Generati
         system=TIER1_SYSTEM_PROMPT,
         messages=[{
             "role": "user",
-            "content": f"Rule chunks:\n{context}\n\nQuestion: {query}"
+            "content": (
+                f"Valid chunk IDs: {', '.join(c['chunk_id'] for c in chunks)}\n\n"
+                f"Rule chunks:\n{context}\n\n"
+                f"Question: {query}"
+            ),
         }],
     )
     answer = message.content[0].text

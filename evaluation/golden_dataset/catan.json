@@ -226,7 +226,7 @@
   },
   {
     "query": "What if two players hit 10 points at the same time?",
-    "expected_tier": 3,
+    "expected_tier": 1,
     "ground_truth": "In the base game, only the player whose turn it is can win, because victory is checked when you reach 10 points on your own turn. So a true simultaneous win does not occur under normal rules.",
     "expected_chunks": [],
     "required_chunk_keywords": ["your own turn", "simultaneous win does not occur"],
@@ -235,7 +235,7 @@
   },
   {
     "query": "Can you move the robber onto an empty hex with nobody around it?",
-    "expected_tier": 3,
+    "expected_tier": 1,
     "ground_truth": "Yes. The robber can be moved to any legal terrain hex other than its current hex. If there is no player with a settlement or city adjacent to that hex, no resource is stolen.",
     "expected_chunks": [],
     "required_chunk_keywords": ["any legal terrain hex", "no resource is stolen"],
@@ -244,7 +244,7 @@
   },
   {
     "query": "Can I keep building a brick road through another player's settlement?",
-    "expected_tier": 3,
+    "expected_tier": 1,
     "ground_truth": "No. Another player's settlement or city stops your road. You cannot build a road through an intersection occupied by another player's building.",
     "expected_chunks": [],
     "required_chunk_keywords": ["stops your road", "another player's settlement or city"],
@@ -253,7 +253,7 @@
   },
   {
     "query": "What happens if every settlement spot on the board is taken?",
-    "expected_tier": 3,
+    "expected_tier": 1,
     "ground_truth": "If there are no legal intersections left, no one can build new settlements there. Play continues with the legal options that remain, such as roads, city upgrades, development cards, and trading, until someone wins.",
     "expected_chunks": [],
     "required_chunk_keywords": ["no legal intersections", "play continues"],
@@ -262,7 +262,7 @@
   },
   {
     "query": "Can I just refuse a trade offer from another player?",
-    "expected_tier": 3,
+    "expected_tier": 1,
     "ground_truth": "Yes. Player trading is voluntary, so any player may refuse a proposed trade.",
     "expected_chunks": [],
     "required_chunk_keywords": ["voluntary", "refuse"],
