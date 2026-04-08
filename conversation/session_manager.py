@@ -47,6 +47,7 @@ class SessionManager:
             selected_parts.append(part)
             token_total += separator_tokens + part_tokens
 
+        selected_parts.reverse()  # Restore chronological order (oldest first)
         return "\n\n".join(selected_parts)
 
     def clear_session(self, session_id: str) -> None:

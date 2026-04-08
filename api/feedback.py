@@ -2,16 +2,16 @@ from __future__ import annotations
 
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 router = APIRouter()
 
 
 class FeedbackRequest(BaseModel):
-    session_id: str
+    session_id: str = Field(..., max_length=64)
     query_id: int
     helpful: bool
-    comment: str = ""
+    comment: str = Field("", max_length=2000)
 
 
 class FeedbackResponse(BaseModel):
@@ -41,5 +41,5 @@ async def submit_feedback(feedback: FeedbackRequest) -> FeedbackResponse:
             comment=feedback.comment,
         )
         return FeedbackResponse(status="ok", message="Feedback recorded")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to record feedback: {e}")
+    except Exception:
+        raise HTTPException(status_code=500, detail="Failed to record feedback")

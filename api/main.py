@@ -6,7 +6,7 @@ import uuid
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 load_dotenv()
 
@@ -15,9 +15,9 @@ app = FastAPI(title="BoardGameOracle", version="0.1.0")
 # ── Pydantic models ──────────────────────────────────────────────────────────
 
 class AskRequest(BaseModel):
-    query: str
-    session_id: str | None = None
-    game_name: str | None = None
+    query: str = Field(..., max_length=2000)
+    session_id: str | None = Field(None, max_length=64)
+    game_name: str | None = Field(None, max_length=50)
 
 
 class ChunkInfo(BaseModel):
@@ -112,6 +112,11 @@ def _run_pipeline(query: str, session_id: str, game_name: str | None) -> AskResp
     _init_components()
     start = time.time()
 
+    if _openai_client is None or _anthropic_client is None:
+        raise HTTPException(status_code=503, detail="API clients not initialized. Check API keys in .env.")
+    if _reranker is None:
+        raise HTTPException(status_code=503, detail="Reranker model not loaded.")
+
     if _searcher is None:
         raise HTTPException(status_code=503, detail="BM25 index not loaded. Run ingestion first.")
 
@@ -191,7 +196,7 @@ def _run_pipeline(query: str, session_id: str, game_name: str | None) -> AskResp
     ]
 
     if tier_decision.tier == 1:
-        gen_result = generate_tier1(query, top_chunks, _anthropic_client)
+        gen_result = generate_tier1(rewritten, top_chunks, _anthropic_client)
 
         # 9. Citation verification
         from verification.citation_verifier import verify_citations
@@ -249,17 +254,24 @@ async def health() -> HealthResponse:
 
 @app.post("/ask", response_model=AskResponse)
 async def ask(request: AskRequest) -> AskResponse:
+    import logging
+
+    logger = logging.getLogger(__name__)
     session_id = request.session_id or str(uuid.uuid4())
     try:
         return _run_pipeline(request.query, session_id, request.game_name)
     except HTTPException:
         raise
-    except Exception as e:
-        # 1 retry on transient errors
+    except (TimeoutError, ConnectionError, OSError) as e:
+        # Retry once on transient network errors only
+        logger.warning("Transient error, retrying: %s", e)
         try:
             return _run_pipeline(request.query, session_id, request.game_name)
         except Exception:
-            raise HTTPException(status_code=503, detail=f"Service temporarily unavailable: {e}")
+            raise HTTPException(status_code=503, detail="Service temporarily unavailable")
+    except Exception as e:
+        logger.exception("Pipeline error: %s", e)
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
 # ── Include feedback router ──────────────────────────────────────────────────

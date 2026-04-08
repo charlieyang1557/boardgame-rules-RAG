@@ -20,8 +20,9 @@ class SemanticCache:
     Session-scoped — does not persist across restarts.
     """
 
-    def __init__(self, threshold: float = 0.92) -> None:
+    def __init__(self, threshold: float = 0.92, max_size: int = 500) -> None:
         self.threshold = threshold
+        self.max_size = max_size
         self.embeddings: list[list[float]] = []
         self.responses: list[dict] = []
 
@@ -47,9 +48,12 @@ class SemanticCache:
         return None
 
     def store(self, query_embedding: list[float], response: dict, tier: int) -> None:
-        """Store a response in cache. Only Tier 1 is cached."""
+        """Store a response in cache. Only Tier 1 is cached. LRU eviction at max_size."""
         if tier != 1:
             return
+        if len(self.embeddings) >= self.max_size:
+            self.embeddings.pop(0)
+            self.responses.pop(0)
         self.embeddings.append(query_embedding)
         self.responses.append(response)
 
