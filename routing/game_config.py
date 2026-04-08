@@ -69,7 +69,13 @@ GAME_CONFIG: dict[str, GameConfig] = {
         tier1_threshold=0.15,  # Lower for domain-specific proper nouns
         tier2_threshold=0.08,  # Lower because cross-encoder scores are lower for Speakeasy
     ),
-    # Phase 2+
+    # FCM thresholds calibrated on golden dataset (2026-04-08):
+    # Tier 1 scores: min=0.050, p10=0.123, median=0.938
+    # Tier 2 scores: min=0.038, p10=0.817, median=0.991
+    # Tier 3 scores: min=0.107, median=0.821
+    # Scores are bimodal with heavy overlap — citation verification
+    # is the primary quality gate, not the threshold.
+    # Chosen: tier1=0.10 (captures 94% of T1), tier2=0.05 (minimal T3 false positives)
     "fcm": GameConfig(
         retrieval_hops=3,
         rerank_top_k=8,
@@ -79,8 +85,8 @@ GAME_CONFIG: dict[str, GameConfig] = {
         use_secondary_kb=False,
         version_aware=False,
         parser_mode="agentic",
-        tier1_threshold=0.20,
-        tier2_threshold=0.08,
+        tier1_threshold=0.10,
+        tier2_threshold=0.05,
     ),
 }
 
