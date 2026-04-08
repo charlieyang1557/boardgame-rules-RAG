@@ -1,0 +1,272 @@
+[
+  {
+    "query": "How many victory points do you need to win Catan?",
+    "expected_tier": 1,
+    "ground_truth": "You win as soon as you reach 10 victory points on your turn.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["10", "victory points"],
+    "forbidden_content": ["12 points"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "What happens when someone rolls a 7?",
+    "expected_tier": 1,
+    "ground_truth": "When a 7 is rolled, no terrain produces resources. Any player with more than 7 resource cards must discard half of them, rounded down. Then the active player moves the robber and may steal 1 resource card from a player with a settlement or city next to the robber's new hex.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["robber", "discard half"],
+    "forbidden_content": ["everyone discards all"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "How many cards do you get for a settlement versus a city?",
+    "expected_tier": 1,
+    "ground_truth": "A settlement produces 1 resource from each adjacent producing hex, while a city produces 2 resources from each adjacent producing hex.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["settlement", "city"],
+    "forbidden_content": ["city produces 3"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "What's the cost to build a road?",
+    "expected_tier": 1,
+    "ground_truth": "A road costs 1 brick and 1 lumber.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["brick", "lumber"],
+    "forbidden_content": ["grain"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "What do I need to pay to build a settlement?",
+    "expected_tier": 1,
+    "ground_truth": "A settlement costs 1 brick, 1 lumber, 1 wool, and 1 grain.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["brick", "wool"],
+    "forbidden_content": ["ore"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "Can I trade with other players in the base game?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. You may trade resources with other players, but only during your own turn.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["trade", "your turn"],
+    "forbidden_content": ["any time"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "How many roads does each player get total?",
+    "expected_tier": 1,
+    "ground_truth": "Each player has a maximum of 15 roads.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["15", "roads"],
+    "forbidden_content": ["13 roads"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "How much is Longest Road worth?",
+    "expected_tier": 1,
+    "ground_truth": "Longest Road is worth 2 victory points. A player must have at least 5 continuous road segments to take it.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["2 victory points", "5"],
+    "forbidden_content": ["1 victory point"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "How much is Largest Army worth?",
+    "expected_tier": 1,
+    "ground_truth": "Largest Army is worth 2 victory points. A player must have played at least 3 knight cards to take it.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["2 victory points", "3 knight"],
+    "forbidden_content": ["4 knights required"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "How many resource cards does a settlement make when its number is rolled?",
+    "expected_tier": 1,
+    "ground_truth": "A settlement produces 1 resource card from each adjacent hex whose number was rolled, unless that hex is blocked by the robber.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["1 resource", "adjacent hex"],
+    "forbidden_content": ["2 resources"],
+    "difficulty": "easy"
+  },
+  {
+    "query": "What's the distance rule for placing settlements?",
+    "expected_tier": 1,
+    "ground_truth": "You may only build a settlement on an empty intersection if all 3 adjacent intersections are unoccupied. In practice, settlements must be at least 2 roads apart.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["2 roads apart", "adjacent intersections"],
+    "forbidden_content": ["next to another settlement"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "Can I play a development card the same turn I buy it?",
+    "expected_tier": 1,
+    "ground_truth": "No. You cannot play a development card on the same turn you buy it. Victory point cards are the exception because they stay hidden until revealed and can count when you reach the winning total.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["same turn", "victory point"],
+    "forbidden_content": ["yes, immediately"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "How does boat trade with the bank work?",
+    "expected_tier": 1,
+    "ground_truth": "Maritime trade lets you trade with the bank at 4 identical resources for 1 of your choice by default. If you have a harbor, you may trade at 3:1 with a generic harbor or 2:1 with the matching resource harbor.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["4:1", "harbor"],
+    "forbidden_content": ["5:1"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "When people discard from a 7, where do those resource cards go?",
+    "expected_tier": 1,
+    "ground_truth": "Discarded resource cards are returned to the bank.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["returned", "bank"],
+    "forbidden_content": ["discard pile"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "During setup, what order do players place their second settlement?",
+    "expected_tier": 1,
+    "ground_truth": "In the second setup round, players place in reverse order. The player who placed last in round 1 places first in round 2.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["reverse order", "second settlement"],
+    "forbidden_content": ["same order"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "Do you get starting resources from your second settlement in setup?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. After placing your second settlement during setup, you collect 1 resource card from each adjacent resource hex.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["second settlement", "adjacent resource hex"],
+    "forbidden_content": ["no starting resources"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "Can the robber go back onto the desert?",
+    "expected_tier": 1,
+    "ground_truth": "No. In the official base game rules, the robber must be moved to a different terrain hex and may not be returned to the desert.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["different terrain hex", "desert"],
+    "forbidden_content": ["yes, back to desert"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "How many development cards are in the deck?",
+    "expected_tier": 1,
+    "ground_truth": "There are 25 development cards total: 14 Knight cards, 5 Victory Point cards, 2 Road Building cards, 2 Year of Plenty cards, and 2 Monopoly cards.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["25", "14 Knight"],
+    "forbidden_content": ["24 development cards"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "Can I build stuff during somebody else's turn?",
+    "expected_tier": 1,
+    "ground_truth": "No. You can build only during your own turn.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["build", "your own turn"],
+    "forbidden_content": ["yes, if you have resources"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "What happens if the bank runs out of one resource type?",
+    "expected_tier": 1,
+    "ground_truth": "If the supply of a resource card type is exhausted, no one receives that resource until cards of that type are returned to the bank.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["supply", "returned to the bank"],
+    "forbidden_content": ["use a substitute token"],
+    "difficulty": "medium"
+  },
+  {
+    "query": "Can Longest Road get broken if another player drops a settlement in the middle of it?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. If another player builds a settlement or city on an intersection that interrupts your continuous road, your road can be split and Longest Road can be broken.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["split", "continuous road"],
+    "forbidden_content": ["settlements do not affect roads"],
+    "difficulty": "hard"
+  },
+  {
+    "query": "If I lose Longest Road, do I lose the 2 victory points right away?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. The 2 victory points from Longest Road belong only to the current holder, so you lose them immediately when another player takes the card or no one qualifies for it.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["immediately", "current holder"],
+    "forbidden_content": ["keep the points permanently"],
+    "difficulty": "hard"
+  },
+  {
+    "query": "Can players trade development cards with each other?",
+    "expected_tier": 1,
+    "ground_truth": "No. Development cards cannot be traded between players.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["development cards", "cannot be traded"],
+    "forbidden_content": ["yes, like resources"],
+    "difficulty": "hard"
+  },
+  {
+    "query": "Can I play more than one development card on my turn?",
+    "expected_tier": 1,
+    "ground_truth": "No. You may play only 1 development card during your turn, except that Victory Point cards are not played in the same way and simply count toward winning.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["only 1", "Victory Point"],
+    "forbidden_content": ["unlimited development cards"],
+    "difficulty": "hard"
+  },
+  {
+    "query": "If I upgrade to a city, does that count like placing a new settlement for the distance rule?",
+    "expected_tier": 1,
+    "ground_truth": "No. A city is an upgrade that replaces your existing settlement on the same intersection, so it does not count as placing a new settlement for distance-rule purposes.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["replaces", "existing settlement"],
+    "forbidden_content": ["must recheck distance rule"],
+    "difficulty": "hard"
+  },
+  {
+    "query": "What if two players hit 10 points at the same time?",
+    "expected_tier": 3,
+    "ground_truth": "In the base game, only the player whose turn it is can win, because victory is checked when you reach 10 points on your own turn. So a true simultaneous win does not occur under normal rules.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["your own turn", "simultaneous win does not occur"],
+    "forbidden_content": ["both players win"],
+    "difficulty": "hard"
+  },
+  {
+    "query": "Can you move the robber onto an empty hex with nobody around it?",
+    "expected_tier": 3,
+    "ground_truth": "Yes. The robber can be moved to any legal terrain hex other than its current hex. If there is no player with a settlement or city adjacent to that hex, no resource is stolen.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["any legal terrain hex", "no resource is stolen"],
+    "forbidden_content": ["must steal from someone"],
+    "difficulty": "hard"
+  },
+  {
+    "query": "Can I keep building a brick road through another player's settlement?",
+    "expected_tier": 3,
+    "ground_truth": "No. Another player's settlement or city stops your road. You cannot build a road through an intersection occupied by another player's building.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["stops your road", "another player's settlement or city"],
+    "forbidden_content": ["roads pass through opponents"],
+    "difficulty": "hard"
+  },
+  {
+    "query": "What happens if every settlement spot on the board is taken?",
+    "expected_tier": 3,
+    "ground_truth": "If there are no legal intersections left, no one can build new settlements there. Play continues with the legal options that remain, such as roads, city upgrades, development cards, and trading, until someone wins.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["no legal intersections", "play continues"],
+    "forbidden_content": ["the game is a draw immediately"],
+    "difficulty": "hard"
+  },
+  {
+    "query": "Can I just refuse a trade offer from another player?",
+    "expected_tier": 3,
+    "ground_truth": "Yes. Player trading is voluntary, so any player may refuse a proposed trade.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["voluntary", "refuse"],
+    "forbidden_content": ["must accept fair trades"],
+    "difficulty": "hard"
+  }
+]
