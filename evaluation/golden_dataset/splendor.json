@@ -268,5 +268,50 @@
     "required_chunk_keywords": ["5", "token", "3"],
     "forbidden_content": ["7 tokens"],
     "difficulty": "medium"
+  },
+  {
+    "query": "If I have 2 blue bonuses and a gold token, can I buy a card costing 3 blue?",
+    "expected_tier": 2,
+    "ground_truth": "Yes. Your 2 blue bonuses reduce the cost by 2, leaving 1 blue needed. A gold joker token can replace any color, so it covers the remaining 1 blue.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["bonus", "joker"],
+    "forbidden_content": [],
+    "difficulty": "hard"
+  },
+  {
+    "query": "Can a noble visit me on the same turn I reach 15 prestige points?",
+    "expected_tier": 2,
+    "ground_truth": "Yes. Noble visits happen at the end of your turn. If acquiring a noble gives you 15+ prestige points, the current round finishes and you win.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["noble", "15 prestige points"],
+    "forbidden_content": [],
+    "difficulty": "hard"
+  },
+  {
+    "query": "If I reserve a card and already have 10 tokens, do I have to return a token to take the gold?",
+    "expected_tier": 2,
+    "ground_truth": "Yes. When you reserve a card you receive a gold token. If you then have more than 10 tokens, you must return tokens until you have exactly 10.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["reserve", "10 tokens", "gold"],
+    "forbidden_content": [],
+    "difficulty": "hard"
+  },
+  {
+    "query": "Can I use development card bonuses to reduce the cost of a reserved card?",
+    "expected_tier": 2,
+    "ground_truth": "Yes. When you purchase a reserved card from your hand, bonuses from previously purchased development cards reduce the gem token cost, same as buying from the table.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["bonus", "reserved", "purchase"],
+    "forbidden_content": [],
+    "difficulty": "hard"
+  },
+  {
+    "query": "If two players both qualify for the same noble at the end of their turns, who gets it?",
+    "expected_tier": 2,
+    "ground_truth": "Noble visits happen at the end of each player's individual turn. The first player (in turn order) who qualifies for the noble gets the tile. It is not available for the other player.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["noble", "end of turn"],
+    "forbidden_content": [],
+    "difficulty": "hard"
   }
 ]

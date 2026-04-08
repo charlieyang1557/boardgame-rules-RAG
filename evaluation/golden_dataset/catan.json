@@ -268,5 +268,50 @@
     "required_chunk_keywords": ["voluntary", "refuse"],
     "forbidden_content": ["must accept fair trades"],
     "difficulty": "hard"
+  },
+  {
+    "query": "If I play a knight card before rolling, can I still roll for resources that turn?",
+    "expected_tier": 2,
+    "ground_truth": "Yes. You may play a knight card before rolling the dice. After resolving the knight (moving the robber), you then roll for resource production as normal.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["knight", "before rolling", "resource production"],
+    "forbidden_content": [],
+    "difficulty": "hard"
+  },
+  {
+    "query": "Can I build a settlement on a harbor and use it for maritime trade the same turn?",
+    "expected_tier": 2,
+    "ground_truth": "Yes. Once you build a settlement on a harbor during the building phase, you may use that harbor's trade ratio for maritime trade during the same turn's trade phase, as long as trading comes after building.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["harbor", "maritime trade", "settlement"],
+    "forbidden_content": [],
+    "difficulty": "hard"
+  },
+  {
+    "query": "If I play Monopoly and take all of one resource, can I immediately use those to build?",
+    "expected_tier": 2,
+    "ground_truth": "Yes. After playing a Monopoly card and collecting all cards of one resource type from other players, you may use those resources for building during your turn.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Monopoly", "resource", "build"],
+    "forbidden_content": [],
+    "difficulty": "hard"
+  },
+  {
+    "query": "Does Largest Army count toward the 10 victory points needed to win?",
+    "expected_tier": 2,
+    "ground_truth": "Yes. Largest Army is worth 2 victory points and counts toward the 10 needed to win. You must have 10 points on your turn to claim victory.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Largest Army", "victory points", "10"],
+    "forbidden_content": [],
+    "difficulty": "hard"
+  },
+  {
+    "query": "If I roll a 7 and have exactly 7 resource cards, do I have to discard?",
+    "expected_tier": 2,
+    "ground_truth": "No. You only discard when you have MORE than 7 resource cards. If you have exactly 7, you keep all of them.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["more than 7", "discard"],
+    "forbidden_content": ["exactly 7 must discard"],
+    "difficulty": "hard"
   }
 ]

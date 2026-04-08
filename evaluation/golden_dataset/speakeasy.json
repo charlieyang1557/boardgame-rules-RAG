@@ -398,5 +398,105 @@
     "forbidden_content": ["Swiss rounds"],
     "difficulty": "easy",
     "category": "general"
+  },
+  {
+    "query": "Can I sell barrels from a building in a district with a Cop if I have protection?",
+    "expected_tier": 2,
+    "ground_truth": "Yes, if your building is Operating. A building needs a Family Member and cannot have an active Cop shutting it down. If you have Leverage protection, the Cop does not affect your building's Operating status.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Operating", "Cop", "Leverage"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "operating"
+  },
+  {
+    "query": "During Mob War, can I use both my Associate power and Goons to defend?",
+    "expected_tier": 2,
+    "ground_truth": "Yes. Your defense strength includes your base Strength value plus any Goons you return to the supply and any applicable Associate powers.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Strength", "Goons", "Associate"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "mob_war"
+  },
+  {
+    "query": "If I take over a Mobster Speakeasy at the Contractor, do I gain the City tile?",
+    "expected_tier": 2,
+    "ground_truth": "When you take over a Mobster Speakeasy at the Contractor, you replace the Mobster building with your own. You gain the City tile for that district if it is the first non-Mobster building placed there.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Contractor", "take over", "City tile"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "locations"
+  },
+  {
+    "query": "What happens to Zone Control if a Cop enters my Casino's district and I lose Operating status?",
+    "expected_tier": 2,
+    "ground_truth": "If your Casino loses Operating status due to a Cop, it counts as non-existent for Zone Control purposes (Golden Rule). You lose any zone control advantage it provided.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Operating", "Zone Control", "Golden Rule"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "zone_control"
+  },
+  {
+    "query": "Can I use the Restaurant to change turn order and then benefit from the Casino payout?",
+    "expected_tier": 2,
+    "ground_truth": "Yes. If you change turn order at the Restaurant, the Casino payout triggers at the end of the round for all players with Operating Casinos based on the new turn order.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Restaurant", "turn order", "Casino"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "locations"
+  },
+  {
+    "query": "If I open a Nightclub at City Planner, can I immediately sell barrels to it?",
+    "expected_tier": 2,
+    "ground_truth": "You can sell barrels to a Nightclub only if it is Operating (has a Family Member). Opening a building at City Planner does not automatically make it Operating.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["City Planner", "Nightclub", "Operating"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "locations"
+  },
+  {
+    "query": "Do Cooked Book goals count non-Operating buildings?",
+    "expected_tier": 2,
+    "ground_truth": "No. Per the Golden Rule, a non-Operating building is treated as non-existent. It does not count toward any Cooked Book scoring goals.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Cooked Book", "Golden Rule", "non-Operating"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "scoring"
+  },
+  {
+    "query": "Can I hire Goons at the Docks and immediately use them in a Mob War the same Act?",
+    "expected_tier": 2,
+    "ground_truth": "Goons hired at the Docks are available immediately. However, Mob War occurs during the Lucky Luciano Phase, which happens after player rounds. So Goons hired during a player round are available for the Mob War in that same Act.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Goons", "Docks", "Mob War", "Lucky Luciano"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "mob_war"
+  },
+  {
+    "query": "If I have the most Infamy but lose a Mob War, do I keep my Infamy?",
+    "expected_tier": 2,
+    "ground_truth": "Yes. Infamy is not lost when you lose a Mob War. Mob War affects buildings and district control, not your accumulated Infamy.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Infamy", "Mob War"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "general"
+  },
+  {
+    "query": "Can I use the Park to exchange a Capo for a Cooked Book goal and then score it immediately?",
+    "expected_tier": 2,
+    "ground_truth": "Cooked Book goals obtained at the Park are scored at the end of the game, not immediately when acquired.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["Park", "Cooked Book", "end of game"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "scoring"
   }
 ]
