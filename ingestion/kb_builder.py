@@ -113,16 +113,21 @@ def build_multi_pdf_kb(game_name: str, pdf_sources: list[tuple[str, str]]) -> KB
     """
     from ingestion.chunker import chunk_parsed_pages
     from ingestion.pdf_parser import parse_pdf
-    from routing.game_config import get_config
+    from routing.game_config import get_config, get_ingestion_config
 
     config = get_config(game_name)
+    ing_config = get_ingestion_config(game_name)
     all_chunks: list[dict] = []
 
     for pdf_path, source_label in pdf_sources:
         cache_name = source_label or game_name
         pages = parse_pdf(pdf_path, cache_name, mode=config.parser_mode)
         chunks = chunk_parsed_pages(
-            pages, game_name, chunk_size=300, overlap=50, source_pdf=source_label
+            pages, game_name,
+            chunk_size=ing_config.chunk_size,
+            overlap=ing_config.overlap,
+            source_pdf=source_label,
+            section_rules=ing_config.section_rules,
         )
         all_chunks.extend(chunks)
 
@@ -153,15 +158,21 @@ def build_primary_kb(game_name: str, pdf_path: str) -> KBBuildResult:
     """
     from ingestion.chunker import chunk_parsed_pages
     from ingestion.pdf_parser import parse_pdf
-    from routing.game_config import get_config
+    from routing.game_config import get_config, get_ingestion_config
 
     config = get_config(game_name)
+    ing_config = get_ingestion_config(game_name)
 
-    # Parse PDF
+    # Parse PDF (with section relabeling from IngestionConfig)
     pages = parse_pdf(pdf_path, game_name, mode=config.parser_mode)
 
-    # Chunk
-    chunks = chunk_parsed_pages(pages, game_name, chunk_size=150, overlap=30)
+    # Chunk (using per-game chunk_size, overlap, and section rules)
+    chunks = chunk_parsed_pages(
+        pages, game_name,
+        chunk_size=ing_config.chunk_size,
+        overlap=ing_config.overlap,
+        section_rules=ing_config.section_rules,
+    )
     if not chunks:
         raise ValueError(f"No chunks produced from {pdf_path}")
 

@@ -1,6 +1,25 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+
+@dataclass(frozen=True)
+class SectionRule:
+    """Per-section chunking rule applied during ingestion."""
+    keep_intact: bool = False          # Never split this section
+    max_chunk_size: int = 0            # Override default chunk size (0 = use game default)
+    split_pattern: str = ""            # Regex to split section into individual items
+    item_name_pattern: str = ""        # Regex to extract item name for chunk ID
+    create_index: bool = False         # Generate a synthetic summary chunk
+
+
+@dataclass(frozen=True)
+class IngestionConfig:
+    """Per-game ingestion settings: chunk sizes, section relabeling, and section rules."""
+    chunk_size: int = 150
+    overlap: int = 30
+    section_patterns: dict[str, str] = field(default_factory=dict)   # regex → section name
+    section_rules: dict[str, SectionRule] = field(default_factory=dict)  # section name → rule
 
 
 @dataclass(frozen=True)
@@ -171,6 +190,73 @@ LOCATION_NAMES: dict[str, frozenset[str]] = {
         "Commission", "Docks", "Restaurant", "Park",
     }),
 }
+
+
+# Per-game ingestion configuration
+INGESTION_CONFIGS: dict[str, IngestionConfig] = {
+    "splendor": IngestionConfig(chunk_size=150, overlap=30),
+    "catan": IngestionConfig(chunk_size=150, overlap=30),
+    "speakeasy": IngestionConfig(chunk_size=300, overlap=50),
+    # FCM: complex game needs section relabeling + custom chunking rules
+    # Section patterns match raw parsed text body → assign section name.
+    # Patterns are checked in order; first match wins per page.
+    # Section carries forward across consecutive pages until a new match.
+    # Section patterns are checked in order — first match wins.
+    # More specific patterns MUST come before general ones.
+    # Patterns are matched against the full page text body.
+    "fcm": IngestionConfig(
+        chunk_size=300,
+        overlap=50,
+        section_patterns={
+            # Phase headers (most specific — match exact "Phase N:" format)
+            r"Phase\s+4.*Dinnertime": "Phase 4 - Dinnertime",
+            r"Phase\s+5.*Pay\s*day": "Phase 5 - Payday",
+            r"Phase\s+6.*Marketing\s+campaign": "Phase 6 - Marketing Campaigns",
+            r"Phase\s+7.*Clean": "Phase 7 - Clean Up",
+            r"Phase\s+3.*Working": "Phase 3 - Working",
+            r"Phase\s+2.*Hiring": "Phase 2 - Hiring",
+            r"Phase\s+1.*Restructuring": "Phase 1 - Restructuring",
+            # Milestones: require actual description language, not card labels
+            r"(?:This|Th\s*is)\s+milestone\s+is\s+awarded": "Milestones",
+            # Marketing campaigns: the "Initiate" section on page 9
+            r"Initiate marketing campaign": "Marketing Campaigns",
+            # Employee card grid (all-caps card names on page 6)
+            r"WAITRESS\nPRICING": "Employee Cards",
+            # Setup pages
+            r"[Ff]illing the bank": "Setup",
+            r"[Cc]ards setup\s*\n.*employee and milestone": "Setup",
+            # Food & drinks production (part of Phase 3 Working)
+            r"Get food.*drinks": "Phase 3 - Working",
+            # Introductory game and strategy guide (page 15)
+            r"[Ii]ntroductory\s*\n?\s*game": "Introductory Game",
+            r"[Ss]trategy\s*\n?\s*[Gg]uide|[Ss]trategic pointer": "Strategy Guide",
+            # Concepts page (page 4)
+            r"[Cc]oncepts\s*\n.*[Ee]mployee cards": "Concepts",
+        },
+        section_rules={
+            "Phase 4 - Dinnertime": SectionRule(keep_intact=True, max_chunk_size=1200),
+            "Milestones": SectionRule(
+                split_pattern=r"(?=First\s+(?:billboard|to\s+train|to\s+hire|burger|drink|cart|airplane|radio|to\s+have|to\s+lower|to\s+pay|to\s+throw))",
+                create_index=True,
+            ),
+            "Marketing Campaigns": SectionRule(keep_intact=True, max_chunk_size=600),
+            "Employee Cards": SectionRule(max_chunk_size=400),
+            "Phase 1 - Restructuring": SectionRule(max_chunk_size=300),
+            "Phase 2 - Hiring": SectionRule(max_chunk_size=300),
+            "Phase 3 - Working": SectionRule(max_chunk_size=300),
+            "Phase 5 - Payday": SectionRule(max_chunk_size=400),
+            "Phase 6 - Marketing Campaigns": SectionRule(max_chunk_size=300),
+            "Phase 7 - Clean Up": SectionRule(max_chunk_size=300),
+            "Setup": SectionRule(max_chunk_size=300),
+            "Introductory Game": SectionRule(max_chunk_size=400),
+            "Strategy Guide": SectionRule(max_chunk_size=400),
+        },
+    ),
+}
+
+
+def get_ingestion_config(game_name: str) -> IngestionConfig:
+    return INGESTION_CONFIGS.get(game_name.lower().strip(), IngestionConfig())
 
 
 def get_pdf_sources(game_name: str) -> list[tuple[str, str]]:
