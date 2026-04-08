@@ -138,8 +138,11 @@ def _run_pipeline(query: str, session_id: str, game_name: str | None) -> AskResp
     # 3. Phase 1: only Splendor is supported
     from routing.game_config import get_config
 
-    if resolved_game != "splendor":
+    # Reject if user explicitly requested a non-splendor game
+    if game_name is not None and game_name.lower() != "splendor":
         raise HTTPException(status_code=400, detail="Only 'splendor' is supported in Phase 1.")
+    # Coerce rewriter-resolved game to splendor (rewriter may misidentify)
+    resolved_game = "splendor"
 
     # 4. Embed rewritten query (used for cache lookup AND search)
     query_embedding = _embed_query(rewritten)

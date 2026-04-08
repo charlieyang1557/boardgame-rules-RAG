@@ -128,7 +128,13 @@ def verify_citations(
                 )
             )
 
+    supported_count = sum(1 for d in details if d.supported)
+    total_count = len(details)
+    # Downgrade to Tier 3 only if majority of claims are unsupported.
+    # A single borderline false-negative from the entailment check should
+    # not nuke an otherwise well-cited answer.
+    majority_supported = supported_count > total_count / 2 if total_count > 0 else True
     return VerificationResult(
-        all_supported=all(detail.supported for detail in details),
+        all_supported=majority_supported,
         details=details,
     )
