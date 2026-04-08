@@ -29,7 +29,7 @@
   {
     "query": "What's the cost to build a road?",
     "expected_tier": 1,
-    "ground_truth": "A road costs 1 brick and 1 lumber.",
+    "ground_truth": "To build a road in Catan, a player must spend 1 brick resource card and 1 lumber resource card. A road is placed along the edge of a hex, connecting two adjacent intersections. Each player has a maximum of 15 roads available.",
     "expected_chunks": [],
     "required_chunk_keywords": ["brick", "lumber"],
     "forbidden_content": ["grain"],
@@ -65,7 +65,7 @@
   {
     "query": "How much is Longest Road worth?",
     "expected_tier": 1,
-    "ground_truth": "Longest Road is worth 2 victory points. A player must have at least 5 continuous road segments to take it.",
+    "ground_truth": "The Longest Road special card awards 2 victory points to the player who holds it. To claim the Longest Road, a player must have a continuous road of at least 5 segments that is longer than any other player's longest road. If another player builds a longer continuous road, that player takes the Longest Road card and its 2 victory points.",
     "expected_chunks": [],
     "required_chunk_keywords": ["2 victory points", "5"],
     "forbidden_content": ["1 victory point"],
@@ -146,10 +146,10 @@
   {
     "query": "Can the robber go back onto the desert?",
     "expected_tier": 1,
-    "ground_truth": "No. In the official base game rules, the robber must be moved to a different terrain hex and may not be returned to the desert.",
+    "ground_truth": "Yes. In the 2020 Catan base game rules, the robber can be moved to any terrain hex other than its current hex, including the desert hex. When the robber is placed on the desert, it does not block any resource production since the desert produces nothing. The key restriction is that the robber must move to a different hex from where it currently sits.",
     "expected_chunks": [],
-    "required_chunk_keywords": ["different terrain hex", "desert"],
-    "forbidden_content": ["yes, back to desert"],
+    "required_chunk_keywords": ["desert", "different hex"],
+    "forbidden_content": ["robber stays on same hex"],
     "difficulty": "medium"
   },
   {
@@ -263,7 +263,7 @@
   {
     "query": "Can I just refuse a trade offer from another player?",
     "expected_tier": 1,
-    "ground_truth": "Yes. Player trading is voluntary, so any player may refuse a proposed trade.",
+    "ground_truth": "Yes, you can refuse any domestic trade offer from another player. Player-to-player trading is entirely voluntary and optional. No player is ever forced to accept a trade proposal. The active player may propose trades during their turn, but other players are free to decline or counter-offer.",
     "expected_chunks": [],
     "required_chunk_keywords": ["voluntary", "refuse"],
     "forbidden_content": ["must accept fair trades"],
