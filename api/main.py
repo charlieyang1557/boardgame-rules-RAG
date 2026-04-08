@@ -230,9 +230,13 @@ def _run_pipeline(query: str, session_id: str, game_name: str) -> AskResponse:
         gen_result = generate_tier1(rewritten, top_chunks, _anthropic_client)
         verification = verify_citations(gen_result.answer, top_chunks, _anthropic_client)
         if not verification.all_supported:
-            gen_result = generate_tier3(
-                top_chunks, anthropic_client=_anthropic_client, query=rewritten,
-            )
+            # Escalate to Tier 2 if game supports multi-hop, else Tier 3
+            if config.retrieval_hops > 1:
+                tier_decision = route_tier(0.0, threshold=1.0, tier2_threshold=0.0)  # Force Tier 2
+            else:
+                gen_result = generate_tier3(
+                    top_chunks, anthropic_client=_anthropic_client, query=rewritten,
+                )
 
     elif tier_decision.tier == 2:
         # Tier 2: Chain-of-Retrieval multi-hop
