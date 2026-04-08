@@ -25,6 +25,7 @@ class EvalResult:
     difficulty: str
     retrieval: RetrievalMetrics
     answer: AnswerMetrics
+    category: str = ""
 
 
 @dataclass
@@ -158,6 +159,7 @@ def run_full_eval(
                 difficulty=entry.get("difficulty", "medium"),
                 retrieval=retrieval,
                 answer=answer,
+                category=entry.get("category", ""),
             )
         )
 
@@ -205,6 +207,20 @@ def print_report(report: EvalReport) -> None:
         acc = sum(1 for r in subset if r.answer.accuracy) / n
         recall = sum(r.retrieval.recall_at_5 for r in subset) / n
         print(f"[{difficulty.upper():6s}] n={n:2d}  accuracy={acc:.1%}  recall@5={recall:.1%}")
+
+    # Stratify by category (if any entries have categories)
+    categories = sorted({r.category for r in report.results if r.category})
+    if categories:
+        print()
+        print("Per-category breakdown:")
+        for cat in categories:
+            subset = [r for r in report.results if r.category == cat]
+            if not subset:
+                continue
+            n = len(subset)
+            acc = sum(1 for r in subset if r.answer.accuracy) / n
+            recall = sum(r.retrieval.recall_at_5 for r in subset) / n
+            print(f"  [{cat:20s}] n={n:2d}  accuracy={acc:.1%}  recall@5={recall:.1%}")
 
     # Print failures
     failures = [
