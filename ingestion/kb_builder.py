@@ -71,7 +71,7 @@ def _upsert_to_pinecone(
                     "game_name": chunk["game_name"],
                     "section": chunk["section"],
                     "page": chunk["page"],
-                    "text": chunk["text"][:1000],  # Pinecone metadata limit
+                    "text": chunk["text"][:1000].encode("ascii", errors="replace").decode("ascii"),
                 },
             })
         index.upsert(vectors=vectors, namespace=game_name)
@@ -121,7 +121,7 @@ def build_primary_kb(game_name: str, pdf_path: str) -> KBBuildResult:
     pages = parse_pdf(pdf_path, game_name, mode=config.parser_mode)
 
     # Chunk
-    chunks = chunk_parsed_pages(pages, game_name)
+    chunks = chunk_parsed_pages(pages, game_name, chunk_size=150, overlap=30)
     if not chunks:
         raise ValueError(f"No chunks produced from {pdf_path}")
 
