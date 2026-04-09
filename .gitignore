@@ -2,8 +2,9 @@ __pycache__/
 *.pyc
 .env
 logs/
-ingestion/cache/
-*.pkl
+ingestion/cache/*.json
+# BM25 pickles are small (<1MB) and needed at runtime — allow them
+!ingestion/cache/*_bm25.pkl
 .venv/
 dist/
 *.egg-info/
