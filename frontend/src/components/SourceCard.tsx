@@ -5,6 +5,15 @@ interface SourceCardProps {
   chunk: ChunkInfo;
 }
 
+function formatChunkLabel(chunkId: string): string {
+  // Pattern: "splendor_p4_c14_727c8fdb" → "Splendor — Page 4"
+  const match = chunkId.match(/^(\w+?)_p(\d+)/);
+  if (!match) return chunkId;
+  const game = match[1].charAt(0).toUpperCase() + match[1].slice(1);
+  const page = match[2];
+  return `${game} — Page ${page}`;
+}
+
 export function SourceCard({ chunk }: SourceCardProps) {
   const [expanded, setExpanded] = useState(false);
   const isTruncated = chunk.text.length >= 297;
@@ -19,7 +28,7 @@ export function SourceCard({ chunk }: SourceCardProps) {
     >
       <div className="flex items-center justify-between gap-2">
         <span className="font-medium text-walnut-700 dark:text-parchment-300 truncate">
-          {chunk.chunk_id}
+          {formatChunkLabel(chunk.chunk_id)}
         </span>
         <div className="flex items-center gap-2 shrink-0">
           <span className="text-xs text-parchment-500">

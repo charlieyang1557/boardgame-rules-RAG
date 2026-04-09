@@ -56,9 +56,10 @@ export function InputBar({ onSend, isLoading }: InputBarProps) {
       <button
         onClick={handleSend}
         disabled={!input.trim() || isLoading}
-        className="shrink-0 rounded-xl bg-walnut-700 dark:bg-parchment-300
-                   text-white dark:text-walnut-900 px-5 py-2.5 text-sm font-medium
+        className="shrink-0 rounded-xl bg-walnut-900 dark:bg-parchment-300
+                   text-parchment-50 dark:text-walnut-900 px-5 py-2.5 text-sm font-semibold
                    hover:bg-walnut-800 dark:hover:bg-parchment-200
+                   ring-1 ring-walnut-900/20 dark:ring-parchment-300/20
                    disabled:opacity-40 disabled:cursor-not-allowed
                    transition-colors"
       >

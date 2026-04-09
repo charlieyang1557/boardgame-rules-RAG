@@ -1,3 +1,4 @@
+import ReactMarkdown from "react-markdown";
 import type { Message } from "../types";
 import { TIER_CONFIG } from "../constants";
 import { SourceCard } from "./SourceCard";
@@ -26,12 +27,17 @@ export function MessageBubble({ message, sessionId }: MessageBubbleProps) {
 
   return (
     <div className="flex justify-start">
-      <div className="max-w-[85%] space-y-3">
+      <div className="max-w-prose space-y-3">
         {/* Answer bubble */}
         <div className="bg-white dark:bg-walnut-800 rounded-2xl rounded-bl-sm
                         px-4 py-3 shadow-sm border border-parchment-200
                         dark:border-walnut-700">
-          <p className="leading-relaxed whitespace-pre-wrap">{message.content}</p>
+          <div className="leading-relaxed prose prose-sm dark:prose-invert
+                          prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5
+                          prose-li:my-0.5 prose-headings:my-2
+                          max-w-none">
+            <ReactMarkdown>{message.content}</ReactMarkdown>
+          </div>
         </div>
 
         {/* Metadata bar: tier badge + feedback */}

@@ -41,10 +41,13 @@ export function useChat(gameName: string, sessionId: string) {
 
         const data: AskResponse = await res.json();
 
+        // Strip internal chunk references like [splendor_p4_c14_727c8fdb]
+        const cleanAnswer = data.answer.replace(/\s*\[[\w]+(?:_[\w]+)*\]/g, "").trim();
+
         const assistantMsg: Message = {
           id: uuidv4(),
           role: "assistant",
-          content: data.answer,
+          content: cleanAnswer,
           tier: data.tier,
           chunks: data.chunks,
           queryId: data.query_id,
