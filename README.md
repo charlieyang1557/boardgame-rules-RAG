@@ -49,7 +49,7 @@ Answer with inline citations + expandable source cards
 
 ## Live Demo
 
-Deployed on Railway: *(add your Railway URL here)*
+Deployed on Railway: https://boardgame-rules-rag-production.up.railway.app
 
 ## Screenshots
 
