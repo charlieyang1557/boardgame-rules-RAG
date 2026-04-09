@@ -44,7 +44,7 @@ describe("App", () => {
 
   it("sends typed question and displays response", async () => {
     render(<App />);
-    const input = screen.getByPlaceholderText("Type your question...");
+    const input = screen.getByPlaceholderText("Ask a rules question...");
     await userEvent.type(input, "How do nobles work?");
 
     const sendBtn = screen.getByRole("button", { name: /send/i });
@@ -61,7 +61,7 @@ describe("App", () => {
   it("changes games and clears conversation", async () => {
     render(<App />);
 
-    const input = screen.getByPlaceholderText("Type your question...");
+    const input = screen.getByPlaceholderText("Ask a rules question...");
     await userEvent.type(input, "test");
     await userEvent.click(screen.getByRole("button", { name: /send/i }));
 
