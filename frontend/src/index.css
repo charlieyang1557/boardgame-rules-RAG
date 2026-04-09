@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@theme {
+  --color-parchment-50: #faf8f4;
+  --color-parchment-100: #f3efe6;
+  --color-parchment-200: #e8e0d0;
+  --color-parchment-300: #d4c9b0;
+  --color-parchment-400: #bfad90;
+  --color-parchment-500: #a99470;
+  --color-walnut-700: #4a3728;
+  --color-walnut-800: #362818;
+  --color-walnut-900: #231a10;
+
+  --color-tier1: #2d7a4f;
+  --color-tier2: #b8860b;
+  --color-tier3: #c4561a;
+
+  --font-heading: "Crimson Pro", serif;
+  --font-body: "Source Sans 3", sans-serif;
+}
+
+.chat-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-parchment-400);
+  border-radius: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
