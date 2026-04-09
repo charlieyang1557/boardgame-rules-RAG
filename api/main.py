@@ -363,3 +363,23 @@ async def ask(request: AskRequest) -> AskResponse:
 from api.feedback import router as feedback_router  # noqa: E402
 
 app.include_router(feedback_router)
+
+# ── Serve React frontend (must come AFTER all API routes) ───────────────────
+
+_frontend_dir = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
+
+if os.path.isdir(_frontend_dir):
+    from fastapi.staticfiles import StaticFiles
+    from fastapi.responses import FileResponse
+
+    _assets_dir = os.path.join(_frontend_dir, "assets")
+    if os.path.isdir(_assets_dir):
+        app.mount("/assets", StaticFiles(directory=_assets_dir), name="static-assets")
+
+    @app.get("/{path:path}")
+    async def serve_frontend(path: str) -> FileResponse:
+        """Serve React SPA — all non-API routes return index.html."""
+        file_path = os.path.join(_frontend_dir, path)
+        if os.path.isfile(file_path):
+            return FileResponse(file_path)
+        return FileResponse(os.path.join(_frontend_dir, "index.html"))
