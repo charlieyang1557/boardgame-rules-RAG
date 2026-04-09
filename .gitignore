@@ -8,3 +8,7 @@ ingestion/cache/
 dist/
 *.egg-info/
 .ruff_cache/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
