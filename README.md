@@ -2,7 +2,7 @@
 
 A RAG-based Q&A system that answers board game rules questions with citations, multi-hop reasoning, and honest uncertainty handling.
 
-Ask a question in plain language, get an answer backed by the actual rule book — with page references you can verify.
+Ask a question in plain language, get an answer backed by the actual rule book — with page references you can verify. Answers can be returned in **English or Simplified Chinese (中文)** via a language toggle.
 
 ## Supported Games
 
@@ -12,6 +12,17 @@ Ask a question in plain language, get an answer backed by the actual rule book �
 | **Catan** | Simple | Single-hop |
 | **Speakeasy** | Medium | 2-hop |
 | **Food Chain Magnate** | Complex | 3-hop |
+| **Feed the Kraken** | Simple | Single-hop |
+
+## Languages
+
+A header toggle (EN / 中文) selects the **output** language for every game; the
+selection is also shareable via the `?lang=` URL parameter. Accuracy is
+preserved by a **verify-then-translate** design: retrieval, generation, and
+citation verification always run in English against the official rule book, and
+only the final *verified* answer is translated (the source-chunk citations stay
+in English). You can ask in either language — questions are normalized to English
+rule-book terminology for retrieval regardless of input language.
 
 ## How It Works
 
@@ -42,6 +53,10 @@ Tier Router
 Citation Verifier
   - String overlap check → LLM entailment fallback
   - Unsupported claims → downgrade to Tier 3
+     |
+     v
+Translator (Claude Haiku) — only if output language != English
+  - Faithfully translates the verified answer; preserves citations
      |
      v
 Answer with inline citations + expandable source cards
@@ -114,7 +129,7 @@ cd frontend && npx vitest run
 - **Sparse Search**: Client-side BM25 via rank_bm25
 - **Reranker**: cross-encoder/ms-marco-MiniLM-L-6-v2 (local)
 - **Embeddings**: OpenAI text-embedding-3-large (3072 dims)
-- **LLM**: Claude Haiku (query rewriting) + Claude Sonnet (generation + verification)
+- **LLM**: Claude Haiku (query rewriting + answer translation) + Claude Sonnet (generation + verification)
 - **PDF Parsing**: LlamaParse (primary), PyMuPDF (fallback)
 - **Framework**: FastAPI
 - **Logging**: SQLite
@@ -136,7 +151,7 @@ boardgame-rules-RAG/
 ├── ingestion/              # PDF parsing, chunking, KB building
 ├── retrieval/              # Hybrid search, reranker, query rewriter, multi-hop
 ├── routing/                # Tier router, game config
-├── generation/             # Tier 1 answer + Tier 3 fallback
+├── generation/             # Tier 1 answer, Tier 3 fallback, answer translator
 ├── verification/           # Citation verifier (string overlap + LLM entailment)
 ├── cache/                  # Semantic cache (in-memory, cosine similarity)
 ├── conversation/           # Session manager (last 3 turns, 2000 token budget)
@@ -149,14 +164,23 @@ boardgame-rules-RAG/
 
 ## Evaluation Results
 
-| Game | Accuracy | Retrieval Recall@5 |
-|------|----------|-------------------|
-| Splendor | 91% | > 85% |
-| Catan | 91% | > 85% |
-| Speakeasy | 82% | > 80% |
-| FCM | 79% | > 75% |
+All figures below are reproducible with `python -m evaluation.run_pipeline_eval <game>`
+over each game's golden dataset.
 
-FCM's Tier 2 (multi-hop) accuracy: **90%** — well above the 65% target.
+| Game | Answer Accuracy | Hallucinations |
+|------|-----------------|----------------|
+| Splendor | 97% | 0 |
+| Catan | 86% | 0 |
+| Speakeasy | 76% | 0 |
+| FCM | 77% | 0 |
+| Feed the Kraken | 97% | 0 |
+
+**Answer accuracy** is a keyword-overlap match against the ground-truth answers;
+**zero hallucinations** across every golden set, enforced by the citation
+verifier. Retrieval recall@5 is 100% on the keyword-presence check (the golden
+datasets validate retrieval by required keywords rather than pinned chunk IDs).
+Feed the Kraken reaches **100% Tier-1 accuracy** on its 38-question set — the two
+misses are out-of-scope meta questions correctly handled as uncertainty.
 
 ## License
 

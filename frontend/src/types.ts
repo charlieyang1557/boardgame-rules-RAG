@@ -14,10 +14,13 @@ export interface AskResponse {
   latency_ms: number;
 }
 
+export type Language = "en" | "zh";
+
 export interface AskRequest {
   query: string;
   game_name: string;
   session_id: string;
+  language: Language;
 }
 
 export interface FeedbackRequest {

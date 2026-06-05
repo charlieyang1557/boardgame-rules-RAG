@@ -75,4 +75,21 @@ describe("App", () => {
     expect(screen.getByText("Ask the Oracle")).toBeInTheDocument();
     expect(screen.getByText(/What happens when I roll a 7/)).toBeInTheDocument();
   });
+
+  it("switches UI chrome and example questions to Chinese", async () => {
+    // Reset URL so this test starts from the default game (jsdom shares
+    // window.location across tests in a file).
+    window.history.replaceState({}, "", "/");
+    render(<App />);
+
+    // Default English chrome.
+    expect(screen.getByText("Ask the Oracle")).toBeInTheDocument();
+
+    await userEvent.selectOptions(screen.getByLabelText("Language"), "zh");
+
+    // Empty-state heading, placeholder, and examples are now localized.
+    expect(screen.getByText("询问神谕")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("输入规则问题……")).toBeInTheDocument();
+    expect(screen.getByText(/我可以拿两个同色的宝石吗/)).toBeInTheDocument();
+  });
 });

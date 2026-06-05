@@ -6,11 +6,13 @@ import uuid
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 load_dotenv()
 
 app = FastAPI(title="BoardGameOracle", version="0.1.0")
+
+SUPPORTED_LANGUAGES = {"en", "zh"}
 
 # ── Pydantic models ──────────────────────────────────────────────────────────
 
@@ -18,6 +20,13 @@ class AskRequest(BaseModel):
     query: str = Field(..., max_length=2000)
     session_id: str | None = Field(None, max_length=64)
     game_name: str = Field(..., max_length=50)
+    language: str = Field("en", max_length=8)
+
+    @field_validator("language")
+    @classmethod
+    def _normalize_language(cls, v: str) -> str:
+        """Unknown / unsupported language codes fall back to English."""
+        return v if v in SUPPORTED_LANGUAGES else "en"
 
 
 class ChunkInfo(BaseModel):
@@ -112,10 +121,19 @@ def _embed_query(query: str) -> list[float]:
     return response.data[0].embedding
 
 
-def _run_pipeline(query: str, session_id: str, game_name: str) -> AskResponse:
-    """Execute the full RAG pipeline."""
+def _run_pipeline(
+    query: str, session_id: str, game_name: str, language: str = "en"
+) -> AskResponse:
+    """Execute the full RAG pipeline.
+
+    Retrieval, generation, and citation verification always run in English.
+    When ``language`` is not English, the final verified answer is translated
+    (verify-then-translate), so the accuracy-critical path is unaffected.
+    """
     _init_components()
     start = time.time()
+    if language not in SUPPORTED_LANGUAGES:
+        language = "en"
 
     if _openai_client is None or _anthropic_client is None:
         raise HTTPException(status_code=503, detail="API clients not initialized. Check API keys in .env.")
@@ -153,8 +171,8 @@ def _run_pipeline(query: str, session_id: str, game_name: str) -> AskResponse:
     # 4. Embed rewritten query (used for cache lookup AND search)
     query_embedding = _embed_query(rewritten)
 
-    # 5. Check semantic cache (keyed on game + rewritten query embedding)
-    cached = _cache.lookup(query_embedding, game_name=resolved_game)
+    # 5. Check semantic cache (keyed on game + language + rewritten query embedding)
+    cached = _cache.lookup(query_embedding, game_name=resolved_game, language=language)
     if cached is not None:
         latency = (time.time() - start) * 1000
         query_id = _logger.log_query(
@@ -167,8 +185,9 @@ def _run_pipeline(query: str, session_id: str, game_name: str) -> AskResponse:
             final_answer=cached["answer"],
             latency_ms=latency,
             cache_hit=True,
+            language=language,
         )
-        _session_manager.add_turn(session_id, query, cached["answer"])
+        _session_manager.add_turn(session_id, query, cached.get("answer_en", cached["answer"]))
         return AskResponse(
             answer=cached["answer"],
             tier=cached["tier"],
@@ -230,13 +249,14 @@ def _run_pipeline(query: str, session_id: str, game_name: str) -> AskResponse:
         gen_result = generate_tier1(rewritten, top_chunks, _anthropic_client)
         verification = verify_citations(gen_result.answer, top_chunks, _anthropic_client)
         if not verification.all_supported:
-            # Escalate to Tier 2 if game supports multi-hop, else Tier 3
-            if config.retrieval_hops > 1:
-                tier_decision = route_tier(0.0, threshold=1.0, tier2_threshold=0.0)  # Force Tier 2
-            else:
-                gen_result = generate_tier3(
-                    top_chunks, anthropic_client=_anthropic_client, query=rewritten,
-                )
+            # Unsupported citations -> honest uncertainty (Tier 3).
+            # NOTE: a prior attempt to escalate multi-hop games to Tier 2 here
+            # never executed (reassigning tier_decision does not re-enter the
+            # elif below), so an unsupported Tier 1 answer was being served and,
+            # for ZH, translated and cached. Fall back to Tier 3 uniformly.
+            gen_result = generate_tier3(
+                top_chunks, anthropic_client=_anthropic_client, query=rewritten, language=language,
+            )
 
     elif tier_decision.tier == 2:
         # Tier 2: Chain-of-Retrieval multi-hop
@@ -270,27 +290,45 @@ def _run_pipeline(query: str, session_id: str, game_name: str) -> AskResponse:
             verification = verify_citations(gen_result.answer, chain_result.merged_chunks, _anthropic_client)
             if not verification.all_supported:
                 gen_result = generate_tier3(
-                    chain_result.merged_chunks, anthropic_client=_anthropic_client, query=rewritten,
+                    chain_result.merged_chunks, anthropic_client=_anthropic_client, query=rewritten, language=language,
                 )
             else:
                 top_chunks = chain_result.merged_chunks  # Update for logging
         else:
             gen_result = generate_tier3(
-                top_chunks, anthropic_client=_anthropic_client, query=rewritten,
+                top_chunks, anthropic_client=_anthropic_client, query=rewritten, language=language,
             )
 
     else:
         gen_result = generate_tier3(
-            top_chunks, anthropic_client=_anthropic_client, query=rewritten,
+            top_chunks, anthropic_client=_anthropic_client, query=rewritten, language=language,
         )
 
-    # 10. Cache (Tier 1 only, keyed on game + rewritten query embedding)
-    _cache.store(
-        query_embedding,
-        {"answer": gen_result.answer, "tier": gen_result.tier},
-        gen_result.tier,
-        game_name=resolved_game,
-    )
+    # 9. Translate the final verified answer for non-English output.
+    #    Tier 3 is already localized by generate_tier3; only official Tier 1/2
+    #    answers are translated (verify-then-translate).
+    translation_ok = True
+    if language != "en" and gen_result.tier in (1, 2):
+        from generation.translator import translate_answer
+
+        final_answer = translate_answer(gen_result.answer, language, _anthropic_client)
+        # translate_answer returns the English input unchanged on failure;
+        # don't cache a failed translation under the non-English key.
+        translation_ok = final_answer != gen_result.answer
+    else:
+        final_answer = gen_result.answer
+
+    # 10. Cache (Tier 1 only, keyed on game + language + rewritten query embedding).
+    #     Store the English answer too, so the session history (used only by the
+    #     English-output rewriter) stays English even on a cache hit.
+    if language == "en" or translation_ok:
+        _cache.store(
+            query_embedding,
+            {"answer": final_answer, "answer_en": gen_result.answer, "tier": gen_result.tier},
+            gen_result.tier,
+            game_name=resolved_game,
+            language=language,
+        )
 
     # 11. Log
     latency = (time.time() - start) * 1000
@@ -302,16 +340,19 @@ def _run_pipeline(query: str, session_id: str, game_name: str) -> AskResponse:
         game_name=resolved_game,
         tier_decision=gen_result.tier,
         top_chunks=chunk_log,
-        final_answer=gen_result.answer,
+        final_answer=final_answer,
         latency_ms=latency,
         cache_hit=False,
+        language=language,
     )
 
-    # 12. Update session
+    # 12. Update session with the ENGLISH answer. Session history is consumed
+    #     only by the rewriter, which must produce an English retrieval query;
+    #     English context resolves coreferences more reliably than translated text.
     _session_manager.add_turn(session_id, query, gen_result.answer)
 
     return AskResponse(
-        answer=gen_result.answer,
+        answer=final_answer,
         tier=gen_result.tier,
         session_id=session_id,
         query_id=query_id,
@@ -343,14 +384,14 @@ async def ask(request: AskRequest) -> AskResponse:
     logger = logging.getLogger(__name__)
     session_id = request.session_id or str(uuid.uuid4())
     try:
-        return _run_pipeline(request.query, session_id, request.game_name)
+        return _run_pipeline(request.query, session_id, request.game_name, request.language)
     except HTTPException:
         raise
     except (TimeoutError, ConnectionError, OSError) as e:
         # Retry once on transient network errors only
         logger.warning("Transient error, retrying: %s", e)
         try:
-            return _run_pipeline(request.query, session_id, request.game_name)
+            return _run_pipeline(request.query, session_id, request.game_name, request.language)
         except Exception:
             raise HTTPException(status_code=503, detail="Service temporarily unavailable")
     except Exception as e:

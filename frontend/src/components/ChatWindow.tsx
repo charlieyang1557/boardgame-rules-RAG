@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import type { Message } from "../types";
-import { EXAMPLE_QUESTIONS } from "../constants";
+import type { Language, Message } from "../types";
+import { EXAMPLE_QUESTIONS, UI_STRINGS } from "../constants";
 import { MessageBubble } from "./MessageBubble";
 
 interface ChatWindowProps {
@@ -9,6 +9,7 @@ interface ChatWindowProps {
   error: string | null;
   sessionId: string;
   gameName: string;
+  language: Language;
   onExampleClick: (question: string) => void;
 }
 
@@ -56,6 +57,7 @@ export function ChatWindow({
   error,
   sessionId,
   gameName,
+  language,
   onExampleClick,
 }: ChatWindowProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -64,7 +66,9 @@ export function ChatWindow({
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
-  const examples = EXAMPLE_QUESTIONS[gameName] ?? [];
+  const t = UI_STRINGS[language];
+  const examples =
+    EXAMPLE_QUESTIONS[gameName]?.[language] ?? EXAMPLE_QUESTIONS[gameName]?.en ?? [];
 
   // Empty state
   if (messages.length === 0 && !isLoading) {
@@ -85,18 +89,18 @@ export function ChatWindow({
             <h2 className="font-heading text-3xl font-bold text-walnut-800
                            dark:text-parchment-100 mb-2 animate-fade-in"
                 style={{ animationDelay: "0.1s" }}>
-              Ask the Oracle
+              {t.emptyHeading}
             </h2>
             <p className="text-parchment-500 dark:text-parchment-400 text-sm
                           animate-fade-in" style={{ animationDelay: "0.2s" }}>
-              Ask any rules question and get answers with citations from the official rule book.
+              {t.emptySubtitle}
             </p>
           </div>
           {examples.length > 0 && (
             <div className="space-y-2">
               <span className="text-xs font-medium text-parchment-400 uppercase tracking-widest
                                animate-fade-in" style={{ animationDelay: "0.25s" }}>
-                Try asking
+                {t.tryAsking}
               </span>
               {examples.map((q, i) => (
                 <button
@@ -127,7 +131,7 @@ export function ChatWindow({
     <div className="flex-1 overflow-y-auto chat-scroll p-4 space-y-4">
       {messages.map((msg) => (
         <div key={msg.id} className="animate-message-in">
-          <MessageBubble message={msg} sessionId={sessionId} />
+          <MessageBubble message={msg} sessionId={sessionId} language={language} />
         </div>
       ))}
 
@@ -147,7 +151,7 @@ export function ChatWindow({
                       style={{ animation: "pulse-soft 1.2s ease-in-out 0.4s infinite" }} />
               </div>
               <span className="text-sm text-parchment-500 dark:text-parchment-400">
-                Consulting the rule book...
+                {t.consulting}
               </span>
             </div>
           </div>

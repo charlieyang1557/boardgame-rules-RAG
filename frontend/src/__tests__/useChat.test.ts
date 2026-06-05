@@ -130,7 +130,35 @@ describe("useChat", () => {
         query: "How do nobles work?",
         game_name: "splendor",
         session_id: "session-1",
+        language: "en",
       }),
+      signal: expect.any(AbortSignal),
+    });
+  });
+
+  it("includes the selected language in the request body", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockResponse),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { result } = renderHook(() => useChat("ftk", "session-1", "zh"));
+
+    await act(async () => {
+      await result.current.sendMessage("水手如何获胜？");
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith("/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: "水手如何获胜？",
+        game_name: "ftk",
+        session_id: "session-1",
+        language: "zh",
+      }),
+      signal: expect.any(AbortSignal),
     });
   });
 });

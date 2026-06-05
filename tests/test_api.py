@@ -60,3 +60,23 @@ class TestFeedbackEndpoint:
     def test_feedback_missing_fields(self, client: TestClient) -> None:
         response = client.post("/api/feedback", json={"session_id": "s1"})
         assert response.status_code == 422  # Validation error
+
+
+class TestAskRequestLanguage:
+    def test_language_defaults_to_en(self) -> None:
+        from api.main import AskRequest
+
+        req = AskRequest(query="How do sailors win?", game_name="ftk")
+        assert req.language == "en"
+
+    def test_language_accepts_zh(self) -> None:
+        from api.main import AskRequest
+
+        req = AskRequest(query="水手如何獲勝？", game_name="ftk", language="zh")
+        assert req.language == "zh"
+
+    def test_invalid_language_falls_back_to_en(self) -> None:
+        from api.main import AskRequest
+
+        req = AskRequest(query="q", game_name="ftk", language="fr")
+        assert req.language == "en"

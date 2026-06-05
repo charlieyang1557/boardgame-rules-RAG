@@ -108,3 +108,34 @@ class TestSemanticCache:
         assert cache.size == 2
         assert cache.lookup(emb, game_name="splendor")["answer"] == "from splendor"
         assert cache.lookup(emb, game_name="fcm")["answer"] == "from fcm"
+
+
+class TestLanguagePartitioning:
+    def test_default_language_is_backward_compatible(self) -> None:
+        # Existing call sites pass no language → default "en" on both sides.
+        cache = SemanticCache(threshold=0.92)
+        emb = [1.0, 0.0, 0.0]
+        cache.store(emb, {"answer": "english"}, tier=1, game_name="ftk")
+        assert cache.lookup(emb, game_name="ftk")["answer"] == "english"
+
+    def test_same_embedding_different_language_misses(self) -> None:
+        cache = SemanticCache(threshold=0.92)
+        emb = [1.0, 0.0, 0.0]
+        cache.store(emb, {"answer": "english"}, tier=1, game_name="ftk", language="en")
+        # A Chinese user must never receive the cached English answer.
+        assert cache.lookup(emb, game_name="ftk", language="zh") is None
+
+    def test_same_game_and_language_hits(self) -> None:
+        cache = SemanticCache(threshold=0.92)
+        emb = [1.0, 0.0, 0.0]
+        cache.store(emb, {"answer": "中文"}, tier=1, game_name="ftk", language="zh")
+        assert cache.lookup(emb, game_name="ftk", language="zh")["answer"] == "中文"
+
+    def test_language_partitioned_entries_coexist(self) -> None:
+        cache = SemanticCache(threshold=0.92)
+        emb = [1.0, 0.0, 0.0]
+        cache.store(emb, {"answer": "english"}, tier=1, game_name="ftk", language="en")
+        cache.store(emb, {"answer": "中文"}, tier=1, game_name="ftk", language="zh")
+        assert cache.size == 2
+        assert cache.lookup(emb, game_name="ftk", language="en")["answer"] == "english"
+        assert cache.lookup(emb, game_name="ftk", language="zh")["answer"] == "中文"

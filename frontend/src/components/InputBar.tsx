@@ -1,8 +1,11 @@
 import { useState, useRef, type KeyboardEvent } from "react";
+import type { Language } from "../types";
+import { UI_STRINGS } from "../constants";
 
 interface InputBarProps {
   onSend: (query: string) => void;
   isLoading: boolean;
+  language: Language;
 }
 
 function SendIcon() {
@@ -14,7 +17,7 @@ function SendIcon() {
   );
 }
 
-export function InputBar({ onSend, isLoading }: InputBarProps) {
+export function InputBar({ onSend, isLoading, language }: InputBarProps) {
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -62,7 +65,7 @@ export function InputBar({ onSend, isLoading }: InputBarProps) {
             handleInput();
           }}
           onKeyDown={handleKeyDown}
-          placeholder="Ask a rules question..."
+          placeholder={UI_STRINGS[language].askPlaceholder}
           rows={1}
           className="flex-1 resize-none rounded-xl
                      border border-parchment-300/60 dark:border-walnut-700

@@ -1,7 +1,11 @@
 from types import SimpleNamespace
 from unittest.mock import MagicMock
 
-from retrieval.query_rewriter import RewriteResult, rewrite_query
+from retrieval.query_rewriter import (
+    REWRITE_SYSTEM_PROMPT,
+    RewriteResult,
+    rewrite_query,
+)
 
 
 def test_rewrite_query_calls_client_with_haiku_model() -> None:
@@ -62,3 +66,25 @@ def test_rewrite_query_includes_history_in_prompt_when_provided() -> None:
     prompt = kwargs["messages"][0]["content"]
     assert history in prompt
     assert "What about that?" in prompt
+
+
+def test_system_prompt_requires_english_retrieval_query() -> None:
+    # The KB, BM25, and cross-encoder are all English, so the rewritten query
+    # must always be English even when the user's question is in another language.
+    assert "English" in REWRITE_SYSTEM_PROMPT
+
+
+def test_chinese_input_yields_english_query() -> None:
+    client = MagicMock()
+    client.messages.create.return_value = SimpleNamespace(
+        content=[SimpleNamespace(
+            text="GAME: ftk\nQUERY: How many guns are needed for a successful mutiny with 6 players?"
+        )]
+    )
+
+    result = rewrite_query("六人遊戲需要幾把槍才能成功叛變？", "", client, default_game="ftk")
+
+    assert result.game_name == "ftk"
+    assert result.rewritten_query == (
+        "How many guns are needed for a successful mutiny with 6 players?"
+    )
