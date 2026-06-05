@@ -55,7 +55,24 @@ describe("App", () => {
     });
 
     expect(screen.getByText("Direct Answer")).toBeInTheDocument();
-    expect(screen.getByText("Sources")).toBeInTheDocument();
+    expect(screen.getByText(/Sources/)).toBeInTheDocument();
+  });
+
+  it("hides source cards by default and reveals them when the Sources header is clicked", async () => {
+    render(<App />);
+    const input = screen.getByPlaceholderText("Ask a rules question...");
+    await userEvent.type(input, "test");
+    await userEvent.click(screen.getByRole("button", { name: /send/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Yes, if 4 tokens remain.")).toBeInTheDocument();
+    });
+
+    // Collapsed by default: the source card (chunk_id "c1") is not rendered.
+    expect(screen.queryByText("c1")).not.toBeInTheDocument();
+    // The header shows the count and toggles the list open.
+    await userEvent.click(screen.getByText(/Sources \(1\)/));
+    expect(screen.getByText("c1")).toBeInTheDocument();
   });
 
   it("changes games and clears conversation", async () => {
