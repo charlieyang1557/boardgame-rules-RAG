@@ -143,3 +143,56 @@ class TestLogFeedback:
 class TestGetQuery:
     def test_nonexistent_returns_none(self, logger: QueryLogger) -> None:
         assert logger.get_query(999) is None
+
+
+class TestLanguageColumn:
+    def test_default_language_is_en(self, logger: QueryLogger) -> None:
+        qid = logger.log_query(
+            session_id="s", raw_query="r", rewritten_query="rw", game_name="ftk",
+            tier_decision=1, top_chunks=[], final_answer="a", latency_ms=1.0, cache_hit=False,
+        )
+        assert logger.get_query(qid)["language"] == "en"
+
+    def test_stores_language(self, logger: QueryLogger) -> None:
+        qid = logger.log_query(
+            session_id="s", raw_query="r", rewritten_query="rw", game_name="ftk",
+            tier_decision=1, top_chunks=[], final_answer="a", latency_ms=1.0,
+            cache_hit=False, language="zh",
+        )
+        assert logger.get_query(qid)["language"] == "zh"
+
+    def test_migration_adds_language_column_to_legacy_db(self, tmp_path: object) -> None:
+        import sqlite3
+
+        db_path = os.path.join(str(tmp_path), "legacy.db")
+        # Simulate a pre-existing DB created before the language column existed.
+        conn = sqlite3.connect(db_path)
+        conn.execute(
+            """CREATE TABLE query_logs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                timestamp TEXT NOT NULL, session_id TEXT NOT NULL,
+                raw_query TEXT NOT NULL, rewritten_query TEXT NOT NULL,
+                game_name TEXT NOT NULL, tier_decision INTEGER NOT NULL,
+                top_chunks TEXT NOT NULL, final_answer TEXT NOT NULL,
+                latency_ms REAL NOT NULL, cache_hit INTEGER NOT NULL
+            )"""
+        )
+        conn.execute(
+            "INSERT INTO query_logs (timestamp, session_id, raw_query, rewritten_query, "
+            "game_name, tier_decision, top_chunks, final_answer, latency_ms, cache_hit) "
+            "VALUES ('t','s','r','rw','ftk',1,'[]','a',1.0,0)"
+        )
+        conn.commit()
+        conn.close()
+
+        # Opening the logger must migrate the schema without data loss.
+        migrated = QueryLogger(db_path=db_path)
+        cols = {row[1] for row in sqlite3.connect(db_path).execute("PRAGMA table_info(query_logs)")}
+        assert "language" in cols
+        # Existing row gets the default; new rows accept an explicit language.
+        qid = migrated.log_query(
+            session_id="s", raw_query="r", rewritten_query="rw", game_name="ftk",
+            tier_decision=1, top_chunks=[], final_answer="a", latency_ms=1.0,
+            cache_hit=False, language="zh",
+        )
+        assert migrated.get_query(qid)["language"] == "zh"

@@ -88,6 +88,26 @@ GAME_CONFIG: dict[str, GameConfig] = {
         tier1_threshold=0.10,
         tier2_threshold=0.05,
     ),
+    # Feed the Kraken: simple single-rulebook social-deduction game (1 hop).
+    # Splendor-class retrieval. Parsed with LlamaParse agentic, then the parse
+    # cache was hand-corrected (the 2-column layout bled author/credits text
+    # into the rules pages).
+    # Calibration (golden dataset, 2026-06-05): all 36 in-scope questions score
+    # reranker sigmoid >= 0.60 (median 0.998); out-of-scope meta-questions also
+    # score high, so the threshold cannot separate them. Keep a low threshold
+    # and rely on citation verification as the primary quality gate. Result:
+    # Tier-1 accuracy 36/36, recall@5 100%, Tier-3 routing 2.6%, 0 hallucinations.
+    "ftk": GameConfig(
+        retrieval_hops=1,
+        rerank_top_k=5,
+        hybrid_top_k=20,
+        rrf_k=60,
+        multi_system_detection=False,
+        use_secondary_kb=False,
+        version_aware=False,
+        parser_mode="agentic",
+        tier1_threshold=0.25,
+    ),
 }
 
 
@@ -173,6 +193,41 @@ TERMINOLOGY_MAPS: dict[str, dict[str, str]] = {
         "reserve": "on the beach",
         "break the bank": "bank breaks",
     },
+    "ftk": {
+        "vote": "mutiny",
+        "voting": "mutiny",
+        "overthrow": "mutiny",
+        "rebel": "mutiny",
+        "rebellion": "mutiny",
+        "first mate": "lieutenant",
+        "helmsman": "navigator",
+        "pilot": "navigator",
+        "direction card": "navigation card",
+        "course card": "navigation card",
+        "pistol": "gun",
+        "weapon": "gun",
+        "role card": "character card",
+        "team": "faction",
+        "side": "faction",
+        "silence": "off with the tongue",
+        "cut tongue": "off with the tongue",
+        "cut out tongue": "off with the tongue",
+        "sacrifice": "feed the kraken",
+        "brainwash": "conversion to cult",
+        "convert": "conversion to cult",
+        "check bag": "cabin search",
+        "search bag": "cabin search",
+        "inspect bag": "cabin search",
+        "blue area": "Bluewater Bay",
+        "sailor goal": "Bluewater Bay",
+        "red area": "Crimson Cove",
+        "pirate goal": "Crimson Cove",
+        "rum": "Drunk navigation card",
+        "skip": "off-duty",
+        "sit out": "off-duty",
+        "jump overboard": "denial of command",
+        "refuse to steer": "denial of command",
+    },
 }
 
 # Multi-PDF source definitions per game
@@ -186,6 +241,7 @@ PDF_SOURCES: dict[str, list[tuple[str, str]]] = {
         ("data/rulebooks/speakeasy_stretch_goals.pdf", "speakeasy_stretch"),
     ],
     "fcm": [("data/rulebooks/fcm.pdf", "fcm_rules")],
+    "ftk": [("data/rulebooks/ftk.pdf", "ftk_rules")],
 }
 
 
@@ -258,6 +314,12 @@ INGESTION_CONFIGS: dict[str, IngestionConfig] = {
             "Strategy Guide": SectionRule(max_chunk_size=400),
         },
     ),
+    # Feed the Kraken: simple game. Rely on the chunker's markdown-heading
+    # sectioning (like Splendor/Catan) — no custom section_patterns initially.
+    # chunk_size=300 keeps multi-step procedures (navigation flow, emergency
+    # navigation, cult rituals) intact. Add section_patterns only if the parse
+    # diagnostic shows poor sectioning.
+    "ftk": IngestionConfig(chunk_size=300, overlap=50),
 }
 
 

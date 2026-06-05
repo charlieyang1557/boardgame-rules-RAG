@@ -31,7 +31,8 @@ class QueryLogger:
                     top_chunks TEXT NOT NULL,
                     final_answer TEXT NOT NULL,
                     latency_ms REAL NOT NULL,
-                    cache_hit INTEGER NOT NULL
+                    cache_hit INTEGER NOT NULL,
+                    language TEXT NOT NULL DEFAULT 'en'
                 )
             """)
             conn.execute("""
@@ -45,6 +46,16 @@ class QueryLogger:
                     FOREIGN KEY (query_id) REFERENCES query_logs(id)
                 )
             """)
+            # Migration: add the language column to pre-existing query_logs tables.
+            # Guarded against a concurrent cold-start race (duplicate column).
+            existing_cols = {row[1] for row in conn.execute("PRAGMA table_info(query_logs)")}
+            if "language" not in existing_cols:
+                try:
+                    conn.execute(
+                        "ALTER TABLE query_logs ADD COLUMN language TEXT NOT NULL DEFAULT 'en'"
+                    )
+                except sqlite3.OperationalError:
+                    pass  # Another process added it first.
 
     def log_query(
         self,
@@ -57,6 +68,7 @@ class QueryLogger:
         final_answer: str,
         latency_ms: float,
         cache_hit: bool,
+        language: str = "en",
     ) -> int:
         timestamp = datetime.now(timezone.utc).isoformat()
         truncated_answer = final_answer[:500]
@@ -66,8 +78,8 @@ class QueryLogger:
                 """
                 INSERT INTO query_logs
                     (timestamp, session_id, raw_query, rewritten_query, game_name,
-                     tier_decision, top_chunks, final_answer, latency_ms, cache_hit)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     tier_decision, top_chunks, final_answer, latency_ms, cache_hit, language)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     timestamp,
@@ -80,6 +92,7 @@ class QueryLogger:
                     truncated_answer,
                     latency_ms,
                     int(cache_hit),
+                    language,
                 ),
             )
             return cursor.lastrowid  # type: ignore[return-value]

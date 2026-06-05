@@ -2,9 +2,11 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useChat } from "./hooks/useChat";
 import { GameSelector } from "./components/GameSelector";
+import { LanguageSelector } from "./components/LanguageSelector";
 import { ChatWindow } from "./components/ChatWindow";
 import { InputBar } from "./components/InputBar";
-import { GAMES } from "./constants";
+import { GAMES, LANGUAGES } from "./constants";
+import type { Language } from "./types";
 
 function getInitialGame(): string {
   const params = new URLSearchParams(window.location.search);
@@ -13,6 +15,15 @@ function getInitialGame(): string {
     return gameParam;
   }
   return "splendor";
+}
+
+function getInitialLanguage(): Language {
+  const params = new URLSearchParams(window.location.search);
+  const langParam = params.get("lang")?.toLowerCase();
+  if (langParam && LANGUAGES.some((l) => l.code === langParam)) {
+    return langParam as Language;
+  }
+  return "en";
 }
 
 function OracleIcon() {
@@ -40,10 +51,12 @@ function OracleIcon() {
 
 export default function App() {
   const [gameName, setGameName] = useState(getInitialGame);
+  const [language, setLanguage] = useState<Language>(getInitialLanguage);
   const sessionId = useMemo(() => uuidv4(), []);
   const { messages, sendMessage, isLoading, error, clearMessages } = useChat(
     gameName,
-    sessionId
+    sessionId,
+    language
   );
 
   const handleGameChange = useCallback(
@@ -52,6 +65,17 @@ export default function App() {
       clearMessages();
       const url = new URL(window.location.href);
       url.searchParams.set("game", newGame);
+      window.history.replaceState({}, "", url.toString());
+    },
+    [clearMessages]
+  );
+
+  const handleLanguageChange = useCallback(
+    (newLanguage: Language) => {
+      setLanguage(newLanguage);
+      clearMessages();
+      const url = new URL(window.location.href);
+      url.searchParams.set("lang", newLanguage);
       window.history.replaceState({}, "", url.toString());
     },
     [clearMessages]
@@ -68,8 +92,11 @@ export default function App() {
     const url = new URL(window.location.href);
     if (url.searchParams.get("game") !== gameName) {
       url.searchParams.set("game", gameName);
-      window.history.replaceState({}, "", url.toString());
     }
+    if (url.searchParams.get("lang") !== language) {
+      url.searchParams.set("lang", language);
+    }
+    window.history.replaceState({}, "", url.toString());
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -87,7 +114,13 @@ export default function App() {
               BoardGameOracle
             </h1>
           </div>
-          <GameSelector selectedGame={gameName} onGameChange={handleGameChange} />
+          <div className="flex items-center gap-2">
+            <LanguageSelector
+              selectedLanguage={language}
+              onLanguageChange={handleLanguageChange}
+            />
+            <GameSelector selectedGame={gameName} onGameChange={handleGameChange} />
+          </div>
         </div>
         {/* Accent line */}
         <div className="absolute bottom-0 left-0 right-0 h-px
@@ -101,10 +134,11 @@ export default function App() {
         error={error}
         sessionId={sessionId}
         gameName={gameName}
+        language={language}
         onExampleClick={handleExampleClick}
       />
 
-      <InputBar onSend={sendMessage} isLoading={isLoading} />
+      <InputBar onSend={sendMessage} isLoading={isLoading} language={language} />
     </div>
   );
 }

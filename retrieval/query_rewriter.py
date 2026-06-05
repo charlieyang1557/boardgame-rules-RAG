@@ -7,6 +7,8 @@ Identify the board game being discussed.
 Replace colloquial or ambiguous terms with precise rulebook terminology using
 the terminology mapping provided below (if available).
 Resolve pronouns and other coreferences using the provided history.
+Always write the rewritten QUERY in English using official rulebook terminology,
+even if the user's question is in another language (the rule book index is English).
 Output exactly two lines in this format:
 GAME: <game name>
 QUERY: <rewritten query>"""

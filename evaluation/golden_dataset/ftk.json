@@ -1,0 +1,382 @@
+[
+  {
+    "query": "How do the Sailors win the game?",
+    "expected_tier": 1,
+    "ground_truth": "All Sailors win as a team if the ship reaches Bluewater Bay, the blue area in the east.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["bluewater bay", "east"],
+    "forbidden_content": [],
+    "difficulty": "easy",
+    "category": "victory"
+  },
+  {
+    "query": "Where do the Pirates need to sail the ship to win?",
+    "expected_tier": 1,
+    "ground_truth": "All Pirates win as a team if the ship reaches Crimson Cove, the red area in the west.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["crimson cove", "west"],
+    "forbidden_content": [],
+    "difficulty": "easy",
+    "category": "victory"
+  },
+  {
+    "query": "How can the Cult win?",
+    "expected_tier": 1,
+    "ground_truth": "The Cult wins as a team if the ship reaches the Kraken in the north (Cult Victory), or when the Cult Leader is sacrificed to the Kraken on a Feed the Kraken space.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["kraken", "north"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "victory"
+  },
+  {
+    "query": "What happens if the captain feeds the Cult Leader to the Kraken?",
+    "expected_tier": 1,
+    "ground_truth": "If the Cult Leader is selected to be fed to the Kraken, the Cult Leader and all of their Cultists immediately win the game.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["cult leader", "win"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "victory"
+  },
+  {
+    "query": "How many guns does each player start with?",
+    "expected_tier": 1,
+    "ground_truth": "Each player receives 3 guns at the start of the game.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["3 guns"],
+    "forbidden_content": [],
+    "difficulty": "easy",
+    "category": "mutiny"
+  },
+  {
+    "query": "How many guns are needed for a successful mutiny in a 6-player game?",
+    "expected_tier": 1,
+    "ground_truth": "In a game with 5 to 7 players, 3 or more revealed guns are required for a successful mutiny.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["3 or more guns"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "mutiny"
+  },
+  {
+    "query": "What is the gun threshold for a mutiny with 10 players?",
+    "expected_tier": 1,
+    "ground_truth": "With 10 or 11 players, 5 or more revealed guns are required for a successful mutiny.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["5 or more guns"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "mutiny"
+  },
+  {
+    "query": "Who becomes the new captain after a successful mutiny?",
+    "expected_tier": 1,
+    "ground_truth": "Whoever revealed the most guns wins the mutiny and becomes the new captain. All players involved in a successful mutiny must discard all of their revealed guns, including the new captain.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["most", "captain", "discard"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "mutiny"
+  },
+  {
+    "query": "What happens if there is a tie for the most guns in a mutiny?",
+    "expected_tier": 1,
+    "ground_truth": "In the case of a tie, the captain still in office selects tied winners one at a time to lower their hands until only one winner remains, who becomes the new captain.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["tie", "captain"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "mutiny"
+  },
+  {
+    "query": "Which map should we use for a 5-player game?",
+    "expected_tier": 1,
+    "ground_truth": "Use the quick journey map for 5, 6 and 7 player games. You should also play your first game on the quick journey map regardless of player count.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["quick journey"],
+    "forbidden_content": [],
+    "difficulty": "easy",
+    "category": "setup"
+  },
+  {
+    "query": "What are the possible team compositions in a 5-player game?",
+    "expected_tier": 1,
+    "ground_truth": "In a 5-player game there are either 3 Sailors, 1 Pirate and 1 Cult Leader, or 2 Sailors, 2 Pirates and 1 Cult Leader.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["sailors", "pirate", "cult leader"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "setup"
+  },
+  {
+    "query": "How many Pirates are there in a 9-player game?",
+    "expected_tier": 1,
+    "ground_truth": "In a 9-player game there are 5 Sailors, 3 Pirates and 1 Cult Leader.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["pirates"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "setup"
+  },
+  {
+    "query": "How do the Pirates find each other at the start of the game?",
+    "expected_tier": 1,
+    "ground_truth": "Before the game begins, during the secret gathering of the Pirates, the Pirates open their eyes for about 20 seconds to memorize their team members. There is no secret gathering of the cult.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["pirates", "eyes"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "setup"
+  },
+  {
+    "query": "What is a character card and when can I use it?",
+    "expected_tier": 1,
+    "ground_truth": "Each player receives a character card at the start, kept facedown. A player can reveal and activate it at any point in the game to receive a unique one-time effect, though some have timing restrictions.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["character card"],
+    "forbidden_content": [],
+    "difficulty": "easy",
+    "category": "roles"
+  },
+  {
+    "query": "Who draws the navigation cards and how many?",
+    "expected_tier": 1,
+    "ground_truth": "The captain draws the top two navigation cards face down from the draw pile, then the lieutenant draws the next two cards face down.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["captain", "lieutenant", "two"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "navigation"
+  },
+  {
+    "query": "How does the navigator choose the final navigation card?",
+    "expected_tier": 1,
+    "ground_truth": "After the captain and lieutenant each place one card in the captain's logbook and it is shuffled, the navigator secretly looks at the two cards, discards one into the deep sea, and leaves their preferred card, which the captain then reveals.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["navigator", "logbook", "deep sea"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "navigation"
+  },
+  {
+    "query": "Are players allowed to talk during the navigation?",
+    "expected_tier": 1,
+    "ground_truth": "No. During navigation the selected players must remain silent and may not give any signs or signals. Only after the captain reveals the last navigation card may players talk about the cards.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["silent"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "navigation"
+  },
+  {
+    "query": "Which direction does a blue navigation card move the ship?",
+    "expected_tier": 1,
+    "ground_truth": "The ship moves in the direction of the colored arrow matching the navigation card. Blue moves the ship east, red moves it west, and yellow moves it north.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["east"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "navigation"
+  },
+  {
+    "query": "What does the Drunk navigation card do?",
+    "expected_tier": 1,
+    "ground_truth": "The current captain loses their position. The captain role moves clockwise to the next player who has the fewest navigation cards (resumes) in front of them, and the captain's logbook is passed to that new captain.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["captain", "fewest"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "nav_card_actions"
+  },
+  {
+    "query": "What does the Mermaid card do?",
+    "expected_tier": 1,
+    "ground_truth": "The captain chooses another player who shuffles the last three discarded navigation cards and secretly looks at them. They may talk about their findings, but might be lying.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["three", "discarded"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "nav_card_actions"
+  },
+  {
+    "query": "What does the Telescope card do?",
+    "expected_tier": 1,
+    "ground_truth": "The captain chooses another player who looks at the top navigation card of the draw pile and may either put it back on the draw pile or discard it into the Deep Sea.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["top", "draw pile"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "nav_card_actions"
+  },
+  {
+    "query": "What is the difference between the Armed and Disarmed navigation cards?",
+    "expected_tier": 1,
+    "ground_truth": "Armed gives the navigator 1 gun from the general supply and is only used on the long journey map. Disarmed forces the navigator to discard 1 gun from their supply if they have any.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["navigator", "gun"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "nav_card_actions"
+  },
+  {
+    "query": "What happens when a Cult Uprising card is played?",
+    "expected_tier": 1,
+    "ground_truth": "A cult ritual is carried out at the end of the navigation: the captain must reveal a random facedown cult ritual card.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["cult ritual"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "nav_card_actions"
+  },
+  {
+    "query": "What happens during a Cabin Search?",
+    "expected_tier": 1,
+    "ground_truth": "The captain chooses another player who must pass their sea bag to the captain for a secret inspection while everybody else closes their eyes. The captain may talk about their findings, but might be lying.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["sea bag", "captain"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "map_actions"
+  },
+  {
+    "query": "What does the 'Off with the Tongue' action do?",
+    "expected_tier": 1,
+    "ground_truth": "The chosen player can no longer articulate words (only sounds and gestures) and can no longer become captain. Their guns still count for a mutiny total, but their gun count is treated as 0 when determining the next captain.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["captain", "words"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "map_actions"
+  },
+  {
+    "query": "What does a Flogging reveal about a player?",
+    "expected_tier": 1,
+    "ground_truth": "Flogging creates public information indicating one faction the selected player does not belong to. The revealed card is placed on the 'I am not a...' card and stays in front of the player until the end of the game.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["faction", "not"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "map_actions"
+  },
+  {
+    "query": "What happens when a player is chosen for Feed the Kraken?",
+    "expected_tier": 1,
+    "ground_truth": "That player is immediately eliminated from the game and must not speak anymore or reveal their faction. The captain must not choose themselves.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["eliminated"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "map_actions"
+  },
+  {
+    "query": "Which players can the Cult Leader convert into a Cultist?",
+    "expected_tier": 1,
+    "ground_truth": "The Cult Leader can only convert convertible players. Any player who has previously been examined in a Cabin Search or Flogging counts as unconvertible.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["convertible", "cabin search", "flogging"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "cult"
+  },
+  {
+    "query": "What happens to a player's allegiance when they become a Cultist?",
+    "expected_tier": 1,
+    "ground_truth": "A new Cultist loses their previous team membership and is no longer a Sailor or Pirate. They can only win together with the Cult Leader by fulfilling one of the cult victory conditions.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["cultist", "sailor", "pirate"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "cult"
+  },
+  {
+    "query": "What does the Cult's Guns Stash ritual do?",
+    "expected_tier": 1,
+    "ground_truth": "The Cult Leader secretly distributes three guns from the supply to up to three players. They can choose any player including themselves, and may give more than one gun to a player.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["three guns"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "cult"
+  },
+  {
+    "query": "Can the navigator refuse to follow the captain's orders?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. Through denial of command the navigator can jump overboard after seeing both cards. Both cards go to the discard pile, the navigator is immediately eliminated and must remain silent, and then an emergency navigation is carried out.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["denial of command", "overboard"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "edge_cases"
+  },
+  {
+    "query": "How does an emergency navigation work?",
+    "expected_tier": 1,
+    "ground_truth": "The captain immediately designates an emergency navigator and may even choose an off-duty player. The crew cannot mutiny against the emergency navigator, the lieutenant stays the same, and they carry out another navigation.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["emergency", "navigator"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "edge_cases"
+  },
+  {
+    "query": "Who receives an off-duty sign after a navigation in an 8-player game?",
+    "expected_tier": 1,
+    "ground_truth": "With 7 to 8 players, 2 off-duty signs are given after navigation, to the lieutenant and the navigator who were involved in the current navigation.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["off-duty", "lieutenant", "navigator"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "off_duty"
+  },
+  {
+    "query": "Can an off-duty player become captain?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. Off-duty players can participate in a mutiny and can become captain. If the captain has an off-duty sign, the sign has no effect as long as that player remains the captain.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["off-duty", "captain"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "off_duty"
+  },
+  {
+    "query": "What is the supply line used for?",
+    "expected_tier": 1,
+    "ground_truth": "The supply line only exists on the long journey map. When the ship crosses it, each player may refill their gun supply up to three guns. A player who already has three or more guns receives no additional guns.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["supply line", "three"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "edge_cases"
+  },
+  {
+    "query": "What happens when the draw pile runs low on cards?",
+    "expected_tier": 1,
+    "ground_truth": "If there are fewer than 4 cards in the draw pile before navigation, combine the remaining draw pile with the discard pile and shuffle them into a new draw pile. The captain's face-up resume cards are never shuffled back in.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["discard pile", "shuffle"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "edge_cases"
+  },
+  {
+    "query": "How long does a typical game of Feed the Kraken take to play?",
+    "expected_tier": 3,
+    "ground_truth": "The rule book does not address the expected playing time of a game.",
+    "expected_chunks": [],
+    "required_chunk_keywords": [],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "tier3"
+  },
+  {
+    "query": "What is the recommended minimum age to play Feed the Kraken?",
+    "expected_tier": 3,
+    "ground_truth": "The rule book does not address a recommended minimum player age.",
+    "expected_chunks": [],
+    "required_chunk_keywords": [],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "tier3"
+  }
+]

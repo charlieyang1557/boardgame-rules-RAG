@@ -1,16 +1,16 @@
 import ReactMarkdown from "react-markdown";
-import type { Message } from "../types";
-import { TIER_CONFIG } from "../constants";
+import type { Language, Message } from "../types";
+import { UI_STRINGS } from "../constants";
 import { SourceCard } from "./SourceCard";
 import { FeedbackButtons } from "./FeedbackButtons";
 
 interface MessageBubbleProps {
   message: Message;
   sessionId: string;
+  language: Language;
 }
 
-function TierBadge({ tier }: { tier: 1 | 2 | 3 }) {
-  const config = TIER_CONFIG[tier];
+function TierBadge({ tier, language }: { tier: 1 | 2 | 3; language: Language }) {
   // Gradient-style badges with subtle glow
   const styles = {
     1: "bg-gradient-to-r from-tier1 to-emerald-600 shadow-tier1/20",
@@ -22,12 +22,13 @@ function TierBadge({ tier }: { tier: 1 | 2 | 3 }) {
     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full
                       text-xs font-semibold text-white shadow-sm
                       ${styles[tier]}`}>
-      {config.label}
+      {UI_STRINGS[language].tierLabels[tier]}
     </span>
   );
 }
 
-export function MessageBubble({ message, sessionId }: MessageBubbleProps) {
+export function MessageBubble({ message, sessionId, language }: MessageBubbleProps) {
+  const t = UI_STRINGS[language];
   if (message.role === "user") {
     return (
       <div className="flex justify-end">
@@ -63,15 +64,15 @@ export function MessageBubble({ message, sessionId }: MessageBubbleProps) {
         {/* Metadata bar: tier badge + feedback */}
         <div className="flex items-center justify-between gap-3 px-1">
           <div className="flex items-center gap-2 flex-wrap">
-            {tier && <TierBadge tier={tier} />}
+            {tier && <TierBadge tier={tier} language={language} />}
             {tier === 2 && (
               <span className="text-xs text-parchment-500 dark:text-parchment-400 italic">
-                Synthesized from multiple rules
+                {t.tier2Note}
               </span>
             )}
             {tier === 3 && (
               <span className="text-xs text-tier3 dark:text-orange-400 italic">
-                Suggested interpretation — not authoritative
+                {t.tier3Note}
               </span>
             )}
           </div>
@@ -92,7 +93,7 @@ export function MessageBubble({ message, sessionId }: MessageBubbleProps) {
               </svg>
               <span className="text-xs font-medium text-parchment-500 dark:text-parchment-400
                                uppercase tracking-widest">
-                Sources
+                {t.sources}
               </span>
             </div>
             {message.chunks!.map((chunk) => (
