@@ -227,6 +227,17 @@ TERMINOLOGY_MAPS: dict[str, dict[str, str]] = {
         "sit out": "off-duty",
         "jump overboard": "denial of command",
         "refuse to steer": "denial of command",
+        # Team makeup by player count -> "team composition" (the rulebook section
+        # that lists how many Sailors, Pirates, and Cult Leaders per player count).
+        "configuration": "team composition",
+        "config": "team composition",
+        "composition": "team composition",
+        "team setup": "team composition",
+        "player setup": "team composition",
+        "team makeup": "team composition",
+        "roles": "team composition (how many Sailors, Pirates, Cult Leader)",
+        "how many of each team": "team composition",
+        "how many on each team": "team composition",
     },
 }
 

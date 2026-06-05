@@ -120,6 +120,16 @@
     "category": "setup"
   },
   {
+    "query": "What is the team configuration for a 7-player game?",
+    "expected_tier": 1,
+    "ground_truth": "In a 7-player game there are 4 Sailors, 2 Pirates and 1 Cult Leader.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["4 sailors", "2 pirates"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "setup"
+  },
+  {
     "query": "How do the Pirates find each other at the start of the game?",
     "expected_tier": 1,
     "ground_truth": "Before the game begins, during the secret gathering of the Pirates, the Pirates open their eyes for about 20 seconds to memorize their team members. There is no secret gathering of the cult.",
