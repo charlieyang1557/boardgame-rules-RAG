@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import type { Language, Message } from "../types";
 import { UI_STRINGS } from "../constants";
@@ -29,6 +30,7 @@ function TierBadge({ tier, language }: { tier: 1 | 2 | 3; language: Language }) 
 
 export function MessageBubble({ message, sessionId, language }: MessageBubbleProps) {
   const t = UI_STRINGS[language];
+  const [sourcesOpen, setSourcesOpen] = useState(false);
   if (message.role === "user") {
     return (
       <div className="flex justify-end">
@@ -82,23 +84,35 @@ export function MessageBubble({ message, sessionId, language }: MessageBubblePro
           )}
         </div>
 
-        {/* Source cards */}
+        {/* Source cards — collapsed by default; the header toggles the list */}
         {hasChunks && (
           <div className="space-y-1.5 px-1">
-            <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setSourcesOpen((open) => !open)}
+              aria-expanded={sourcesOpen}
+              className="group flex items-center gap-1.5 cursor-pointer
+                         transition-colors hover:text-parchment-600 dark:hover:text-parchment-300"
+            >
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                   className="text-parchment-400 dark:text-parchment-500">
+                   className="text-parchment-400 dark:text-parchment-500 shrink-0">
                 <path d="M1 2.5C1 1.67 1.67 1 2.5 1H5l1 1h3.5c.83 0 1.5.67 1.5 1.5v6c0 .83-.67 1.5-1.5 1.5h-7A1.5 1.5 0 011 9.5v-7z"
                       stroke="currentColor" strokeWidth="1" />
               </svg>
               <span className="text-xs font-medium text-parchment-500 dark:text-parchment-400
                                uppercase tracking-widest">
-                {t.sources}
+                {t.sources} ({message.chunks!.length})
               </span>
-            </div>
-            {message.chunks!.map((chunk) => (
-              <SourceCard key={chunk.chunk_id} chunk={chunk} />
-            ))}
+              <span className="text-parchment-400 text-[10px] transition-transform duration-200
+                               group-hover:text-parchment-500"
+                    style={{ transform: sourcesOpen ? "rotate(180deg)" : "rotate(0)" }}>
+                &#x25BC;
+              </span>
+            </button>
+            {sourcesOpen &&
+              message.chunks!.map((chunk) => (
+                <SourceCard key={chunk.chunk_id} chunk={chunk} />
+              ))}
           </div>
         )}
       </div>
