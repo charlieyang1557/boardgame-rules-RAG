@@ -6,6 +6,7 @@ export const GAMES: Game[] = [
   { displayName: "Speakeasy", apiKey: "speakeasy" },
   { displayName: "Food Chain Magnate", apiKey: "fcm" },
   { displayName: "Feed the Kraken", apiKey: "ftk" },
+  { displayName: "7 Wonders", apiKey: "7wonders" },
 ];
 
 export const LANGUAGES: { code: Language; label: string }[] = [
@@ -72,6 +73,18 @@ export const EXAMPLE_QUESTIONS: Record<string, Record<Language, string[]>> = {
       "水手（Sailors）要如何获胜？",
       "成功发动叛变（mutiny）需要几把枪？",
       "“喂食克拉肯”（Feed the Kraken）有什么作用？",
+    ],
+  },
+  "7wonders": {
+    en: [
+      "What do the green (science) cards do?",
+      "How do military conflicts work?",
+      "How much does buying a resource from a neighbor cost?",
+    ],
+    zh: [
+      "绿色（科学）卡牌有什么作用？",
+      "军事冲突是如何结算的？",
+      "向邻居购买资源需要多少钱？",
     ],
   },
 };
