@@ -13,6 +13,7 @@ Ask a question in plain language, get an answer backed by the actual rule book �
 | **Speakeasy** | Medium | 2-hop |
 | **Food Chain Magnate** | Complex | 3-hop |
 | **Feed the Kraken** | Simple | Single-hop |
+| **7 Wonders** | Simple | Single-hop |
 
 ## Languages
 
@@ -174,13 +175,15 @@ over each game's golden dataset.
 | Speakeasy | 76% | 0 |
 | FCM | 77% | 0 |
 | Feed the Kraken | 97% | 0 |
+| 7 Wonders | 97% | 0 |
 
 **Answer accuracy** is a keyword-overlap match against the ground-truth answers;
 **zero hallucinations** across every golden set, enforced by the citation
 verifier. Retrieval recall@5 is 100% on the keyword-presence check (the golden
 datasets validate retrieval by required keywords rather than pinned chunk IDs).
-Feed the Kraken reaches **100% Tier-1 accuracy** on its 38-question set — the two
-misses are out-of-scope meta questions correctly handled as uncertainty.
+Feed the Kraken and 7 Wonders each reach **100% Tier-1 accuracy** on their golden
+sets — the only misses are out-of-scope meta questions correctly handled as
+uncertainty.
 
 ## License
 
