@@ -1,0 +1,352 @@
+[
+  {
+    "query": "How many Ages are there and how many cards do you play each Age?",
+    "expected_tier": 1,
+    "ground_truth": "A game of 7 Wonders is played over 3 Ages, and each player plays 6 cards per Age.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["3 ages", "6 cards"],
+    "forbidden_content": [],
+    "difficulty": "easy",
+    "category": "overview"
+  },
+  {
+    "query": "What do the green cards do?",
+    "expected_tier": 1,
+    "ground_truth": "Green cards are Scientific Structures; they score victory points depending on your progress in the three scientific fields.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["scientific structures", "green"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "cards"
+  },
+  {
+    "query": "What are the brown cards in 7 Wonders?",
+    "expected_tier": 1,
+    "ground_truth": "Brown cards are Raw Materials; these structures produce resources.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["raw materials", "brown"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "cards"
+  },
+  {
+    "query": "What do red cards represent?",
+    "expected_tier": 1,
+    "ground_truth": "Red cards are Military Structures; they increase your military might, which comes into play during Conflict resolution.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["military structures", "red"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "cards"
+  },
+  {
+    "query": "What are the purple cards?",
+    "expected_tier": 1,
+    "ground_truth": "Purple cards are Guilds; they allow players to score victory points according to specific criteria, and they appear in the Age III deck.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["guilds", "purple"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "cards"
+  },
+  {
+    "query": "What three actions can I take with my chosen card on a turn?",
+    "expected_tier": 1,
+    "ground_truth": "With your chosen card you may build the structure, build a stage of your Wonder, or discard the card to gain 3 coins.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["build", "wonder", "discard"],
+    "forbidden_content": [],
+    "difficulty": "easy",
+    "category": "turn_actions"
+  },
+  {
+    "query": "How many coins do I get for discarding a card?",
+    "expected_tier": 1,
+    "ground_truth": "Discarding a card lets you take 3 coins from the bank and add them to your treasury.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["3 coins", "discard"],
+    "forbidden_content": [],
+    "difficulty": "easy",
+    "category": "turn_actions"
+  },
+  {
+    "query": "Can I build two of the same structure?",
+    "expected_tier": 1,
+    "ground_truth": "No. A player can never build two identical structures (those with the same name or illustration).",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["identical structures"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "turn_actions"
+  },
+  {
+    "query": "In what order must I build my Wonder stages?",
+    "expected_tier": 1,
+    "ground_truth": "The stages of a Wonder must be built in order, from left to right.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["order", "left to right"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "turn_actions"
+  },
+  {
+    "query": "When I build a Wonder stage, which cost do I pay?",
+    "expected_tier": 1,
+    "ground_truth": "You pay the price shown on the Wonder board, not the cost shown on the card used as the construction marker.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["wonder board"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "turn_actions"
+  },
+  {
+    "query": "How much does it cost to buy a resource from a neighbor?",
+    "expected_tier": 1,
+    "ground_truth": "For each resource bought from a neighboring city, you must give 2 coins to the owner of that resource.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["2 coins"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "commerce"
+  },
+  {
+    "query": "Can I buy the resources produced by a neighbor's yellow commercial cards?",
+    "expected_tier": 1,
+    "ground_truth": "No. You cannot buy resources produced by some commercial structures (yellow cards) or by some Wonders; those are reserved for their owner. You can only buy a city's initial board resources and resources from its brown and gray cards.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["commercial structures", "reserved"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "commerce"
+  },
+  {
+    "query": "Can a neighbor refuse to sell me a resource?",
+    "expected_tier": 1,
+    "ground_truth": "No. Players can never refuse to sell resources to a neighboring city.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["never refuse to sell"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "commerce"
+  },
+  {
+    "query": "Can I use coins I earned this turn to buy resources on the same turn?",
+    "expected_tier": 1,
+    "ground_truth": "No. To buy resources you must have the coins at the beginning of the turn. Coins earned through commerce during a turn cannot be used that turn, only the next one.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["beginning of the turn"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "commerce"
+  },
+  {
+    "query": "Do some cards reduce the cost of buying resources from neighbors?",
+    "expected_tier": 1,
+    "ground_truth": "Yes. Some commercial structures (yellow cards) reduce the cost of buying resources from a neighbor from 2 coins to 1 coin.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["2 to 1"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "commerce"
+  },
+  {
+    "query": "How are military conflicts resolved?",
+    "expected_tier": 1,
+    "ground_truth": "At the end of each Age, each player compares their military might (shields) with their two neighboring cities, receiving a Victory token for more shields and a Defeat token for fewer.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["military", "neighboring"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "military"
+  },
+  {
+    "query": "What are the values of the victory conflict tokens in each Age?",
+    "expected_tier": 1,
+    "ground_truth": "Victory tokens are worth +1 at the end of Age I, +3 at the end of Age II, and +5 at the end of Age III.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["+1", "+3", "+5"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "military"
+  },
+  {
+    "query": "What is the value of a military defeat token?",
+    "expected_tier": 1,
+    "ground_truth": "A military Defeat token has a value of -1.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["defeat tokens", "-1"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "military"
+  },
+  {
+    "query": "How do you score sets of identical scientific symbols?",
+    "expected_tier": 1,
+    "ground_truth": "For each of the 3 scientific symbols, identical symbols score: 1 symbol = 1 point, 2 identical = 4 points, 3 identical = 9 points, 4 identical = 16 points.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["identical", "9", "16"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "science"
+  },
+  {
+    "query": "How many points is a set of 3 different scientific symbols worth?",
+    "expected_tier": 1,
+    "ground_truth": "Each group of 3 different scientific symbols scores 7 victory points, and this is cumulative with the points from sets of identical symbols.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["3 different", "7 victory points"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "science"
+  },
+  {
+    "query": "How are coins converted to points at the end of the game?",
+    "expected_tier": 1,
+    "ground_truth": "For every 3 coins you have at the end of the game, you score 1 victory point. Leftover coins score no points.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["3 coins", "1 victory point"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "scoring"
+  },
+  {
+    "query": "Who wins if there is a tie at the end of the game?",
+    "expected_tier": 1,
+    "ground_truth": "In case of a tie, the player with the most coins in their treasury wins. A tie on coins is not broken further.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["tie", "most coins"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "scoring"
+  },
+  {
+    "query": "In what order are victory points counted at the end?",
+    "expected_tier": 1,
+    "ground_truth": "Count points in this order: military conflicts, treasury contents, Wonder, civilian structures, scientific structures, commercial structures, and guilds.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["military conflicts", "guilds"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "scoring"
+  },
+  {
+    "query": "How many coins does each player start with?",
+    "expected_tier": 1,
+    "ground_truth": "Each player begins the game with 3 coins (three value '1' coins) placed on their board.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["3 value"],
+    "forbidden_content": [],
+    "difficulty": "easy",
+    "category": "setup"
+  },
+  {
+    "query": "How many Guild cards are used in a 4-player game?",
+    "expected_tier": 1,
+    "ground_truth": "In a 4-player game, 6 Guild cards are used.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["6 guilds"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "setup"
+  },
+  {
+    "query": "What is the second-stage effect of the Colossus of Rhodes on side A?",
+    "expected_tier": 1,
+    "ground_truth": "On side A, the Colossus of Rhodes adds 2 Shields to your total in each conflict resolution.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["2 shields", "colossus"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "wonders"
+  },
+  {
+    "query": "What does the Temple of Artemis in Ephesus give on side A?",
+    "expected_tier": 1,
+    "ground_truth": "On side A, the Temple of Artemis gives the player 9 coins from the bank, taken once immediately after the stage is built.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["9 coins", "artemis"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "wonders"
+  },
+  {
+    "query": "What can the Mausoleum of Halicarnassus do?",
+    "expected_tier": 1,
+    "ground_truth": "The Mausoleum of Halicarnassus lets the player look through all cards discarded since the beginning of the game, pick one, and build it for free.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["discarded", "free"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "wonders"
+  },
+  {
+    "query": "How many stages and points does the Pyramids of Giza side B have?",
+    "expected_tier": 1,
+    "ground_truth": "On side B, the Pyramids of Giza are built in 4 stages, each worth victory points (3, 5, 5 and 7) for a total of 20 points.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["4 stages", "20"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "wonders"
+  },
+  {
+    "query": "What happens on the sixth turn of an Age?",
+    "expected_tier": 1,
+    "ground_truth": "On the sixth and final turn of an Age, players receive a two-card hand, choose one to play normally, and discard the other face down. Then the Age ends.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["two-card hand", "sixth"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "overview"
+  },
+  {
+    "query": "Is building my Wonder mandatory?",
+    "expected_tier": 1,
+    "ground_truth": "No. Construction of the Wonder is not mandatory; a player can win the game without finishing or even starting their Wonder.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["not mandatory"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "edge_cases"
+  },
+  {
+    "query": "How does the 2-player game work?",
+    "expected_tier": 1,
+    "ground_truth": "In the 2-player 'Expert' variant, players also manage a neutral Free city; the player holding the Free city card chooses two cards (one for their own city and one for the Free city) while the opponent chooses one normally.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["free city"],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "two_player"
+  },
+  {
+    "query": "Which direction do the card hands pass?",
+    "expected_tier": 1,
+    "ground_truth": "After playing a card, each player passes their remaining hand to a neighbor; the direction of the hands' rotation changes with each Age.",
+    "expected_chunks": [],
+    "required_chunk_keywords": ["direction", "changes with each age"],
+    "forbidden_content": [],
+    "difficulty": "medium",
+    "category": "overview"
+  },
+  {
+    "query": "What is the recommended minimum age to play 7 Wonders?",
+    "expected_tier": 3,
+    "ground_truth": "The rule book does not address a recommended minimum player age.",
+    "expected_chunks": [],
+    "required_chunk_keywords": [],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "tier3"
+  },
+  {
+    "query": "How long does a typical game of 7 Wonders take to play?",
+    "expected_tier": 3,
+    "ground_truth": "The rule book does not address the expected playing time of a game.",
+    "expected_chunks": [],
+    "required_chunk_keywords": [],
+    "forbidden_content": [],
+    "difficulty": "hard",
+    "category": "tier3"
+  }
+]

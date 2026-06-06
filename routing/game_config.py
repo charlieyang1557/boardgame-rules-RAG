@@ -108,6 +108,24 @@ GAME_CONFIG: dict[str, GameConfig] = {
         parser_mode="agentic",
         tier1_threshold=0.25,
     ),
+    # 7 Wonders: card-drafting game, single rulebook (1 hop). Splendor-class
+    # retrieval. Agentic parse, then the parse cache was trimmed (dropped the
+    # text-less cover page and the mangled card-list/credits pages).
+    # Calibration (golden dataset): all 33 in-scope questions score reranker
+    # sigmoid >= 0.43 (median 0.999); keep a low threshold with citation
+    # verification as the primary gate. Result: Tier-1 accuracy 33/33,
+    # recall@5 100%, Tier-3 routing 2.9%, 0 hallucinations.
+    "7wonders": GameConfig(
+        retrieval_hops=1,
+        rerank_top_k=5,
+        hybrid_top_k=20,
+        rrf_k=60,
+        multi_system_detection=False,
+        use_secondary_kb=False,
+        version_aware=False,
+        parser_mode="agentic",
+        tier1_threshold=0.25,
+    ),
 }
 
 
@@ -239,6 +257,32 @@ TERMINOLOGY_MAPS: dict[str, dict[str, str]] = {
         "how many of each team": "team composition",
         "how many on each team": "team composition",
     },
+    "7wonders": {
+        "points": "victory points",
+        "vp": "victory points",
+        "money": "coins",
+        "war": "military conflict",
+        "battle": "military conflict",
+        "combat": "military conflict",
+        "shields": "military strength (shields)",
+        "brown cards": "raw materials (brown cards)",
+        "grey cards": "manufactured goods (grey cards)",
+        "gray cards": "manufactured goods (grey cards)",
+        "blue cards": "civilian structures (blue cards)",
+        "green cards": "scientific structures (green cards)",
+        "yellow cards": "commercial structures (yellow cards)",
+        "red cards": "military structures (red cards)",
+        "purple cards": "guilds (purple cards)",
+        "science": "scientific symbols",
+        "buy": "trade for a resource from a neighbor",
+        "buying": "trade for a resource from a neighbor",
+        "build": "construct a structure",
+        "wonder": "Wonder",
+        "wonder stage": "Wonder stage",
+        "draft": "choose a card from your hand",
+        "pass": "pass the hand to the neighbor",
+        "free build": "free construction (chain)",
+    },
 }
 
 # Multi-PDF source definitions per game
@@ -253,6 +297,7 @@ PDF_SOURCES: dict[str, list[tuple[str, str]]] = {
     ],
     "fcm": [("data/rulebooks/fcm.pdf", "fcm_rules")],
     "ftk": [("data/rulebooks/ftk.pdf", "ftk_rules")],
+    "7wonders": [("data/rulebooks/7wonders.pdf", "7wonders_rules")],
 }
 
 
@@ -331,6 +376,9 @@ INGESTION_CONFIGS: dict[str, IngestionConfig] = {
     # navigation, cult rituals) intact. Add section_patterns only if the parse
     # diagnostic shows poor sectioning.
     "ftk": IngestionConfig(chunk_size=300, overlap=50),
+    # 7 Wonders: rely on markdown-heading sectioning; chunk_size=300 keeps the
+    # per-Age and scoring rules intact. Refine after inspecting the parse.
+    "7wonders": IngestionConfig(chunk_size=300, overlap=50),
 }
 
 
